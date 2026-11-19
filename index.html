@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>回血 — 一起回血，这一段我陪你走</title>
+<meta name="description" content="找工作、省钱、赚钱。交给一个 agent 去做。永久免费。">
+<style>
+  :root{
+    --paper:#F7F4EC;
+    --paper-2:#F1ECE0;
+    --ink:#1C1A17;
+    --ink-2:#57514A;
+    --ink-3:#6E675C;
+    --line:#D9D1C0;
+    --red:#B03A28;
+    --red-2:#8E2C1E;
+    --red-wash:#E8CDC3;
+    --sage:#6E7B62;
+    --gold:#D9AE55;
+    --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",Georgia,"Times New Roman",serif;
+    --sans:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",-apple-system,sans-serif;
+    --mono:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--serif);font-size:17px;line-height:1.95;
+    overflow-x:hidden;
+  }
+  /* 纸张颗粒：极轻的一层，压掉屏幕的塑料感 */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.16;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+  ::selection{background:var(--red-wash);color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  .page{max-width:1080px;margin:0 auto;padding:0 34px}
+
+  /* ============ 报头 ============ */
+  .masthead{padding:30px 0 0}
+  .masthead-in{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:24px;padding-bottom:14px;border-bottom:2px solid var(--ink);
+  }
+  .plt{display:flex;align-items:center;gap:11px}
+  .plt svg{width:26px;height:26px;flex:none}
+  .plt b{font-size:25px;font-weight:600;letter-spacing:.16em}
+  .mh-meta{
+    display:flex;gap:20px;font-family:var(--sans);font-size:11.5px;
+    color:var(--ink-3);letter-spacing:.1em;padding-bottom:8px;
+  }
+  .mh-meta span{white-space:nowrap}
+  .subrule{border-bottom:1px solid var(--line);padding-bottom:10px;display:flex;justify-content:space-between;gap:16px;font-family:var(--sans);font-size:11px;color:var(--ink-3);letter-spacing:.14em;padding-top:9px}
+
+  /* ============ 头版 ============ */
+  .lead-grid{
+    display:grid;grid-template-columns:1.25fr .9fr;
+    grid-template-areas:"head fig" "deck fig" "facts facts";
+    column-gap:44px;padding:56px 0 0;
+  }
+  .facts{grid-area:facts}
+  .hd{grid-area:head}
+  .kicker{
+    font-family:var(--sans);font-size:12px;letter-spacing:.2em;color:var(--red);
+    padding-bottom:16px;
+  }
+  h1{
+    font-size:clamp(62px,9.4vw,112px);line-height:1.02;font-weight:600;
+    letter-spacing:.03em;
+  }
+  .h1-sub{
+    font-size:clamp(19px,2.2vw,24px);letter-spacing:.1em;color:var(--ink-2);
+    margin-top:14px;
+  }
+  .h1-rule{display:block;width:96px;height:2px;background:var(--red);margin:22px 0 0}
+  .deck{grid-area:deck;padding-top:26px;max-width:38ch}
+  .deck p{font-size:17.5px;line-height:2.05;color:var(--ink-2)}
+  .deck p b{font-weight:600;color:var(--ink);border-bottom:2px solid var(--red-wash)}
+
+  /* 说明栏：模拟报纸的分栏速览 */
+  .facts{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    margin-top:40px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+  }
+  .fact{padding:18px 20px 20px 0}
+  .fact + .fact{border-left:1px solid var(--line);padding-left:24px}
+  .fact dt{font-family:var(--sans);font-size:11px;letter-spacing:.16em;color:var(--ink-3);margin-bottom:6px}
+  .fact dd{font-size:16px;line-height:1.75}
+  .fact dd em{font-style:normal;color:var(--red);font-weight:600}
+
+  /* 图 */
+  .fig{grid-area:fig;position:relative;align-self:end;margin-bottom:6px}
+  .fig svg{width:100%;height:auto;display:block;overflow:visible}
+  .figcap{
+    font-family:var(--sans);font-size:11.5px;line-height:1.85;color:var(--ink-3);
+    letter-spacing:.05em;margin-top:10px;padding-left:2px;max-width:31ch;
+  }
+  .figcap b{color:var(--ink-2);font-weight:500}
+
+  /* ============ 通用版块 ============ */
+  .band{padding:88px 0 0}
+  .band-grid{display:grid;grid-template-columns:112px 1fr 200px;gap:36px;align-items:start}
+  .band-no{
+    font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--ink-3);
+    padding-top:9px;
+  }
+  .band-no i{display:block;font-style:normal;color:var(--red);font-size:26px;font-family:var(--serif);letter-spacing:0;margin-bottom:2px;font-weight:600}
+  .band-main{max-width:44ch}
+  h2{font-size:clamp(25px,3.2vw,34px);line-height:1.55;font-weight:600;letter-spacing:.02em;margin-bottom:22px}
+  .body p{text-indent:2em;margin-bottom:14px;color:var(--ink-2)}
+  .body p:last-child{margin-bottom:0}
+  .body p b{font-weight:600;color:var(--ink)}
+  .margin-note{
+    font-size:13.5px;line-height:1.95;color:var(--ink-3);
+    border-top:1px solid var(--ink);padding-top:12px;max-width:22ch;
+  }
+  .margin-note em{font-style:normal;color:var(--red);display:block;font-size:11px;font-family:var(--sans);letter-spacing:.14em;margin-bottom:6px}
+
+  /* ============ 三件事：不等宽、无框 ============ */
+  .work{display:grid;grid-template-columns:1.15fr .85fr;gap:0 48px;margin-top:8px}
+  .work-item{padding:26px 0;border-top:1px solid var(--line)}
+  .work-item:nth-child(1){grid-column:1 / -1}
+  .work-item:nth-child(1) .wi-body{max-width:56ch}
+  .wi-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .wi-head span{
+    font-family:var(--sans);font-size:11px;letter-spacing:.16em;color:var(--ink-3);
+  }
+  .wi-head h3{font-size:23px;font-weight:600;letter-spacing:.06em}
+  .wi-num{
+    font-family:var(--sans);font-size:11px;color:var(--red);letter-spacing:.1em;
+    border:1px solid var(--red-wash);border-radius:999px;padding:1px 8px;flex:none;
+  }
+  .wi-body{color:var(--ink-2);font-size:16px;line-height:1.98}
+  .wi-body b{color:var(--ink);font-weight:600}
+  .wi-list{list-style:none;margin-top:10px;font-size:15px;color:var(--ink-3)}
+  .wi-list li{display:inline-block;margin-right:4px}
+  .wi-list li::after{content:"／";color:var(--line);margin-left:4px}
+  .wi-list li:last-child::after{content:""}
+
+  /* ============ 回执 ============ */
+  .receipt{
+    background:#FFFDF7;border:1px solid var(--line);
+    padding:0;margin-top:6px;
+    box-shadow:0 1px 0 #fff inset, 0 24px 44px -40px rgba(28,26,23,.55);
+  }
+  .rc-head{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+    padding:16px 26px;border-bottom:1px dashed var(--line);
+    font-family:var(--sans);font-size:11.5px;letter-spacing:.1em;color:var(--ink-3);
+  }
+  .rc-head b{color:var(--ink);font-weight:600;letter-spacing:.06em}
+  .rc-row{
+    display:grid;grid-template-columns:52px 1fr auto;gap:18px;align-items:first baseline;
+    padding:15px 26px;border-bottom:1px dotted var(--line);
+  }
+  .rc-row:last-of-type{border-bottom:none}
+  .rc-row .no{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.02em}
+  .rc-row .item{font-size:15.5px;line-height:1.8}
+  .rc-row .item i{font-style:normal;display:block;font-size:13px;color:var(--ink-3);margin-top:2px;font-family:var(--sans);letter-spacing:.02em}
+  .rc-row .amt{
+    font-family:var(--mono);font-size:14.5px;color:var(--red);white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .rc-row .amt.q{color:var(--ink-3)}
+  .rc-foot{
+    display:flex;flex-wrap:wrap;gap:26px;padding:15px 26px;
+    border-top:1px solid var(--ink);background:var(--paper-2);
+    font-family:var(--sans);font-size:12.5px;color:var(--ink-2);letter-spacing:.03em;
+  }
+  .rc-foot b{font-family:var(--mono);color:var(--red);font-weight:500}
+  .rc-note{margin-top:12px;font-size:13px;color:var(--ink-3);font-family:var(--sans);line-height:1.9;max-width:56ch}
+
+  /* ============ 永久免费 ============ */
+  .free-band{
+    margin-top:88px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    padding:46px 0 50px;position:relative;
+  }
+  .free-in{display:grid;grid-template-columns:1fr 168px;gap:40px;align-items:start}
+  .free-title{
+    font-size:clamp(44px,6.4vw,76px);line-height:1.06;font-weight:600;letter-spacing:.04em;
+  }
+  .free-title small{
+    display:block;font-size:14px;font-family:var(--sans);letter-spacing:.2em;
+    color:var(--ink-3);font-weight:400;margin-bottom:12px;
+  }
+  .free-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:26px}
+  .free-cols p{font-size:16px;line-height:2;color:var(--ink-2)}
+  .free-cols p b{color:var(--ink);font-weight:600}
+  .seal{
+    width:132px;height:132px;border:4px solid var(--red);color:var(--red);
+    display:grid;place-items:center;transform:rotate(-5.5deg);
+    font-size:33px;line-height:1.15;font-weight:600;letter-spacing:.06em;
+    padding:10px;text-align:center;opacity:.9;border-radius:6px;
+    box-shadow:inset 0 0 0 1px rgba(176,58,40,.28);
+    margin-left:auto;
+  }
+  .seal span{display:block}
+
+  /* ============ 契约 ============ */
+  .faith{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;margin-top:4px}
+  .faith h4{
+    font-family:var(--sans);font-size:11.5px;letter-spacing:.18em;color:var(--ink-3);
+    padding-bottom:10px;border-bottom:1px solid var(--ink);margin-bottom:4px;
+  }
+  .faith ul{list-style:none}
+  .faith li{padding:11px 0;border-bottom:1px dotted var(--line);font-size:15.5px;line-height:1.85;color:var(--ink-2)}
+  .faith li:last-child{border-bottom:none}
+  .faith.yes h4{border-bottom-color:var(--red);color:var(--red)}
+  .faith.yes li{color:var(--ink)}
+
+  /* ============ 落款 ============ */
+  .sign{
+    margin-top:96px;padding:52px 0 0;border-top:1px solid var(--ink);
+    display:grid;grid-template-columns:1fr auto;gap:36px;align-items:end;
+  }
+  .sign h2{
+    font-size:clamp(38px,5.6vw,64px);line-height:1.12;letter-spacing:.03em;margin-bottom:12px;
+  }
+  .sign p{font-size:19px;color:var(--ink-2);letter-spacing:.08em}
+  .sign-note{margin-top:24px;font-size:15.5px;color:var(--ink-2);line-height:2;max-width:40ch}
+  .sign-note b{color:var(--ink);font-weight:600}
+  .cta-col{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding-bottom:8px}
+  .cta{
+    font-size:17px;letter-spacing:.06em;padding:14px 30px;
+    background:var(--ink);color:var(--paper);border-radius:2px;
+    transition:background .25s,transform .25s;
+  }
+  .cta:hover{background:var(--red);transform:translateY(-1px)}
+  .cta-fine{font-family:var(--sans);font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
+
+  footer{margin-top:80px;border-top:1px solid var(--line);padding:22px 0 44px}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--sans);font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
+  .foot .fl{display:flex;gap:20px}
+  .foot a:hover{color:var(--ink-2)}
+
+  /* ============ 动效：只给一个对象 ============ */
+  .bob{animation:bob 6.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .bob2{animation:bob 7.2s ease-in-out infinite .9s}
+  .eye{transform-box:fill-box;transform-origin:center;animation:blink 5.8s infinite}
+  .eye2{animation-delay:.07s}
+  @keyframes blink{0%,93.5%,100%{transform:scaleY(1)}95.6%{transform:scaleY(.1)}97.8%{transform:scaleY(1)}}
+  .pupil{transition:transform .18s ease-out}
+  .barfill{transform-box:fill-box;transform-origin:left center;transform:scaleX(.06);animation:fillbar 2.6s cubic-bezier(.16,.84,.28,1) .5s forwards}
+  @keyframes fillbar{to{transform:scaleX(.68)}}
+  .heart{transform-box:fill-box;transform-origin:center;animation:beat 2s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}10%{transform:scale(1.17)}22%{transform:scale(1)}34%{transform:scale(1.1)}}
+  .coin{opacity:0;animation:drop 5.4s cubic-bezier(.45,.05,.7,.5) infinite}
+  @keyframes drop{
+    0%{transform:translate(436px,86px);opacity:0}
+    14%{opacity:1}
+    66%{transform:translate(436px,230px);opacity:1}
+    76%{transform:translate(436px,236px);opacity:0}
+    100%{opacity:0;transform:translate(436px,236px)}
+  }
+  .doc-fly{opacity:0;animation:carry 6.2s cubic-bezier(.45,.06,.55,.94) infinite}
+  @keyframes carry{
+    0%{transform:translate(260px,150px) rotate(-14deg) scale(.9);opacity:0}
+    12%{transform:translate(272px,168px) rotate(-10deg) scale(.9);opacity:1}
+    48%{transform:translate(310px,196px) rotate(-4deg) scale(1);opacity:1}
+    78%{transform:translate(340px,206px) rotate(2deg) scale(1);opacity:1}
+    90%{transform:translate(344px,218px) rotate(4deg) scale(1);opacity:0}
+    100%{opacity:0;transform:translate(344px,218px) rotate(4deg)}
+  }
+  .plant{transform-box:fill-box;transform-origin:bottom center;animation:sway 6.4s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.4deg)}}
+  .fig:hover .bob{animation-duration:1.7s}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .barfill{transform:scaleX(.68)}
+  }
+
+  /* ============ 小屏 ============ */
+  @media(max-width:900px){
+    .page{padding:0 22px}
+    body{font-size:16px}
+    .lead-grid{grid-template-columns:1fr;grid-template-areas:"head" "fig" "deck" "facts";row-gap:26px;padding-top:36px}
+    .deck{padding-top:0}
+    .facts{grid-area:facts}
+    .fig{max-width:400px;margin:0 auto}
+    .facts{grid-template-columns:1fr;margin-top:26px}
+    .fact{padding:15px 0}
+    .fact + .fact{border-left:none;border-top:1px solid var(--line);padding-left:0}
+    .band{padding-top:62px}
+    .band-grid{grid-template-columns:1fr;gap:14px}
+    .band-no{padding-top:0;display:flex;align-items:baseline;gap:8px}
+    .band-no i{font-size:20px;margin:0}
+    .margin-note{max-width:none;margin-top:6px}
+    .work{grid-template-columns:1fr}
+    .work-item:nth-child(1){grid-column:auto}
+    .free-in{grid-template-columns:1fr;gap:26px}
+    .free-title small{font-size:12.5px}
+    .seal{margin:0;width:112px;height:112px;font-size:28px;justify-self:start}
+    .free-cols{grid-template-columns:1fr}
+    .faith{grid-template-columns:1fr;gap:32px}
+    .sign{grid-template-columns:1fr;gap:28px;padding-top:38px}
+    .cta-col{align-items:stretch}
+    .cta{text-align:center}
+    .rc-row{grid-template-columns:44px 1fr;row-gap:4px;padding:14px 18px}
+    .rc-row .amt{grid-column:2}
+    .rc-head,.rc-foot{padding-left:18px;padding-right:18px}
+    .masthead-in{gap:12px}
+    .plt b{font-size:21px;letter-spacing:.1em}
+    .mh-meta{gap:12px;font-size:10.5px}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead-in">
+      <a class="plt" href="#top">
+        <svg viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M13 22S3.6 16.6 3.6 10.4a4.9 4.9 0 0 1 9.4-1.6 4.9 4.9 0 0 1 9.4 1.6C22.4 16.6 13 22 13 22Z" fill="#B03A28"/>
+        </svg>
+        <b>回血</b>
+      </a>
+      <div class="mh-meta">
+        <span>永久免费</span>
+        <span>永久免费</span>
+        <span>2026.11</span>
+      </div>
+    </div>
+    <div class="subrule">
+      <span>一个替你做事的 AGENT</span>
+      <span>找工作 · 省钱 · 赚钱</span>
+    </div>
+  </header>
+
+  <div class="lead-grid" id="top">
+    <div class="hd">
+      <div class="kicker">写给想把日子过稳的人</div>
+      <h1>一起<br>回血</h1>
+      <p class="h1-sub">这一段，我陪你走。</p>
+      <span class="h1-rule"></span>
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 480 300" role="img" aria-label="一架纸飞机从左边的账单堆起飞，把其中一张送进右边的分类托盘，零钱落进罐子，头顶有一条慢慢变长的血条">
+        <defs>
+          <linearGradient id="soft" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFFDF8"/><stop offset="100%" stop-color="#F0E6D3"/>
+          </linearGradient>
+          <clipPath id="barClip"><rect x="90" y="20" width="300" height="14" rx="7"/></clipPath>
+        </defs>
+
+        <!-- 血条 -->
+        <g>
+          <rect x="86" y="16" width="308" height="22" rx="3" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2.2"/>
+          <g clip-path="url(#barClip)">
+            <rect class="barfill" x="90" y="20" width="300" height="14" fill="#B03A28"/>
+          </g>
+          <path d="M60 32v-8h6M70 24h6v8" stroke="#1C1A17" stroke-width="2" fill="none"/>
+          <text x="404" y="31" font-family="ui-monospace,Menlo,monospace" font-size="10.5" fill="#6E675C" letter-spacing=".5">68%</text>
+        </g>
+
+        <!-- 桌面 -->
+        <ellipse cx="240" cy="266" rx="150" ry="5" fill="#1C1A17" opacity=".06"/>
+        <path d="M16 262h448" stroke="#1C1A17" stroke-width="2.4"/>
+        <path d="M16 269h448" stroke="#D9D1C0" stroke-width="1.1"/>
+
+        <!-- 飞行轨迹 -->
+        <path d="M96 226C150 200 196 150 246 126c30-14 58 2 82 34" stroke="#C9C0AE" stroke-width="1.6"
+              fill="none" stroke-dasharray="5 6" stroke-linecap="round"/>
+
+        <!-- 左边：账单堆 -->
+        <g>
+          <g transform="rotate(-9 96 246)">
+            <rect x="44" y="226" width="86" height="32" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2"/>
+            <path d="M53 237h56M53 245h36" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <g transform="rotate(5 112 244)">
+            <rect x="74" y="220" width="80" height="30" fill="#F0E6D3" stroke="#1C1A17" stroke-width="2"/>
+            <path d="M83 231h54M83 239h32" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <g transform="rotate(-18 138 250)">
+            <rect x="116" y="234" width="56" height="26" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2"/>
+            <path d="M124 244h38M124 251h20" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <rect x="32" y="256" width="34" height="6" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.4"/>
+          <rect x="36" y="249" width="34" height="6" fill="#E2BB69" stroke="#A87F2B" stroke-width="1.4"/>
+        </g>
+
+        <!-- 纸飞机 -->
+        <g class="bob">
+          <g transform="translate(246 150) rotate(-16) scale(1.15)">
+            <polygon points="95,0 -75,-50 -30,-4" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2.6" stroke-linejoin="round"/>
+            <polygon points="95,0 -30,-4 -62,46" fill="#EDE2CE" stroke="#1C1A17" stroke-width="2.6" stroke-linejoin="round"/>
+            <path d="M95 0L-30 -4" stroke="#1C1A17" stroke-width="3" stroke-linecap="round"/>
+            <path d="M95 0L-58 -38" stroke="#CFC5B1" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M-62 46l16-24" stroke="#1C1A17" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </g>
+
+        <!-- 送出去的那张纸 -->
+        <g class="doc-fly">
+          <rect width="40" height="26" fill="#FFFDF8" stroke="#1C1A17" stroke-width="1.8"/>
+          <path d="M7 9h26M7 17h16" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
+        </g>
+
+        <!-- 托盘 -->
+        <g>
+          <path d="M322 262v-42h80v42" fill="#F5ECDC" stroke="#1C1A17" stroke-width="2.4"/>
+          <path d="M319 220h86" stroke="#1C1A17" stroke-width="2.6"/>
+          <rect x="332" y="212" width="58" height="7" fill="#FFFDF8" stroke="#1C1A17" stroke-width="1.6"/>
+          <rect x="336" y="205" width="50" height="7" fill="#F0E6D3" stroke="#1C1A17" stroke-width="1.6"/>
+          <rect x="340" y="198" width="42" height="7" fill="#FFFDF8" stroke="#1C1A17" stroke-width="1.6"/>
+          <path d="M372 226v30" stroke="#D9D1C0" stroke-width="1.4"/>
+          <path d="M328 238h38" stroke="#C9C0AE" stroke-width="1.8"/>
+          <path d="M328 248h24" stroke="#C9C0AE" stroke-width="1.8"/>
+        </g>
+
+        <!-- 硬币罐 -->
+        <g>
+          <path d="M412 218h42v44h-42z" fill="#FFFCF4" stroke="#1C1A17" stroke-width="2.2"/>
+          <path d="M409 218h48" stroke="#1C1A17" stroke-width="2.6"/>
+          <rect x="418" y="248" width="30" height="5" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.2"/>
+          <rect x="420" y="241" width="28" height="5" fill="#E2BB69" stroke="#A87F2B" stroke-width="1.2"/>
+          <rect x="424" y="234" width="24" height="5" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.2"/>
+        </g>
+
+        <!-- 硬币 -->
+        <g class="coin"><rect x="-8" y="-4" width="16" height="8" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.5"/></g>
+
+        <!-- 植物 -->
+        <g class="plant">
+          <path d="M28 252c0-12-4-19-9-24" stroke="#6E7B62" stroke-width="2.2" fill="none"/>
+          <path d="M28 252c0-10 5-17 10-22" stroke="#6E7B62" stroke-width="2.2" fill="none"/>
+          <ellipse cx="16" cy="226" rx="8" ry="4.6" fill="#84937A" transform="rotate(-30 16 226)"/>
+          <ellipse cx="19" cy="237" rx="7" ry="4.2" fill="#6E7B62" transform="rotate(-14 19 237)"/>
+          <ellipse cx="40" cy="228" rx="8" ry="4.6" fill="#84937A" transform="rotate(26 40 228)"/>
+        </g>
+        <path d="M14 252h30v10H14z" fill="#E4D3B8" stroke="#1C1A17" stroke-width="2"/>
+      </svg>
+
+      <p class="figcap"><b>图 1</b>　它每天清一遍。</p>
+    </div>
+
+    <div class="deck">
+      <p>这两年，日子紧了。工作不好找，账单一件没少。<b>这不是谁不够努力。</b></p>
+      <p>所以我们做了个 agent，替你跑这些事。不讲课，只办事。</p>
+    </div>
+
+    <dl class="facts">
+      <div class="fact"><dt>给谁</dt><dd>想让收入稳一点、开销少一点的人</dd></div>
+      <div class="fact"><dt>做什么</dt><dd>找工作、省钱、赚钱，三件事</dd></div>
+      <div class="fact"><dt>多少钱</dt><dd><em>永久免费</em>，不收一分</dd></div>
+    </dl>
+  </div>
+
+  <!-- 01 为什么免费 -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-no"><i>01</i>为什么</div>
+      <div class="band-main body">
+        <h2>它该像路灯一样。</h2>
+        <p>找工作、退订、比价、卖闲置，这些事本身不复杂。复杂的是它们要花掉一个人本来就快被榨干的注意力。而下行期最贵的，恰好就是注意力。</p>
+        <p>我们想把它做成基础设施：像路灯、像公共图书馆。它不该因为你没钱就关掉。<b>所以它永久免费，没有会员，没有付费解锁，也没有藏在后面的第二套价格。</b></p>
+        <p>维持它需要成本。这部分由我们承担，另外我们也会想办法，用不打扰你的方式承担一部分。</p>
+      </div>
+      <aside class="margin-note">
+        <em>旁批</em>
+        下行期里，先被卖掉的是耐心。
+      </aside>
+    </div>
+  </section>
+
+  <!-- 02 它做什么 -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-no"><i>02</i>做什么</div>
+      <div class="band-main" style="max-width:none">
+        <h2>三件事，它替你跑。</h2>
+
+        <div class="work">
+          <div class="work-item">
+            <div class="wi-head">
+              <span class="wi-num">一</span>
+              <h3>找工作</h3>
+            </div>
+            <div class="wi-body">每天把新放出来的岗位扫一遍，筛掉明显不合适的，剩下的替你投出去。简历按岗位改写，投完跟进，面试前把公司背景、路线、要带的材料排好。
+              <ul class="wi-list"><li>按履历改简历</li><li>自动投递</li><li>投后跟进</li><li>面试准备</li></ul>
+            </div>
+          </div>
+
+          <div class="work-item">
+            <div class="wi-head">
+              <span class="wi-num">二</span>
+              <h3>省钱</h3>
+            </div>
+            <div class="wi-body">该降档的降档，该退订的退订，该比价的比价。省下来的记在账上，不是一句“已为您优化”。
+              <ul class="wi-list"><li>套餐审查</li><li>订阅清理</li><li>账单异常</li></ul>
+            </div>
+          </div>
+
+          <div class="work-item">
+            <div class="wi-head">
+              <span class="wi-num">三</span>
+              <h3>赚钱</h3>
+            </div>
+            <div class="wi-body">零碎的进账先捡起来。闲置估价挂出，临时活筛一遍，能报的补贴和退款别漏。
+              <ul class="wi-list"><li>闲置出手</li><li>临时用工</li><li>补贴退款</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aside class="margin-note">
+        <em>旁批</em>
+        不是三个功能，是三件本来该有人替你办的事。
+      </aside>
+    </div>
+  </section>
+
+  <!-- 03 回执 -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-no"><i>03</i>账目</div>
+      <div class="band-main" style="max-width:none">
+        <h2>你打开看到的，就是这个。</h2>
+
+        <div class="receipt">
+          <div class="rc-head">
+            <span><b>11 月 19 日</b>　周三　共 14 项</span>
+            <span>其中 3 项需要你确认</span>
+          </div>
+
+          <div class="rc-row"><div class="no">明天</div><div class="item">2 场面试已排好<i>9:30 一家 · 14:00 一家 · 中间留 1 小时</i></div><div class="amt q">已准备</div></div>
+          <div class="rc-row"><div class="no">06:12</div><div class="item">宽带套餐降一档，同速率<i>已提交 · 下月生效</i></div><div class="amt">−48 元/月</div></div>
+          <div class="rc-row"><div class="no">09:30</div><div class="item">投递 7 个匹配岗位<i>薪资 12–18k · 3 家已读</i></div><div class="amt q">7 份</div></div>
+          <div class="rc-row"><div class="no">11:05</div><div class="item">两个订阅到期，其中一个三个月没用<i>已暂停 · 等你决定退不退</i></div><div class="amt">−30 元/月</div></div>
+          <div class="rc-row"><div class="no">14:40</div><div class="item">三件闲置挂出，一件成交<i>旧显示器 · 买家已付款</i></div><div class="amt">+260 元</div></div>
+          <div class="rc-row"><div class="no">16:20</div><div class="item">发现一笔多扣的运费险<i>已申请退回 · 3–5 个工作日到账</i></div><div class="amt">+18 元</div></div>
+
+          <div class="rc-foot">
+            <span>今日：省 <b>78</b> 元/月</span>
+            <span>进账 <b>278</b> 元</span>
+            <span>投递 <b>7</b> 份</span>
+          </div>
+        </div>
+
+        <p class="rc-note">这是格式示意，数字是假的。真的账目只对你自己可见，可以导出，可以随时删。</p>
+      </div>
+      <aside class="margin-note">
+        <em>旁批</em>
+        承诺靠句子，信任靠记录。
+      </aside>
+    </div>
+  </section>
+
+  <!-- 永久免费 -->
+  <div class="free-band">
+    <div class="free-in">
+      <div>
+        <div class="free-title"><small>关于收费</small>永久免费</div>
+        <div class="free-cols">
+          <p><b>不卖数据。</b>你的简历、账单、聊天记录，不会出现在任何一份商业报告里。</p>
+          <p><b>不放广告。</b>这里不会出现贷款、理财、分期。你缺钱的时候，这些是最不该出现的东西。</p>
+          <p><b>不做付费解锁。</b>所有功能，所有人，从头到尾一样。</p>
+          <p><b>撑不住会先说。</b>如果哪天真撑不下去，会提前一年公告，不会半夜改成收费。</p>
+        </div>
+      </div>
+      <div class="seal" aria-label="永久免费印章"><span>永久</span><span>免费</span></div>
+    </div>
+  </div>
+
+  <!-- 04 会与不会 -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-no"><i>04</i>边界</div>
+      <div class="band-main" style="max-width:none">
+        <h2>能做什么，不能做什么，都写清楚。</h2>
+        <div class="faith">
+          <div>
+            <h4>不承诺</h4>
+            <ul>
+              <li>不承诺你一定找到工作。</li>
+              <li>不承诺每个月多赚多少。</li>
+              <li>不承诺你不用再做任何决定。</li>
+              <li>不承诺这段日子会很快过去。</li>
+            </ul>
+          </div>
+          <div class="faith yes">
+            <h4>承诺</h4>
+            <ul>
+              <li>这些事不再由你一个人跑。</li>
+              <li>每一笔省下的、进账的，都记在账上。</li>
+              <li>要你出面的事，说清楚，不绕。</li>
+              <li>你随时可以停，数据全部带走。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="margin-note">
+        <em>旁批</em>
+        说得太满的产品，你大概已经见过很多了。
+      </aside>
+    </div>
+  </section>
+
+  <!-- 落款 -->
+  <div class="sign">
+    <div>
+      <h2>这一段，<br>我陪你走。</h2>
+      <p>不用绑卡，不用付费，明早给你第一份记录。</p>
+      <p class="sign-note">如果你现在还没准备好，也不用开始。<b>把这一页存下来，需要的时候再来。</b></p>
+    </div>
+    <div class="cta-col">
+      <a href="#" class="cta">开始用　→</a>
+      <span class="cta-fine">约 3 分钟 · 永久免费</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot">
+      <span>回血 · 2026</span>
+      <div class="fl">
+        <a href="#">隐私</a>
+        <a href="#">我们怎么活下来</a>
+        <a href="#">联系我们</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const fig = document.querySelector('.fig');
+  const pupils = document.querySelectorAll('.pupil');
+  if (fig && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let raf = null;
+    addEventListener('mousemove', ev => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        const r = fig.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) { raf = null; return; }
+        const cx = r.left + r.width * 0.5, cy = r.top + r.height * 0.72;
+        const dx = Math.max(-3.5, Math.min(3.5, (ev.clientX - cx) / 70));
+        const dy = Math.max(-2.6, Math.min(2.6, (ev.clientY - cy) / 80));
+        pupils.forEach(p => p.style.transform = `translate(${dx}px,${dy}px)`);
+        raf = null;
+      });
+    }, { passive: true });
+  }
+</script>
+</body>
+</html>
