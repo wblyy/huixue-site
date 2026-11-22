@@ -44,8 +44,8 @@
   .brand{display:flex;align-items:center;gap:9px;font-size:22px;font-weight:700;letter-spacing:.1em}
   .brand svg{width:30px;height:30px;flex:none}
   .brand b{font-weight:700}
-  .links{display:flex;gap:28px;font-size:15px;color:var(--ink-2)}
-  .links a{padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+  .links{display:flex;gap:28px;font-size:15px;color:var(--ink-2);flex:none}
+  .links a{padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
   .links a:hover{color:var(--ink);border-bottom-color:var(--green)}
   .nav-cta{margin-left:auto;display:flex;align-items:center;gap:10px}
   .nav-cta .mini{font-size:14px;color:var(--ink-2)}
@@ -200,7 +200,7 @@
   }
   .findings li:last-child{border-bottom:none}
   @keyframes fin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-  .f-tag{display:grid;place-items:center;width:17px;height:17px;border-radius:5px;font-size:9.5px;color:#fff;line-height:1}
+  .f-tag{display:grid;place-items:center;width:19px;height:19px;border-radius:5px;font-size:11px;color:#fff;line-height:1;flex:none}
   .f-tag.k{background:var(--green)}
   .f-tag.s{background:var(--blue)}
   .f-tag.m{background:#F5A623}
@@ -839,12 +839,12 @@
 
   // 扫描项：k=找机会 s=省钱 m=要你出面
   var items = [
-    {tag:'s', txt:'教育优惠 · 软件学生版', val:'省 ¥486'},
-    {tag:'m', txt:'助学金 · 未申报', val:'待补材料'},
-    {tag:'k', txt:'话费套餐 · 同速率高配', val:'−18/月'},
-    {tag:'s', txt:'视频会员 · 学生价未开', val:'−12/月'},
-    {tag:'k', txt:'实习岗 · 匹配命中', val:'11 个'},
-    {tag:'m', txt:'闲置 · 可出手', val:'估 ¥420'}
+    {tag:'s', lab:'省', txt:'教育优惠 · 软件学生版', val:'省 ¥486'},
+    {tag:'m', lab:'你', txt:'助学金 · 未申报', val:'待补材料'},
+    {tag:'k', lab:'机', txt:'话费套餐 · 同速率高配', val:'−18/月'},
+    {tag:'s', lab:'省', txt:'视频会员 · 学生价未开', val:'−12/月'},
+    {tag:'k', lab:'机', txt:'实习岗 · 匹配命中', val:'11 个'},
+    {tag:'m', lab:'你', txt:'闲置 · 可出手', val:'估 ¥420'}
   ];
 
   var list    = document.getElementById('findings');
@@ -856,7 +856,7 @@
 
   function makeLi(it){
     var li = document.createElement('li');
-    li.innerHTML = '<span class="f-tag ' + it.tag + '">' + it.tag.toUpperCase() + '</span>'
+    li.innerHTML = '<span class="f-tag ' + it.tag + '">' + it.lab + '</span>'
                  + '<span class="f-txt">' + it.txt + '</span>'
                  + '<span class="f-val">' + it.val + '</span>';
     return li;
