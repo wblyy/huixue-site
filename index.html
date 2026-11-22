@@ -231,6 +231,67 @@
   .dir p{font-size:14px;line-height:1.9;color:var(--ink-2)}
   .dir p b{color:#12304A;font-weight:600}
 
+  /* ============ 核验 ============ */
+  .vfy{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);gap:22px;align-items:stretch}
+  .vfy-card{min-width:0;background:#fff;border-radius:var(--r);border:1px solid var(--line-2);box-shadow:var(--shadow);padding:22px 24px 20px}
+  .vfy-h{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;font-weight:700;color:#12304A;
+    padding-bottom:14px;border-bottom:1px solid var(--line-2)}
+  .vfy-h em{font-style:normal;font-size:12px;font-weight:400;color:var(--ink-4)}
+  .fld{margin-top:16px}
+  .fld label{display:block;font-size:12px;color:var(--ink-3);margin-bottom:7px;letter-spacing:.04em}
+  .fld-box{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:0 14px;
+    border-radius:12px;border:1px solid #D9E6F0;background:#FBFDFF;font-size:15px;font-weight:600;color:#12304A}
+  .fld-hit{font-size:11.5px;font-weight:400;color:var(--ink-4);white-space:nowrap}
+  .chips{display:flex;gap:8px}
+  .chips span{flex:1;min-width:0;text-align:center;height:38px;line-height:38px;border-radius:10px;
+    border:1px solid #D9E6F0;background:#FBFDFF;font-size:13px;color:var(--ink-2);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+  .chips .on{background:var(--green-wash);border-color:#9AE3BC;color:var(--green-d);font-weight:700}
+  .fld-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;padding-top:15px;
+    border-top:1px dashed var(--line)}
+  .fld-row i{display:block;font-style:normal;font-size:11px;color:var(--ink-4);margin-bottom:3px}
+  .fld-row b{font-size:13px;font-weight:600;color:#12304A;line-height:1.4;display:block}
+  .vfy-foot{margin-top:16px;border-radius:12px;background:#F2FBF6;border:1px solid #CFEEDD;
+    padding:11px 14px;font-size:12.5px;color:var(--green-d);display:flex;align-items:center;gap:9px}
+  .vfy-foot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 3px rgba(0,196,88,.16);flex:none}
+  .vfy-no{min-width:0;background:#fff;border-radius:var(--r);border:1px solid var(--line-2);box-shadow:var(--shadow-s);padding:22px 24px 20px}
+  .vfy-no h4{font-size:12.5px;font-weight:700;color:var(--ink-3);letter-spacing:.1em;margin-bottom:4px}
+  .vfy-no li{display:flex;gap:14px;align-items:baseline;padding:9px 0;border-bottom:1px dotted var(--line-2);font-size:14px}
+  .vfy-no li b{color:#12304A;font-weight:600;flex:none;min-width:8.4em;
+    text-decoration:line-through;text-decoration-color:#DDA6A6;text-decoration-thickness:1px}
+  .vfy-no li span{font-size:12.5px;color:var(--ink-4)}
+  .vfy-no p{margin-top:14px;font-size:13px;line-height:1.9;color:var(--ink-2);
+    background:#F8FBFE;border-radius:12px;padding:12px 14px}
+  .vfy-no p b{color:#12304A;font-weight:600}
+
+  /* ============ 年级 × 学校 ============ */
+  .mats-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .mats-tabs button{font:inherit;font-size:14px;font-weight:600;color:var(--ink-2);background:#fff;
+    border:1px solid #DCE6EE;border-radius:999px;padding:9px 20px;cursor:pointer;
+    transition:background .18s,color .18s,border-color .18s,box-shadow .18s}
+  .mats-tabs button:hover{border-color:#C5D5E2;color:var(--ink)}
+  .mats-tabs button[aria-selected="true"]{background:linear-gradient(180deg,#12D46A,#00B851);color:#fff;
+    border-color:transparent;box-shadow:0 8px 20px -10px rgba(0,196,88,.8)}
+  .mats-panel{display:none}
+  .mats-panel.on{display:block}
+  .grade-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .gcard{background:#fff;border-radius:18px;border:1px solid var(--line-2);box-shadow:var(--shadow-s);
+    padding:19px 19px 16px;display:flex;flex-direction:column}
+  .gcard header{display:flex;align-items:baseline;gap:8px;padding-bottom:11px;border-bottom:1px solid var(--line-2)}
+  .g-no{font-size:17px;font-weight:700;color:#12304A;letter-spacing:.02em}
+  .gcard header em{font-style:normal;font-size:11px;color:var(--ink-4)}
+  .gcard li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+    padding:9px 0;border-bottom:1px dotted var(--line-2);font-size:13.5px;color:#2B3A47;line-height:1.5}
+  .gcard li:last-child{border-bottom:none}
+  .gcard li span{min-width:0;font-weight:500}
+  .gcard li b{font-family:var(--num);font-size:12.5px;font-weight:700;color:var(--green-d);
+    white-space:nowrap;flex:none;text-align:right;line-height:1.5}
+  .gcard li b.q{font-family:var(--sans);font-weight:400;color:var(--ink-3)}
+  .gcard p{margin-top:auto;padding-top:12px;font-size:11.5px;line-height:1.8;color:var(--ink-3)}
+  .mats-note{margin-top:18px;font-size:12.5px;line-height:1.9;color:var(--ink-4);text-align:center}
+  .mats-note b{color:var(--ink-2);font-weight:600}
+
   /* 发现清单 */
   .panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
     border:1px solid var(--line-2);overflow:hidden}
@@ -361,6 +422,8 @@
 
   /* ============ 响应式 ============ */
   @media(max-width:1080px){
+    .vfy{grid-template-columns:minmax(0,1fr)}
+    .grade-grid{grid-template-columns:1fr 1fr}
     .app-grid{grid-template-columns:1fr;gap:14px}
     .radar{max-width:240px}
     .foot-grid{grid-template-columns:1fr 1fr}
@@ -384,6 +447,8 @@
     .exec-row{grid-template-columns:84px 1fr 40px;row-gap:5px;padding:11px 18px}
     .e-note{grid-column:1 / -1;font-size:12px}
     .panel-h,.grp-h,.row,.panel-foot,.exec-row{padding-left:18px;padding-right:18px}
+    .links{gap:20px;font-size:14px}
+    .nav-in{gap:22px}
     .sec{padding-top:64px}
     .stats{margin-top:64px;padding:44px 0 40px}
     .free{margin-top:64px}
@@ -415,6 +480,13 @@
     .exec-row{grid-template-columns:1fr 1fr;row-gap:4px}
     .exec-row .e-bar{grid-column:1 / -1}
     .e-pct{text-align:left}
+    .vfy-card,.vfy-no{padding:18px 17px 16px}
+    .fld-row{grid-template-columns:1fr 1fr;gap:12px 10px}
+    .vfy-no li{flex-direction:column;gap:2px;align-items:flex-start}
+    .vfy-no li b{min-width:0}
+    .grade-grid{grid-template-columns:1fr}
+    .mats-tabs button{font-size:13px;padding:8px 15px}
+    .fld-hit{display:none}
   }
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -436,7 +508,8 @@
     </a>
     <div class="links">
       <a href="#diag">身份诊断</a>
-      <a href="#find">发现清单</a>
+      <a href="#verify">怎么核验</a>
+      <a href="#mats">年级清单</a>
       <a href="#run">并发执行</a>
       <a href="#ledger">账本</a>
       <a href="#free">关于收费</a>
@@ -452,13 +525,13 @@
   <div class="wrap hero-in">
     <span class="eyebrow">给在校生的 AGENT · 永久免费</span>
     <h1>先扫一遍，<br>把<em>漏掉的</em>捡回来</h1>
-    <p class="hero-sub">学生身份能换到的东西，比你以为的多。实习、奖学金、助学金、教育优惠、能卖的旧东西、能接的兼职——散在几十个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b></p>
+    <p class="hero-sub">学生身份能换到的东西，比你以为的多。实习、奖学金、助学金、教育优惠、能卖的旧东西、能接的兼职——散在几十个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b>核验只用两句话：哪个学校，大几。</p>
     <div class="hero-btns">
       <a href="#top" class="btn btn-green">免费扫描　约 3 分钟</a>
       <a href="#diag" class="btn btn-ghost">先看一次扫描</a>
     </div>
     <div class="hero-tags">
-      <span>本科生 / 研究生</span>
+      <span>不传学生证</span>
       <span>不用绑卡</span>
       <span>不卖数据</span>
       <span>随时可停</span>
@@ -473,7 +546,7 @@
             <div class="app-title">学生身份诊断
               <span class="dotpill">扫描中</span>
             </div>
-            <div class="app-stat">已扫 <b>6</b> 类入口 · 合计约 <b>¥8,950</b></div>
+            <div class="app-stat">已扫 <b>6</b> 类入口 · 合计约 <b>¥10,350</b></div>
           </div>
 
           <div class="app-grid">
@@ -545,6 +618,7 @@
       <span class="sec-no">01　扫描什么</span>
       <h2>漏掉的不是能力，是入口。</h2>
       <p class="sec-sub">一个学生的机会，散在教务、学院群、招聘站、二手平台、银行 App、话费账单里。任何单个入口都不难，难的是它们加起来有几十个。于是大多数人只翻最熟的那两三个。</p>
+      <p class="sec-sub" style="margin-top:10px">扫的范围不是全网乱扫。学校类型决定哪批政策能落下来，年级决定哪批还来得及。<b>这两项一给，几十个入口就收窄到十几个。</b></p>
     </div>
 
     <div class="dirs">
@@ -570,26 +644,285 @@
   </div>
 </section>
 
+<!-- 核验 -->
+<section class="sec" id="verify">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">02　核验</span>
+      <h2>不用交学生证。问两个问题就够。</h2>
+      <p class="sec-sub">学校、年级，这两项决定了你能碰到哪些入口。剩下的信息，扫描的时候它自己去查，不需要你先把手里的证件拍上来。</p>
+    </div>
+
+    <div class="vfy">
+      <div class="vfy-card">
+        <div class="vfy-h">核验 · 两句话<em>约 20 秒</em></div>
+
+        <div class="fld">
+          <label for="school">你在哪所学校</label>
+          <div class="fld-box">
+            <input id="school" type="text" inputmode="text" autocomplete="off" placeholder="输入全称或简称，如 华南理工" style="flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15px;font-weight:600;color:#12304A;outline:none">
+            <span class="fld-hit">覆盖全国普通高校</span>
+          </div>
+        </div>
+
+        <div class="fld">
+          <label>学校类型 · 可改</label>
+          <div class="chips" id="chips-type">
+            <span class="on">双一流</span><span>普通本科</span><span>高职高专</span>
+          </div>
+        </div>
+
+        <div class="fld">
+          <label>现在大几</label>
+          <div class="chips" id="chips-grade">
+            <span>大一</span><span>大二</span><span class="on">大三</span><span>大四</span>
+          </div>
+        </div>
+
+        <div class="fld-row">
+          <div><i>学制</i><b>四年制</b></div>
+          <div><i>入学年份</i><b>2024 年</b></div>
+          <div><i>距离毕业</i><b>还有 19 个月</b></div>
+        </div>
+
+        <div class="vfy-foot">这三项够用了。下一屏直接出清单，中间没有一步要传图。</div>
+      </div>
+
+      <div class="vfy-no">
+        <h4>不需要什么</h4>
+        <ul>
+          <li><b>学生证照片</b><span>学号、院系、本人照片，一张就能对上人</span></li>
+          <li><b>身份证正反面</b><span>号码和住址都在上面，与核验无关</span></li>
+          <li><b>学信网截图</b><span>表里有学籍号、专业和身份证号</span></li>
+          <li><b>成绩单原图</b><span>排名可以自己填，它只用来排序</span></li>
+          <li><b>家庭情况证明</b><span>进门不设门槛，困难认定是学校的事</span></li>
+        </ul>
+        <p>要发钱、要报名的地方，一定会把材料列清楚。<b>到那一步你再去开</b>，由你决定给谁看。核验本身，什么都不收。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 年级 × 学校类型 -->
+<section class="sec" id="mats">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">03　按学校、按年级</span>
+      <h2>大一能办的，和大四能办的，不是同一张单子。</h2>
+      <p class="sec-sub">同样的身份，进了不同的学校、走到不同的年级，能碰到的入口就换了一批。下面按学校类型分开，一年一格。</p>
+    </div>
+
+    <div class="mats-tabs" role="tablist" aria-label="学校类型">
+      <button role="tab" aria-selected="true" data-tab="t1">双一流</button>
+      <button role="tab" aria-selected="false" data-tab="t2">普通本科</button>
+      <button role="tab" aria-selected="false" data-tab="t3">高职高专</button>
+      <button role="tab" aria-selected="false" data-tab="t4">师范 · 涉农 · 医学</button>
+    </div>
+
+    <div class="mats-panel on" id="t1">
+      <div class="grade-grid">
+        <div class="gcard">
+          <header><span class="g-no">大一</span><em>先别急着放弃</em></header>
+          <ul>
+            <li><span>国家助学金</span><b>3,700/年</b></li>
+            <li><span>勤工助学 · 12 元/时</span><b>480/月</b></li>
+            <li><span>新生入学资助 滋蕙计划</span><b>500–1,000</b></li>
+            <li><span>学生票 · 硬座 5 折</span><b>每年 4 次</b></li>
+          </ul>
+          <p>助学金 2,500–5,000 分三档，别按最低档估自己。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大二</span><em>绩点换钱的一年</em></header>
+          <ul>
+            <li><span>国家奖学金 · 全国 12 万名</span><b>10,000/年</b></li>
+            <li><span>国家励志奖学金 · 前 3%</span><b>6,000/年</b></li>
+            <li><span>大学生创新创业训练</span><b>1–2 万</b></li>
+            <li><span>保研起点 · 绩点进前 10%</span><b>定档</b></li>
+          </ul>
+          <p>国奖看综合，励志看成绩加困难认定，两条路不冲突。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大三</span><em>名额真正开始动</em></header>
+          <ul>
+            <li><span>夏令营 / 预推免</span><b>5–9 月</b></li>
+            <li><span>本校保研率 · 985 区间</span><b>30–65%</b></li>
+            <li><span>交换与联合培养</span><b>一学期</b></li>
+            <li><span>暑期实习 · 转正名额</span><b>提前批</b></li>
+          </ul>
+          <p>2025 年多校取消夏令营，预推免成了主战场，别按老时间线准备。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大四</span><em>只此一次的钱</em></header>
+          <ul>
+            <li><span>推免系统填报</span><b>9 月底</b></li>
+            <li><span>一次性求职补贴 · 困难生</span><b>1,000–3,000</b></li>
+            <li><span>同项 · 有助学贷款</span><b>600</b></li>
+            <li><span>基层就业学费补偿</span><b>≤20,000/年</b></li>
+          </ul>
+          <p>求职补贴各地 600–3,000 不等（广州 3,000、江苏 1,500），错过申报期不补发。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mats-panel" id="t2">
+      <div class="grade-grid">
+        <div class="gcard">
+          <header><span class="g-no">大一</span><em>换轨道的窗口</em></header>
+          <ul>
+            <li><span>国家助学金</span><b>3,700/年</b></li>
+            <li><span>勤工助学 · 12 元/时</span><b>480/月</b></li>
+            <li><span>转专业 · 大多在大一末</span><b>一次</b></li>
+            <li><span>国家助学贷款</span><b>≤20,000/年</b></li>
+          </ul>
+          <p>转专业只看大一成绩，这一步错过就没有第二次。学生票每年 4 次，动车二等座 75 折。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大二</span><em>把加分项攒起来</em></header>
+          <ul>
+            <li><span>国家励志奖学金</span><b>6,000/年</b></li>
+            <li><span>四六级 / 教资笔试</span><b>两证</b></li>
+            <li><span>大创项目 · 省级以上</span><b>1 项</b></li>
+            <li><span>辅修 / 双学位</span><b>另收学费</b></li>
+          </ul>
+          <p>推免名额少的学校，竞赛和大创是唯一能自己加的分。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大三</span><em>考研要现在定</em></header>
+          <ul>
+            <li><span>考研择校 · 考数学的科目</span><b>提前 12 个月</b></li>
+            <li><span>专业实习</span><b>3–6 个月</b></li>
+            <li><span>省考 / 选调 · 部分省收本科</span><b>看省份</b></li>
+            <li><span>学科竞赛 · 省级</span><b>加分项</b></li>
+          </ul>
+          <p>数学和专业课要重来的科目，大三上就该动手了。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大四</span><em>三条路同时开</em></header>
+          <ul>
+            <li><span>秋招主战场</span><b>9–11 月</b></li>
+            <li><span>一次性求职补贴 · 困难生</span><b>600–3,000</b></li>
+            <li><span>三支一扶 / 西部计划</span><b>服务 2 年</b></li>
+            <li><span>基层就业学费补偿</span><b>≤20,000/年</b></li>
+          </ul>
+          <p>秋招和考研可以同时报，别在 9 月就替自己做完选择。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mats-panel" id="t3">
+      <div class="grade-grid">
+        <div class="gcard">
+          <header><span class="g-no">大一</span><em>学费先减掉</em></header>
+          <ul>
+            <li><span>国家助学金 · 高职约 22%</span><b>3,700/年</b></li>
+            <li><span>雨露计划 · 脱贫家庭</span><b>3,000/年</b></li>
+            <li><span>退役士兵 · 全部享受助学金</span><b>3,700/年</b></li>
+            <li><span>勤工助学 · 每小时 ≥12 元</span><b>480/月</b></li>
+          </ul>
+          <p>雨露计划分春秋两学期发，每学期 1,500，村里报。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大二</span><em>证书能换补贴</em></header>
+          <ul>
+            <li><span>国家励志奖学金 · 前 3.3%</span><b>6,000/年</b></li>
+            <li><span>技能等级证书 · 一次性</span><b>1,500–2,000</b></li>
+            <li><span>1+X 证书</span><b>按工种</b></li>
+            <li><span>现代学徒制 · 企业补贴</span><b>按月</b></li>
+          </ul>
+          <p>证书要在毕业前一年内考，过期申领不受理。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大三</span><em>毕业年，一次算清</em></header>
+          <ul>
+            <li><span>专升本 · 各省统考</span><b>3–4 月</b></li>
+            <li><span>顶岗实习</span><b>半年</b></li>
+            <li><span>一次性求职补贴 · 困难生</span><b>600–3,000</b></li>
+            <li><span>雨露短期技能培训</span><b>1,500–2,000</b></li>
+          </ul>
+          <p>三年制的高职，毕业年就是大三，所有申报都压在这一年。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大四</span><em>三年制没有这一格</em></header>
+          <ul>
+            <li><span>职业本科 · 按本科口径</span><b>重算</b></li>
+            <li><span>专升本后本科两年</span><b>2 年</b></li>
+            <li><span>应征入伍学费补偿</span><b>≤20,000/年</b></li>
+            <li><span>基层就业学费补偿</span><b>≤20,000/年</b></li>
+          </ul>
+          <p>升上本科后奖助学金按本科口径重算，别按下限估。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mats-panel" id="t4">
+      <div class="grade-grid">
+        <div class="gcard">
+          <header><span class="g-no">大一</span><em>入学就签的那份协议</em></header>
+          <ul>
+            <li><span>公费师范 · 两免一补</span><b>学费全免</b></li>
+            <li><span>定向医学生 · 免费培养</span><b>带编</b></li>
+            <li><span>退役士兵 · 全部享受助学金</span><b>3,700/年</b></li>
+            <li><span>雨露计划 · 脱贫家庭</span><b>3,000/年</b></li>
+          </ul>
+          <p>两免一补＝免学费、免住宿费，加每月生活补助。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大二</span><em>还有第二次机会</em></header>
+          <ul>
+            <li><span>优师计划 · 中西部定向</span><b>两免一补</b></li>
+            <li><span>非公费生转入 · 入学两年内</span><b>返学费</b></li>
+            <li><span>公费农科生 · 部分省</span><b>看省份</b></li>
+            <li><span>国家助学金</span><b>3,700/年</b></li>
+          </ul>
+          <p>非公费生入学两年内可申请转入，转入后返还学费。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大三</span><em>去向开始绑定</em></header>
+          <ul>
+            <li><span>履约地市 · 按考核排序选</span><b>一次</b></li>
+            <li><span>教育实习 / 规培衔接</span><b>半年</b></li>
+            <li><span>执业资格 · 教资 / 医师</span><b>应届可考</b></li>
+            <li><span>师范生技能竞赛</span><b>加档案分</b></li>
+          </ul>
+          <p>本研衔接的公费师范生，研一课程结束后才按排序选地市。</p>
+        </div>
+        <div class="gcard">
+          <header><span class="g-no">大四</span><em>换来的是一份编制</em></header>
+          <ul>
+            <li><span>履约任教 · 有编有岗</span><b>6 年</b></li>
+            <li><span>本研衔接 · 免试读教育硕士</span><b>全日制</b></li>
+            <li><span>基层任教专项支持</span><b>按月补</b></li>
+            <li><span>违约 · 退费加信用记录</span><b>成本</b></li>
+          </ul>
+          <p>违约要退已享受的免费教育费用，并计入信用记录，别只听好处。</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="mats-note">金额依据教育部、财政部与各省 2025 年公开文件整理，<b>档位和申报时间以本校学生资助中心通知为准</b>。同类项目通常不可重复领取。</p>
+  </div>
+</section>
+
 <!-- 发现清单 -->
 <section class="sec" id="find">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">02　扫完得到什么</span>
+      <span class="sec-no">04　扫完得到什么</span>
       <h2>一张清单，每项标好档位。</h2>
-      <p class="sec-sub">立刻能办的，它直接去办；要你点头的，一句话确认；必须你本人的，标出来，等你有空。</p>
+      <p class="sec-sub">立刻能办的，它直接去办；要你点头的，一句话确认；必须你本人的，标出来，等你有空。清单跟着学校类型和年级生成，换一格，结果就换一批。</p>
     </div>
 
     <div class="panel">
       <div class="panel-h">
-        <div><b>发现清单</b><em>11 月 19 日 · 第 1 轮</em></div>
-        <span class="pill">合计约 ¥8,950</span>
+        <div><b>发现清单</b><em>华南理工 · 双一流 · 大三 · 11 月 19 日</em></div>
+        <span class="pill">合计约 ¥10,350</span>
       </div>
 
       <div class="grp">
         <div class="grp-h"><span class="bd"></span>找机会<em>资格与入口</em></div>
         <div class="row"><div class="l"><span>实习岗 · 匹配命中</span><i>4 个明确接受在校生、每周 3 天</i></div><div class="r b">11 个</div></div>
-        <div class="row"><div class="l"><span>国家助学金 · 本学年未申报</span><i>需一份家庭情况证明 · 学院开</i></div><div class="r">¥3,300</div></div>
-        <div class="row"><div class="l"><span>励志奖学金 · 下周截止</span><i>成绩单可在线打印</i></div><div class="r">¥5,000</div></div>
+        <div class="row"><div class="l"><span>国家助学金 · 本学年未申报</span><i>需一份家庭情况证明 · 学院开</i></div><div class="r">¥3,700</div></div>
+        <div class="row"><div class="l"><span>励志奖学金 · 下周截止</span><i>成绩单可在线打印</i></div><div class="r">¥6,000</div></div>
         <div class="row"><div class="l"><span>校内助管 · 每周 6 小时</span><i>图书馆 · 排班可调</i></div><div class="r">¥480/月</div></div>
       </div>
 
@@ -613,7 +946,7 @@
         <span>立刻能办 <b>9</b> 项</span>
         <span>要你点头 <b>2</b> 项</span>
         <span>必须本人 <b>1</b> 项</span>
-        <span>合计约 <b>¥8,950</b></span>
+        <span>合计约 <b>¥10,350</b></span>
       </div>
     </div>
   </div>
@@ -623,7 +956,7 @@
 <section class="sec" id="run">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">03　怎么执行</span>
+      <span class="sec-no">05　怎么执行</span>
       <h2>列出来的事，同时办。</h2>
       <p class="sec-sub">一件一件排队，是人的做法。这些事之间没有依赖，本来就该一起跑。改简历、投岗位、谈闲置、查账单、补材料，同时进行，谁先有结果谁先报。</p>
     </div>
@@ -650,7 +983,7 @@
 <section class="sec" id="ledger">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">04　账本</span>
+      <span class="sec-no">06　账本</span>
       <h2>它办了什么，打开就能看见。</h2>
       <p class="sec-sub">承诺靠句子，信任靠记录。每一笔省下的、进账的，都有时间和出处。</p>
     </div>
@@ -714,7 +1047,7 @@
     <h3>一学期扫一遍，大概是这个量级</h3>
     <p class="lead">数字来自内测学生的平均结果，每个人不一样。</p>
     <div class="stat-grid">
-      <div class="stat"><b>8,950<i>元</i></b><span>一学期可回血金额</span></div>
+      <div class="stat"><b>10,350<i>元</i></b><span>一学期可回血金额</span></div>
       <div class="stat"><b>37<i>个</i></b><span>人均扫出的入口</span></div>
       <div class="stat"><b>4.2<i>小时</i></b><span>替你做掉的手续</span></div>
       <div class="stat"><b>0<i>元</i></b><span>收费，永久</span></div>
@@ -726,7 +1059,7 @@
 <section class="sec" id="faith">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">05　边界</span>
+      <span class="sec-no">07　边界</span>
       <h2>能做什么，不能做什么，都写清楚。</h2>
       <p class="sec-sub">说得太满的产品，你大概已经见过很多了。这里只写真能做到的。</p>
     </div>
@@ -803,6 +1136,8 @@
       <div class="foot-col">
         <h5>产品</h5>
         <a href="#diag">身份诊断</a>
+        <a href="#verify">怎么核验</a>
+        <a href="#mats">年级清单</a>
         <a href="#find">发现清单</a>
         <a href="#run">并发执行</a>
         <a href="#ledger">账本</a>
@@ -834,6 +1169,30 @@
 </footer>
 
 <script>
+(function(){
+  // 学校类型 / 年级：只给建议，不作为进入门槛
+  var tabs = [].slice.call(document.querySelectorAll('.mats-tabs button'));
+  var panels = [].slice.call(document.querySelectorAll('.mats-panel'));
+
+  function pick(id){
+    tabs.forEach(function(b){ b.setAttribute('aria-selected', String(b.getAttribute('data-tab') === id)); });
+    panels.forEach(function(p){ p.classList.toggle('on', p.id === id); });
+  }
+  tabs.forEach(function(b){
+    b.addEventListener('click', function(){ pick(b.getAttribute('data-tab')); });
+  });
+
+  // 核验卡里的选项也是纯选择，不提交任何东西
+  [].slice.call(document.querySelectorAll('.chips')).forEach(function(box){
+    [].slice.call(box.children).forEach(function(c){
+      c.addEventListener('click', function(){
+        [].slice.call(box.children).forEach(function(o){ o.classList.remove('on'); });
+        c.classList.add('on');
+      });
+    });
+  });
+})();
+
 (function(){
   var motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 
