@@ -3,20 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>回血 — 一起回血，这一段我陪你走</title>
-<meta name="description" content="找机会、省钱、赚钱。交给一个 agent 去做。永久免费。">
+<title>回血 — 扫一遍，把漏掉的捡回来</title>
+<meta name="description" content="给大学生的 agent：扫描、发现、并发执行。找机会、省钱、赚钱。永久免费。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F7F4EC'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%23C9C0AE' stroke-width='4'/%3E%3Cpath d='M32 32 L32 13' stroke='%23B03A28' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23B03A28'/%3E%3C/svg%3E">
 <style>
   :root{
     --paper:#F7F4EC;
     --paper-2:#F1ECE0;
+    --panel:#FFFDF7;
     --ink:#1C1A17;
     --ink-2:#57514A;
     --ink-3:#6E675C;
     --line:#D9D1C0;
+    --line-2:#C9C0AE;
     --red:#B03A28;
     --red-2:#8E2C1E;
     --red-wash:#E8CDC3;
-    --sage:#6E7B62;
+    --sage:#5F6F54;
+    --sage-wash:#DCE1D2;
     --gold:#D9AE55;
     --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",Georgia,"Times New Roman",serif;
     --sans:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",-apple-system,sans-serif;
@@ -29,7 +33,6 @@
     font-family:var(--serif);font-size:17px;line-height:1.95;
     overflow-x:hidden;
   }
-  /* 纸张颗粒：极轻的一层，压掉屏幕的塑料感 */
   body::after{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.16;mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
@@ -56,33 +59,29 @@
 
   /* ============ 头版 ============ */
   .lead-grid{
-    display:grid;grid-template-columns:1.25fr .9fr;
+    display:grid;grid-template-columns:1.18fr .92fr;
     grid-template-areas:"head fig" "deck fig" "facts facts";
-    column-gap:44px;padding:56px 0 0;
+    column-gap:48px;padding:52px 0 0;align-items:start;
   }
   .facts{grid-area:facts}
   .hd{grid-area:head}
-  .kicker{
-    font-family:var(--sans);font-size:12px;letter-spacing:.2em;color:var(--red);
-    padding-bottom:16px;
-  }
   h1{
-    font-size:clamp(62px,9.4vw,112px);line-height:1.02;font-weight:600;
+    font-size:clamp(52px,7.6vw,92px);line-height:1.08;font-weight:600;
     letter-spacing:.03em;
   }
   .h1-sub{
-    font-size:clamp(19px,2.2vw,24px);letter-spacing:.1em;color:var(--ink-2);
-    margin-top:14px;
+    font-size:clamp(18px,2.1vw,23px);letter-spacing:.08em;color:var(--ink-2);
+    margin-top:16px;
   }
   .h1-rule{display:block;width:96px;height:2px;background:var(--red);margin:22px 0 0}
-  .deck{grid-area:deck;padding-top:26px;max-width:38ch}
-  .deck p{font-size:17.5px;line-height:2.05;color:var(--ink-2)}
+  .deck{grid-area:deck;padding-top:24px;max-width:40ch}
+  .deck p{font-size:17px;line-height:2.05;color:var(--ink-2);margin-bottom:12px}
+  .deck p:last-child{margin-bottom:0}
   .deck p b{font-weight:600;color:var(--ink);border-bottom:2px solid var(--red-wash)}
 
-  /* 说明栏：模拟报纸的分栏速览 */
   .facts{
     display:grid;grid-template-columns:repeat(3,1fr);gap:0;
-    margin-top:40px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    margin-top:38px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
   }
   .fact{padding:18px 20px 20px 0}
   .fact + .fact{border-left:1px solid var(--line);padding-left:24px}
@@ -90,25 +89,88 @@
   .fact dd{font-size:16px;line-height:1.75}
   .fact dd em{font-style:normal;color:var(--red);font-weight:600}
 
-  /* 图 */
-  .fig{grid-area:fig;position:relative;align-self:end;margin-bottom:6px}
-  .fig svg{width:100%;height:auto;display:block;overflow:visible}
+  /* ============ 扫描面板 ============ */
+  .fig{grid-area:fig;position:relative;margin-top:4px}
+  .scan{
+    background:var(--panel);border:1px solid var(--ink);
+    box-shadow:0 1px 0 #fff inset, 0 26px 42px -36px rgba(28,26,23,.62);
+  }
+  .scan-head{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:10px 14px;border-bottom:1px solid var(--line);
+    font-family:var(--sans);font-size:10.5px;letter-spacing:.12em;color:var(--ink-3);
+  }
+  .scan-head b{color:var(--ink);font-weight:600;letter-spacing:.1em}
+  .dial-wrap{position:relative;width:min(100%,268px);margin:20px auto 14px}
+  .dial{width:100%;height:auto;display:block}
+  .dial-sweep{transform-box:view-box;transform-origin:100px 100px;animation:spin 9s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .tick{stroke:#C9C0AE;stroke-width:2;animation:tickLight 9s linear infinite}
+  @keyframes tickLight{
+    0%{stroke:var(--red);stroke-width:2.8}
+    5%{stroke:var(--red);stroke-width:2.8}
+    14%{stroke:#C9C0AE;stroke-width:2}
+    100%{stroke:#C9C0AE;stroke-width:2}
+  }
+  .dial-center{
+    position:absolute;inset:0;display:grid;place-content:center;text-align:center;
+    pointer-events:none;padding-top:2px;
+  }
+  .dial-num{
+    font-family:var(--mono);font-size:40px;line-height:1;letter-spacing:-.03em;
+    color:var(--ink);font-variant-numeric:tabular-nums;
+  }
+  .dial-num span{font-size:15px;color:var(--ink-3);margin-left:2px;letter-spacing:0}
+  .dial-label{
+    font-family:var(--sans);font-size:10px;letter-spacing:.2em;color:var(--ink-3);
+    margin-top:9px;
+  }
+  .findings{
+    list-style:none;height:108px;overflow:hidden;
+    border-top:1px solid var(--line);padding:0 14px;
+  }
+  .findings li{
+    display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:9px;
+    height:34px;border-bottom:1px dotted var(--line);
+    font-family:var(--mono);font-size:11px;letter-spacing:.01em;
+    animation:fin .32s ease both;
+  }
+  .findings li:last-child{border-bottom:none}
+  @keyframes fin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .f-tag{
+    display:grid;place-items:center;width:18px;height:18px;border-radius:2px;
+    font-family:var(--sans);font-size:10px;line-height:1;letter-spacing:0;
+    border:1px solid currentColor;
+  }
+  .f-tag.k{color:var(--ink-3)}
+  .f-tag.s{color:var(--sage)}
+  .f-tag.m{color:var(--red)}
+  .f-txt{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .f-val{color:var(--ink);white-space:nowrap}
+  .scan-foot{
+    display:flex;justify-content:space-between;gap:10px;
+    padding:9px 14px;border-top:1px solid var(--ink);
+    background:var(--paper-2);font-family:var(--sans);font-size:10.5px;
+    letter-spacing:.06em;color:var(--ink-2);
+  }
+  .scan-foot b{font-family:var(--mono);font-weight:500;color:var(--red);letter-spacing:0}
   .figcap{
     font-family:var(--sans);font-size:11.5px;line-height:1.85;color:var(--ink-3);
-    letter-spacing:.05em;margin-top:10px;padding-left:2px;max-width:31ch;
+    letter-spacing:.05em;margin-top:10px;padding-left:2px;
   }
   .figcap b{color:var(--ink-2);font-weight:500}
 
   /* ============ 通用版块 ============ */
-  .band{padding:88px 0 0}
+  .band{padding:84px 0 0}
   .band-grid{display:grid;grid-template-columns:112px 1fr 200px;gap:36px;align-items:start}
+  .band-grid > *{min-width:0}
   .band-no{
     font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--ink-3);
     padding-top:9px;
   }
   .band-no i{display:block;font-style:normal;color:var(--red);font-size:26px;font-family:var(--serif);letter-spacing:0;margin-bottom:2px;font-weight:600}
   .band-main{max-width:44ch}
-  h2{font-size:clamp(25px,3.2vw,34px);line-height:1.55;font-weight:600;letter-spacing:.02em;margin-bottom:22px}
+  h2{font-size:clamp(24px,3.1vw,33px);line-height:1.55;font-weight:600;letter-spacing:.02em;margin-bottom:20px}
   .body p{text-indent:2em;margin-bottom:14px;color:var(--ink-2)}
   .body p:last-child{margin-bottom:0}
   .body p b{font-weight:600;color:var(--ink)}
@@ -116,17 +178,13 @@
     font-size:13.5px;line-height:1.95;color:var(--ink-3);
     border-top:1px solid var(--ink);padding-top:12px;max-width:22ch;
   }
-  .margin-note em{font-style:normal;color:var(--red);display:block;font-size:11px;font-family:var(--sans);letter-spacing:.14em;margin-bottom:6px}
 
-  /* ============ 三件事：不等宽、无框 ============ */
-  .work{display:grid;grid-template-columns:1.15fr .85fr;gap:0 48px;margin-top:8px}
-  .work-item{padding:26px 0;border-top:1px solid var(--line)}
+  /* ============ 三个方向 ============ */
+  .work{display:grid;grid-template-columns:1.15fr .85fr;gap:0 48px;margin-top:4px}
+  .work-item{padding:24px 0;border-top:1px solid var(--line)}
   .work-item:nth-child(1){grid-column:1 / -1}
   .work-item:nth-child(1) .wi-body{max-width:56ch}
   .wi-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
-  .wi-head span{
-    font-family:var(--sans);font-size:11px;letter-spacing:.16em;color:var(--ink-3);
-  }
   .wi-head h3{font-size:23px;font-weight:600;letter-spacing:.06em}
   .wi-num{
     font-family:var(--sans);font-size:11px;color:var(--red);letter-spacing:.1em;
@@ -134,15 +192,119 @@
   }
   .wi-body{color:var(--ink-2);font-size:16px;line-height:1.98}
   .wi-body b{color:var(--ink);font-weight:600}
-  .wi-list{list-style:none;margin-top:10px;font-size:15px;color:var(--ink-3)}
+  .wi-list{list-style:none;margin-top:10px;font-size:14.5px;color:var(--ink-3)}
   .wi-list li{display:inline-block;margin-right:4px}
   .wi-list li::after{content:"／";color:var(--line);margin-left:4px}
   .wi-list li:last-child::after{content:""}
 
+  /* ============ 发现清单 ============ */
+  .disc{
+    background:var(--panel);border:1px solid var(--ink);margin-top:2px;
+    box-shadow:0 1px 0 #fff inset, 0 24px 40px -38px rgba(28,26,23,.55);
+  }
+  .disc-head{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:11px 18px;border-bottom:1px solid var(--ink);
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;color:var(--ink-3);
+  }
+  .disc-head b{color:var(--ink);font-weight:600}
+  .dg{display:grid;grid-template-columns:96px 1fr;gap:0 16px;padding:14px 18px;border-bottom:1px dotted var(--line)}
+  .dg:last-of-type{border-bottom:none}
+  .dg-label{
+    font-family:var(--sans);font-size:12px;letter-spacing:.1em;color:var(--ink);
+    padding-top:2px;
+  }
+  .dg-label em{
+    font-style:normal;display:block;font-family:var(--mono);font-size:10.5px;
+    color:var(--ink-3);letter-spacing:0;margin-top:3px;
+  }
+  .dg ul{list-style:none}
+  .dg li{
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+    font-size:14.5px;line-height:1.95;color:var(--ink-2);
+    padding:3px 0;
+  }
+  .dg li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dg li b{color:var(--ink);font-weight:600}
+  .dg li span:last-child{
+    font-family:var(--mono);font-size:12.5px;color:var(--red);white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .dg li .q{color:var(--ink-3)}
+  .disc-foot{
+    display:flex;flex-wrap:wrap;gap:22px;padding:11px 18px;
+    border-top:1px solid var(--ink);background:var(--paper-2);
+    font-family:var(--sans);font-size:11.5px;color:var(--ink-2);letter-spacing:.04em;
+  }
+  .disc-foot b{font-family:var(--mono);color:var(--red);font-weight:500;letter-spacing:0}
+
+  /* ============ 并发执行 ============ */
+  .exec{
+    background:var(--panel);border:1px solid var(--ink);margin-top:2px;
+    box-shadow:0 1px 0 #fff inset, 0 24px 40px -38px rgba(28,26,23,.55);
+  }
+  .exec-head{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:11px 18px;border-bottom:1px solid var(--ink);
+    font-family:var(--sans);font-size:11px;letter-spacing:.14em;color:var(--ink-3);
+  }
+  .exec-head b{color:var(--ink);font-weight:600}
+  .exec-head .live{display:inline-flex;align-items:center;gap:7px}
+  .exec-head .live::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--red);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.28;transform:scale(.8)}}
+  .exec-row{
+    display:grid;grid-template-columns:84px 1fr 44px 138px;gap:14px;align-items:center;
+    padding:11px 18px;border-bottom:1px dotted var(--line);
+    font-family:var(--sans);font-size:12px;
+  }
+  .exec-row:last-child{border-bottom:none}
+  .e-name{color:var(--ink);font-weight:500;letter-spacing:.04em;white-space:nowrap}
+  .e-bar{position:relative;height:7px;background:var(--paper-2);border:1px solid var(--line-2);overflow:hidden}
+  .e-bar i{position:absolute;top:0;bottom:0;left:0;width:0;background:var(--ink);transition:background .3s,width 1.1s cubic-bezier(.3,.7,.3,1)}
+  .e-bar i.run{transition:none}
+  .exec-row.done .e-bar i{background:var(--sage)}
+  .e-pct{
+    font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:right;
+    font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap;
+  }
+  .exec-row.done .e-pct{color:var(--sage)}
+  .e-note{font-size:11.5px;color:var(--ink-3);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .exec-row.hold{
+    background:color-mix(in srgb, var(--red-wash) 34%, transparent);
+    border-left:2px solid var(--red);
+    padding-left:16px;
+  }
+  .exec-row.hold .e-name{color:var(--red)}
+  .exec-row.hold .e-bar{border-color:var(--red-wash)}
+  .exec-row.hold .e-bar i{width:100%!important;background:var(--red-wash);opacity:1}
+  .exec-row.hold .e-pct{color:var(--red)}
+  .exec-note{
+    margin-top:12px;font-family:var(--sans);font-size:12px;color:var(--ink-3);
+    letter-spacing:.02em;line-height:1.9;
+  }
+  .exec-note b{color:var(--red);font-weight:500}
+  .body-p{color:var(--ink-2);margin-bottom:0;max-width:54ch}
+  .body-p b{color:var(--ink);font-weight:600}
+  /* 越界到右侧栏：队列需要整张纸的宽度 */
+  .band-wide{grid-column:2 / 4;margin-top:24px}
+
+  /* ============ 三个人工口子 ============ */
+  .hand{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px;margin-top:6px}
+  .hand-item{border-top:1px solid var(--ink);padding-top:12px}
+  .h-step{
+    font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.06em;
+  }
+  .hand-item h3{font-size:19px;font-weight:600;letter-spacing:.05em;margin:6px 0 7px}
+  .hand-item p{font-size:14.5px;line-height:1.9;color:var(--ink-2)}
+  .hand-item p b{color:var(--ink);font-weight:600}
+
   /* ============ 回执 ============ */
   .receipt{
-    background:#FFFDF7;border:1px solid var(--line);
-    padding:0;margin-top:6px;
+    background:var(--panel);border:1px solid var(--line);
+    padding:0;margin-top:2px;
     box-shadow:0 1px 0 #fff inset, 0 24px 44px -40px rgba(28,26,23,.55);
   }
   .rc-head{
@@ -174,19 +336,19 @@
 
   /* ============ 永久免费 ============ */
   .free-band{
-    margin-top:88px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
-    padding:46px 0 50px;position:relative;
+    margin-top:84px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    padding:44px 0 48px;position:relative;
   }
   .free-in{display:grid;grid-template-columns:1fr 168px;gap:40px;align-items:start}
   .free-title{
-    font-size:clamp(44px,6.4vw,76px);line-height:1.06;font-weight:600;letter-spacing:.04em;
+    font-size:clamp(42px,6.2vw,72px);line-height:1.06;font-weight:600;letter-spacing:.04em;
   }
   .free-title small{
-    display:block;font-size:14px;font-family:var(--sans);letter-spacing:.2em;
+    display:block;font-size:13px;font-family:var(--sans);letter-spacing:.2em;
     color:var(--ink-3);font-weight:400;margin-bottom:12px;
   }
-  .free-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:26px}
-  .free-cols p{font-size:16px;line-height:2;color:var(--ink-2)}
+  .free-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:24px}
+  .free-cols p{font-size:15.5px;line-height:2;color:var(--ink-2)}
   .free-cols p b{color:var(--ink);font-weight:600}
   .seal{
     width:132px;height:132px;border:4px solid var(--red);color:var(--red);
@@ -199,7 +361,7 @@
   .seal span{display:block}
 
   /* ============ 契约 ============ */
-  .faith{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;margin-top:4px}
+  .faith{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;margin-top:2px}
   .faith h4{
     font-family:var(--sans);font-size:11.5px;letter-spacing:.18em;color:var(--ink-3);
     padding-bottom:10px;border-bottom:1px solid var(--ink);margin-bottom:4px;
@@ -212,14 +374,14 @@
 
   /* ============ 落款 ============ */
   .sign{
-    margin-top:96px;padding:52px 0 0;border-top:1px solid var(--ink);
+    margin-top:92px;padding:50px 0 0;border-top:1px solid var(--ink);
     display:grid;grid-template-columns:1fr auto;gap:36px;align-items:end;
   }
   .sign h2{
-    font-size:clamp(38px,5.6vw,64px);line-height:1.12;letter-spacing:.03em;margin-bottom:12px;
+    font-size:clamp(34px,5vw,58px);line-height:1.16;letter-spacing:.03em;margin-bottom:12px;
   }
-  .sign p{font-size:19px;color:var(--ink-2);letter-spacing:.08em}
-  .sign-note{margin-top:24px;font-size:15.5px;color:var(--ink-2);line-height:2;max-width:40ch}
+  .sign p{font-size:18px;color:var(--ink-2);letter-spacing:.06em}
+  .sign-note{margin-top:22px;font-size:15px;color:var(--ink-2);line-height:2;max-width:40ch}
   .sign-note b{color:var(--ink);font-weight:600}
   .cta-col{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding-bottom:8px}
   .cta{
@@ -230,128 +392,48 @@
   .cta:hover{background:var(--red);transform:translateY(-1px)}
   .cta-fine{font-family:var(--sans);font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
 
-  footer{margin-top:80px;border-top:1px solid var(--line);padding:22px 0 44px}
+  footer{margin-top:78px;border-top:1px solid var(--line);padding:22px 0 44px}
   .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--sans);font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
   .foot .fl{display:flex;gap:20px}
   .foot a:hover{color:var(--ink-2)}
 
-  /* ============ 动效：只给一个对象 ============ */
-  .bob{animation:bob 6.4s ease-in-out infinite}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-  .bob2{animation:bob 7.2s ease-in-out infinite .9s}
-  .eye{transform-box:fill-box;transform-origin:center;animation:blink 5.8s infinite}
-  .eye2{animation-delay:.07s}
-  @keyframes blink{0%,93.5%,100%{transform:scaleY(1)}95.6%{transform:scaleY(.1)}97.8%{transform:scaleY(1)}}
-  .pupil{transition:transform .18s ease-out}
-  /* 血条：跟着航程一段段往上涨 */
-  .barfill{transform-box:fill-box;transform-origin:left center;
-    animation:fillbar 10s cubic-bezier(.4,0,.5,1) infinite}
-  @keyframes fillbar{
-    0%{transform:scaleX(.10)}
-    22%{transform:scaleX(.26)}
-    45%{transform:scaleX(.44)}
-    68%{transform:scaleX(.62)}
-    88%{transform:scaleX(.78)}
-    97%{transform:scaleX(.86)}
-    100%{transform:scaleX(.10)}
-  }
-  .heart{transform-box:fill-box;transform-origin:center;animation:beat 2s ease-in-out infinite}
-  @keyframes beat{0%,100%{transform:scale(1)}10%{transform:scale(1.17)}22%{transform:scale(1)}34%{transform:scale(1.1)}}
-  /* 纸飞机：位置由 animateMotion 驱动，这里只做轻微侧倾 */
-  .plane-art{
-    animation:flutter 3s ease-in-out infinite;
-    transform-box:fill-box;
-    transform-origin:center;
-  }
-  @keyframes flutter{
-    0%,100%{transform:rotate(-2deg)}
-    50%{transform:rotate(2.2deg)}
-  }
-
-  /* 托盘与罐子：随每趟带回的成果逐层堆起 */
-  .stack{transform-box:fill-box;transform-origin:center bottom;
-    animation:collect 10s linear infinite}
-  .s1{animation-delay:0s} .s2{animation-delay:.12s} .s3{animation-delay:.24s}
-  .j1{animation-delay:0s} .j2{animation-delay:.1s} .j3{animation-delay:.2s} .j4{animation-delay:.3s}
-  @keyframes collect{
-    0%,88%{opacity:0;transform:translateY(6px) scaleY(.4)}
-    90%{opacity:1;transform:translateY(0) scaleY(1)}
-    96%{opacity:1}
-    98%{opacity:0;transform:translateY(0) scaleY(1)}
-    100%{opacity:0}
-  }
-
-  /* 航线虚线流动 */
-  .trail{animation:dash 2.6s linear infinite}
-  @keyframes dash{to{stroke-dashoffset:-26}}
-
-  /* 沿途机会点：依次亮起 */
-  .node{fill:#C9C0AE;animation:nodeBlink 10s linear infinite}
-  .n1{animation-delay:0s}
-  .n2{animation-delay:1.4s}
-  .n3{animation-delay:2.8s}
-  .n4{animation-delay:4.2s}
-  @keyframes nodeBlink{
-    0%{fill:#C9C0AE;stroke:none;stroke-width:0}
-    3%{fill:#B03A28;stroke:#B03A28;stroke-width:5;stroke-opacity:.18}
-    9%{fill:#C9C0AE;stroke:none;stroke-width:0}
-    100%{fill:#C9C0AE;stroke:none;stroke-width:0}
-  }
-
-  /* 带回的纸：航线尾声落进托盘 */
-  .doc-fly{opacity:0;animation:carry 10s cubic-bezier(.4,.02,.55,.96) infinite}
-  @keyframes carry{
-    0%,80%{transform:translate(300px,120px) rotate(-10deg) scale(.85);opacity:0}
-    84%{transform:translate(312px,150px) rotate(-7deg) scale(.92);opacity:1}
-    89%{transform:translate(332px,196px) rotate(-3deg) scale(1);opacity:1}
-    93%{transform:translate(340px,218px) rotate(1deg) scale(1);opacity:1}
-    96%{transform:translate(342px,226px) rotate(3deg) scale(1);opacity:0}
-    100%{opacity:0;transform:translate(342px,226px) rotate(3deg) scale(1)}
-  }
-
-  /* 带回的硬币 */
-  .coin{opacity:0;animation:drop 10s cubic-bezier(.4,.03,.7,.6) infinite}
-  @keyframes drop{
-    0%,88%{transform:translate(432px,140px);opacity:0}
-    90%{opacity:1}
-    95%{transform:translate(432px,208px);opacity:1}
-    97.5%{transform:translate(432px,220px);opacity:0}
-    100%{opacity:0;transform:translate(432px,220px)}
-  }
-
-  .plant{transform-box:fill-box;transform-origin:bottom center;animation:sway 6.4s ease-in-out infinite}
-  @keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.4deg)}}
-  .fig:hover .bob{animation-duration:1.7s}
-
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}
-    .barfill{transform:scaleX(.68)}
   }
 
   /* ============ 小屏 ============ */
   @media(max-width:900px){
     .page{padding:0 22px}
     body{font-size:16px}
-    .lead-grid{grid-template-columns:1fr;grid-template-areas:"head" "fig" "deck" "facts";row-gap:26px;padding-top:36px}
+    .lead-grid{grid-template-columns:1fr;grid-template-areas:"head" "fig" "deck" "facts";row-gap:26px;padding-top:34px}
     .deck{padding-top:0}
-    .facts{grid-area:facts}
-    .fig{max-width:400px;margin:0 auto}
-    .facts{grid-template-columns:1fr;margin-top:26px}
-    .fact{padding:15px 0}
+    .fig{max-width:360px;margin:0 auto;width:100%}
+    .facts{grid-template-columns:1fr;margin-top:24px}
+    .fact{padding:14px 0}
     .fact + .fact{border-left:none;border-top:1px solid var(--line);padding-left:0}
-    .band{padding-top:62px}
+    .band{padding-top:58px}
     .band-grid{grid-template-columns:1fr;gap:14px}
     .band-no{padding-top:0;display:flex;align-items:baseline;gap:8px}
     .band-no i{font-size:20px;margin:0}
     .margin-note{max-width:none;margin-top:6px}
     .work{grid-template-columns:1fr}
     .work-item:nth-child(1){grid-column:auto}
-    .free-in{grid-template-columns:1fr;gap:26px}
-    .free-title small{font-size:12.5px}
+    .exec-row{grid-template-columns:74px 1fr 38px;gap:10px;row-gap:4px;padding:10px 14px}
+    .e-note{grid-column:1 / -1;font-size:11px;padding-left:0}
+    .hand{grid-template-columns:1fr;gap:18px}
+    .band-wide{grid-column:1}
+    .dg{grid-template-columns:1fr;gap:6px;padding:13px 14px}
+    .dg-label{display:flex;align-items:baseline;gap:8px;padding-top:0}
+    .dg-label em{margin-top:0}
+    .dg li{font-size:14px}
+    .disc-head{padding:10px 14px;font-size:10.5px}
+    .disc-foot{padding:10px 14px;gap:12px 18px;font-size:11px}
+    .free-in{grid-template-columns:1fr;gap:24px}
+    .free-title small{font-size:12px}
     .seal{margin:0;width:112px;height:112px;font-size:28px;justify-self:start}
     .free-cols{grid-template-columns:1fr}
-    .faith{grid-template-columns:1fr;gap:32px}
-    .sign{grid-template-columns:1fr;gap:28px;padding-top:38px}
+    .faith{grid-template-columns:1fr;gap:30px}
+    .sign{grid-template-columns:1fr;gap:26px;padding-top:36px}
     .cta-col{align-items:stretch}
     .cta{text-align:center}
     .rc-row{grid-template-columns:44px 1fr;row-gap:4px;padding:14px 18px}
@@ -381,228 +463,244 @@
       </div>
     </div>
     <div class="subrule">
-      <span>一个陪你过日子的 AGENT</span>
+      <span>给在校生的 AGENT</span>
       <span>找机会 · 省钱 · 赚钱</span>
     </div>
   </header>
 
   <div class="lead-grid" id="top">
     <div class="hd">
-      <h1>一起<br>回血</h1>
-      <p class="h1-sub">这一段，我陪你走。</p>
+      <h1>先扫<br>一遍</h1>
+      <p class="h1-sub">学生身份能换到的东西，比你以为的多。</p>
       <span class="h1-rule"></span>
     </div>
 
     <div class="fig">
-      <svg viewBox="0 0 480 300" role="img" aria-label="一架纸飞机从左边的账单堆起飞，把其中一张送进右边的分类托盘，零钱落进罐子，头顶有一条慢慢变长的血条">
-        <defs>
-          <linearGradient id="soft" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#FFFDF8"/><stop offset="100%" stop-color="#F0E6D3"/>
-          </linearGradient>
-          <clipPath id="barClip"><rect x="90" y="20" width="300" height="14" rx="7"/></clipPath>
-        </defs>
+      <div class="scan">
+        <div class="scan-head">
+          <span><b>诊断</b>　学生身份</span>
+          <span>扫描中</span>
+        </div>
 
-        <!-- 血条 -->
-        <g>
-          <rect x="86" y="16" width="308" height="22" rx="3" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2.2"/>
-          <g clip-path="url(#barClip)">
-            <rect class="barfill" x="90" y="20" width="300" height="14" fill="#B03A28"/>
-          </g>
-          <path d="M60 32v-8h6M70 24h6v8" stroke="#1C1A17" stroke-width="2" fill="none"/>
-          <text class="pct" x="404" y="31" font-family="ui-monospace,Menlo,monospace" font-size="10.5" fill="#6E675C" letter-spacing=".5">10%<animate attributeName="fill" dur="10s" repeatCount="indefinite" values="#6E675C;#B03A28;#6E675C" keyTimes="0;0.9;1"/></text>
-        </g>
+        <div class="dial-wrap">
+          <svg class="dial" viewBox="0 0 200 200" role="img" aria-label="扫描表盘，指针一圈圈扫过，已发现的项数不断增加">
+            <circle cx="100" cy="100" r="86" fill="none" stroke="#E4DCCB" stroke-width="7"/>
+            <circle class="ring" cx="100" cy="100" r="86" fill="none" stroke="#B03A28"
+                    stroke-width="7" stroke-linecap="round"
+                    transform="rotate(-90 100 100)"
+                    stroke-dasharray="540.4" stroke-dashoffset="540.4"/>
+            <g>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(0 100 100)"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(30 100 100)" style="animation-delay:.75s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(60 100 100)" style="animation-delay:1.5s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(90 100 100)" style="animation-delay:2.25s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(120 100 100)" style="animation-delay:3s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(150 100 100)" style="animation-delay:3.75s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(180 100 100)" style="animation-delay:4.5s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(210 100 100)" style="animation-delay:5.25s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(240 100 100)" style="animation-delay:6s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(270 100 100)" style="animation-delay:6.75s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(300 100 100)" style="animation-delay:7.5s"/>
+              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(330 100 100)" style="animation-delay:8.25s"/>
+            </g>
+            <g class="dial-sweep">
+              <path d="M100 100 L100 28" stroke="#B03A28" stroke-width="1.3" opacity=".5"/>
+              <circle cx="100" cy="28" r="2.4" fill="#B03A28"/>
+            </g>
+            <circle cx="100" cy="100" r="3" fill="#1C1A17"/>
+          </svg>
+          <div class="dial-center">
+            <div class="dial-num"><span class="found">0</span><span>项</span></div>
+            <div class="dial-label">已发现</div>
+          </div>
+        </div>
 
-        <!-- 桌面 -->
-        <ellipse cx="240" cy="266" rx="150" ry="5" fill="#1C1A17" opacity=".06"/>
-        <path d="M16 262h448" stroke="#1C1A17" stroke-width="2.4"/>
-        <path d="M16 269h448" stroke="#D9D1C0" stroke-width="1.1"/>
+        <ul class="findings" id="findings"></ul>
 
-        <!-- 航线 -->
-        <path class="trail" d="M110 226C170 180 240 130 316 126c56-2 96 26 92 64-4 34-42 50-78 30-50-28-120-70-180-52-42 12-54 40-40 58"
-              stroke="#C9C0AE" stroke-width="1.5" fill="none"
-              stroke-dasharray="5 8" stroke-linecap="round"/>
-
-        <!-- 沿途的机会点 -->
-        <g class="nodes">
-          <circle class="node n1" cx="172" cy="188" r="3.2"/>
-          <circle class="node n2" cx="240" cy="150" r="3.2"/>
-          <circle class="node n3" cx="308" cy="127" r="3.2"/>
-          <circle class="node n4" cx="378" cy="150" r="3.2"/>
-        </g>
-
-        <!-- 左边：账单堆 -->
-        <g>
-          <g transform="rotate(-9 96 246)">
-            <rect x="44" y="226" width="86" height="32" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2"/>
-            <path d="M53 237h56M53 245h36" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
-          </g>
-          <g transform="rotate(5 112 244)">
-            <rect x="74" y="220" width="80" height="30" fill="#F0E6D3" stroke="#1C1A17" stroke-width="2"/>
-            <path d="M83 231h54M83 239h32" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
-          </g>
-          <g transform="rotate(-18 138 250)">
-            <rect x="116" y="234" width="56" height="26" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2"/>
-            <path d="M124 244h38M124 251h20" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
-          </g>
-          <rect x="32" y="256" width="34" height="6" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.4"/>
-          <rect x="36" y="249" width="34" height="6" fill="#E2BB69" stroke="#A87F2B" stroke-width="1.4"/>
-        </g>
-
-        <!-- 纸飞机：出去一圈，把东西带回来 -->
-        <g class="plane">
-          <animateMotion dur="10s" repeatCount="indefinite" rotate="auto" path="M110 226C170 180 240 130 316 126c56-2 96 26 92 64-4 34-42 50-78 30-50-28-120-70-180-52-42 12-54 40-40 58"/>
-          <animate attributeName="opacity" dur="10s" repeatCount="indefinite"
-                   values="0;1;1;1;0;0" keyTimes="0;0.05;0.9;0.93;0.97;1"/>
-          <g class="plane-art">
-            <polygon points="0,0 -170,-50 -125,-4" fill="#FFFDF8" stroke="#1C1A17" stroke-width="2.6" stroke-linejoin="round"/>
-            <polygon points="0,0 -125,-4 -157,46" fill="#EDE2CE" stroke="#1C1A17" stroke-width="2.6" stroke-linejoin="round"/>
-            <path d="M0 0L-125 -4" stroke="#1C1A17" stroke-width="3" stroke-linecap="round"/>
-            <path d="M0 0L-153 -38" stroke="#CFC5B1" stroke-width="1.6" stroke-linecap="round"/>
-            <path d="M-157 46l16-24" stroke="#1C1A17" stroke-width="2" stroke-linecap="round"/>
-          </g>
-        </g>
-
-        <!-- 送出去的那张纸 -->
-        <g class="doc-fly">
-          <rect width="40" height="26" fill="#FFFDF8" stroke="#1C1A17" stroke-width="1.8"/>
-          <path d="M7 9h26M7 17h16" stroke="#C9C0AE" stroke-width="1.8" stroke-linecap="round"/>
-        </g>
-
-        <!-- 托盘 -->
-        <g>
-          <path d="M322 262v-42h80v42" fill="#F5ECDC" stroke="#1C1A17" stroke-width="2.4"/>
-          <path d="M319 220h86" stroke="#1C1A17" stroke-width="2.6"/>
-          <rect class="stack s1" x="332" y="212" width="58" height="7" fill="#FFFDF8" stroke="#1C1A17" stroke-width="1.6"/>
-          <rect class="stack s2" x="336" y="205" width="50" height="7" fill="#F0E6D3" stroke="#1C1A17" stroke-width="1.6"/>
-          <rect class="stack s3" x="340" y="198" width="42" height="7" fill="#FFFDF8" stroke="#1C1A17" stroke-width="1.6"/>
-          <path d="M372 226v30" stroke="#D9D1C0" stroke-width="1.4"/>
-          <path d="M328 238h38" stroke="#C9C0AE" stroke-width="1.8"/>
-          <path d="M328 248h24" stroke="#C9C0AE" stroke-width="1.8"/>
-        </g>
-
-        <!-- 硬币罐 -->
-        <g>
-          <path d="M412 218h42v44h-42z" fill="#FFFCF4" stroke="#1C1A17" stroke-width="2.2"/>
-          <path d="M409 218h48" stroke="#1C1A17" stroke-width="2.6"/>
-          <rect class="stack j1" x="416" y="250" width="32" height="5" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.2"/>
-          <rect class="stack j2" x="418" y="243" width="30" height="5" fill="#E2BB69" stroke="#A87F2B" stroke-width="1.2"/>
-          <rect class="stack j3" x="420" y="236" width="28" height="5" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.2"/>
-          <rect class="stack j4" x="422" y="229" width="26" height="5" fill="#E2BB69" stroke="#A87F2B" stroke-width="1.2"/>
-        </g>
-
-        <!-- 硬币 -->
-        <g class="coin"><rect x="-8" y="-4" width="16" height="8" fill="#D9AE55" stroke="#A87F2B" stroke-width="1.5"/></g>
-
-        <!-- 植物 -->
-        <g class="plant">
-          <path d="M28 252c0-12-4-19-9-24" stroke="#6E7B62" stroke-width="2.2" fill="none"/>
-          <path d="M28 252c0-10 5-17 10-22" stroke="#6E7B62" stroke-width="2.2" fill="none"/>
-          <ellipse cx="16" cy="226" rx="8" ry="4.6" fill="#84937A" transform="rotate(-30 16 226)"/>
-          <ellipse cx="19" cy="237" rx="7" ry="4.2" fill="#6E7B62" transform="rotate(-14 19 237)"/>
-          <ellipse cx="40" cy="228" rx="8" ry="4.6" fill="#84937A" transform="rotate(26 40 228)"/>
-        </g>
-        <path d="M14 252h30v10H14z" fill="#E4D3B8" stroke="#1C1A17" stroke-width="2"/>
-      </svg>
-
-      <p class="figcap"><b>图 1</b>　它每天清一遍。</p>
+        <div class="scan-foot">
+          <span>已扫 <b>6</b> 类入口</span>
+          <span>合计约 <b>¥8,950</b></span>
+        </div>
+      </div>
+      <p class="figcap"><b>图 1</b>　一轮扫描，把散在各处的机会摆到一张纸上。</p>
     </div>
 
     <div class="deck">
-      <p>这两年，日子紧了。工作不好找，账单一件没少。<b>这不是谁不够努力。</b></p>
-      <p>我们做了个 agent，陪你过日子。不讲课，不卖 token，只办事。</p>
+      <p>实习、奖学金、助学金、教育优惠、能卖的旧东西、能接的兼职——散在几十个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b></p>
+      <p>回血像杀毒软件那样，先把你的学生身份扫一遍，列出所有正在漏的，然后一起办。</p>
     </div>
 
     <dl class="facts">
-      <div class="fact"><dt>给谁</dt><dd>回血过日子的朋友</dd></div>
-      <div class="fact"><dt>做什么</dt><dd>找机会、省钱、赚钱，三件事</dd></div>
+      <div class="fact"><dt>给谁</dt><dd>在校生，本科生和研究生</dd></div>
+      <div class="fact"><dt>怎么做</dt><dd>扫一遍、列清楚、同时去办</dd></div>
       <div class="fact"><dt>多少钱</dt><dd><em>永久免费</em>，不收一分</dd></div>
     </dl>
   </div>
 
-  <!-- 01 为什么免费 -->
+  <!-- 01 为什么 -->
   <section class="band">
     <div class="band-grid">
       <div class="band-no"><i>01</i>为什么</div>
       <div class="band-main body">
-        <h2>它该像路灯一样。</h2>
-        <p>找工作、退订、比价、卖闲置，这些事本身不复杂。复杂的是它们要花掉一个人本来就快被榨干的注意力。而下行期最贵的，恰好就是注意力。</p>
-        <p>我们想把它做成基础设施：像路灯、像公共图书馆。它不该因为你没钱就关掉。<b>所以它永久免费，没有会员，没有付费解锁，也没有藏在后面的第二套价格。</b></p>
+        <h2>漏掉的不是能力，是入口。</h2>
+        <p>一个学生的机会，散在学校教务、学院群、招聘网站、二手平台、银行 App、话费账单、订阅页面，还有几十个你根本没听说过的申报入口里。任何单个入口都不难，难的是它们加起来有几十个。</p>
+        <p>于是大多数人只翻最熟的那两三个。剩下的，不是没资格，<b>是压根没看到</b>。</p>
       </div>
       <aside class="margin-note">
-        为你亮起，不计较地照亮前面的路。
+        你不是没赶上，是没人告诉你几点开。
       </aside>
     </div>
   </section>
 
-  <!-- 02 它做什么 -->
+  <!-- 02 扫描 -->
   <section class="band">
     <div class="band-grid">
-      <div class="band-no"><i>02</i>做什么</div>
+      <div class="band-no"><i>02</i>扫描</div>
       <div class="band-main" style="max-width:none">
-        <h2>三件事，它做你的免费管家。</h2>
+        <h2>先把该看的地方，都看一遍。</h2>
+      </div>
+      <aside class="margin-note">
+        先看清楚，再动手。顺序反了，就是瞎忙。
+      </aside>
+      <div class="band-wide">
+        <div class="hand">
+          <div class="hand-item">
+            <div class="h-step">找机会 · 身份</div>
+            <h3>学生证能换什么</h3>
+            <p>教育优惠、学生版软件、校园宽带、助学金、励志奖学金、竞赛资格。<b>大部分要主动申请，不申请就默认放弃。</b></p>
+          </div>
+          <div class="hand-item">
+            <div class="h-step">省钱 · 支出</div>
+            <h3>每月在漏多少</h3>
+            <p>话费套餐、视频会员、云盘、外卖、打车。同一个服务，学生价和原价往往差一半，而默认选项永远是原价。</p>
+          </div>
+          <div class="hand-item">
+            <div class="h-step">赚钱 · 闲置</div>
+            <h3>身边有哪些能换钱</h3>
+            <p>毕业季的旧书、换下来的数码、用不上的券。还有每周空出来的几段时间，够接一份家教或校内助管。</p>
+          </div>
+        </div>
 
-        <div class="work">
-          <div class="work-item">
-            <div class="wi-head">
-              <span class="wi-num">一</span>
-              <h3>找工作</h3>
-            </div>
-            <div class="wi-body">每天把新放出来的岗位扫一遍，筛掉明显不合适的，剩下的替你投出去。简历按岗位改写，投完跟进，面试前把公司背景、路线、要带的材料排好。
-              <ul class="wi-list"><li>按履历改简历</li><li>自动投递</li><li>投后跟进</li><li>面试准备</li></ul>
-            </div>
+        <div class="body" style="margin-top:26px;max-width:66ch">
+          <p>扫完会得到一张清单，每一项标好档位：<b>立刻能办的</b>，它直接去办；<b>要你点头的</b>，一句话确认；<b>必须你本人的</b>，标出来，等你有空。</p>
+        </div>
+
+        <div class="disc">
+          <div class="disc-head">
+            <span><b>发现清单</b>　11 月 19 日　第 1 轮</span>
+            <span>按三件事分组</span>
           </div>
 
-          <div class="work-item">
-            <div class="wi-head">
-              <span class="wi-num">二</span>
-              <h3>省钱</h3>
-            </div>
-            <div class="wi-body">该降档的降档，该退订的退订，该比价的比价。省下来的记在账上，不是一句“已为您优化”。
-              <ul class="wi-list"><li>套餐审查</li><li>订阅清理</li><li>账单异常</li></ul>
-            </div>
+          <div class="dg">
+            <div class="dg-label">找机会<em>资格与入口</em></div>
+            <ul>
+              <li><span>实习岗 · 匹配命中</span><span>11 个</span></li>
+              <li><span>国家助学金 · 本学年未申报</span><span>¥3,300</span></li>
+              <li><span>励志奖学金 · 下周截止</span><span>¥5,000</span></li>
+              <li><span>校内助管 · 每周 6 小时</span><span>¥480/月</span></li>
+            </ul>
           </div>
 
-          <div class="work-item">
-            <div class="wi-head">
-              <span class="wi-num">三</span>
-              <h3>赚钱</h3>
-            </div>
-            <div class="wi-body">零碎的进账先捡起来。闲置估价挂出，临时活筛一遍，能报的补贴和退款别漏。
-              <ul class="wi-list"><li>闲置出手</li><li>临时用工</li><li>补贴退款</li></ul>
-            </div>
+          <div class="dg">
+            <div class="dg-label">省钱<em>能降下来的</em></div>
+            <ul>
+              <li><span>教材 · 三门课换二手同版本</span><span>−¥214</span></li>
+              <li><span>话费套餐 · 同速率降一档</span><span>−¥18/月</span></li>
+              <li><span>视频会员 · 学生价未开</span><span>−¥12/月</span></li>
+              <li><span>云盘 · 三个月未用</span><span>−¥15/月</span></li>
+            </ul>
+          </div>
+
+          <div class="dg">
+            <div class="dg-label">赚钱<em>能换回来的</em></div>
+            <ul>
+              <li><span>旧显示器 · 有人收</span><span>¥260</span></li>
+              <li><span>考研资料 · 毕业季好卖</span><span>¥160</span></li>
+              <li><span>多扣的运费险 · 可申诉</span><span>¥18</span></li>
+              <li><span>校园卡押金 · 已到期</span><span class="q">待你办</span></li>
+            </ul>
+          </div>
+
+          <div class="disc-foot">
+            <span>立刻能办 <b>9</b> 项</span>
+            <span>要你点头 <b>2</b> 项</span>
+            <span>必须本人 <b>1</b> 项</span>
+            <span>合计约 <b>¥8,950</b></span>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 03 并发 -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-no"><i>03</i>并发</div>
+      <div class="band-main" style="max-width:none">
+        <h2>列出来的事，同时办。</h2>
+        <p class="body-p">一件一件排队，是人的做法。这些事之间没有依赖，本来就该一起跑。改简历、投岗位、谈闲置、查账单、补材料，同时进行，谁先有结果谁先报。</p>
+      </div>
       <aside class="margin-note">
-        不是三个功能，是三件本来该有人替你办的事。
+        人的时间是串行的。它不必。
+      </aside>
+      <div class="band-wide">
+        <div class="exec">
+          <div class="exec-head">
+            <span><b>执行队列</b>　今日 6 项　·　同一时刻</span>
+            <span class="live">运行中</span>
+          </div>
+          <div class="exec-row done"><span class="e-name">套餐降档</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">已提交 · 下月生效</span></div>
+          <div class="exec-row done"><span class="e-name">投递实习</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">11 份 · 6 家已读</span></div>
+          <div class="exec-row done"><span class="e-name">闲置上架</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">5 件 · 2 件成交</span></div>
+          <div class="exec-row done"><span class="e-name">订阅清理</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">省 46 元/月</span></div>
+          <div class="exec-row"><span class="e-name">奖学金材料</span><span class="e-bar"><i class="fill" data-w="72"></i></span><span class="e-pct">72%</span><span class="e-note">正在补齐第 3 项</span></div>
+          <div class="exec-row hold"><span class="e-name">银行卡认证</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">待你</span><span class="e-note">需要本人人脸核验</span></div>
+        </div>
+        <p class="exec-note">碰到必须本人的环节，它会停下来，<b>把原因写清楚</b>，等你三分钟。其余的继续跑，不为一件卡住的事让整条队列停下。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 协作 -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-no"><i>04</i>协作</div>
+      <div class="band-main body">
+        <h2>有些事，只能你来。它把话说到最短。</h2>
+        <p>实名认证、签字、面试、当面交接——这些它替不了你，也不该假装能替。它只做一件事：<b>把你要做的部分压缩到最小</b>，前面所有准备都做完，轮到你的时候只剩动作本身。</p>
+        <p>做完了回一句，它接着往下跑。你不需要记住进度，也不需要回来找它。</p>
+      </div>
+      <aside class="margin-note">
+        不假装全自动。这是它值钱的地方。
       </aside>
     </div>
   </section>
 
-  <!-- 03 回执 -->
+  <!-- 05 账目 -->
   <section class="band">
     <div class="band-grid">
-      <div class="band-no"><i>03</i>账目</div>
+      <div class="band-no"><i>05</i>账目</div>
       <div class="band-main" style="max-width:none">
-        <h2>你打开看到的，就是这个。</h2>
+        <h2>它办了什么，你打开就能看见。</h2>
 
         <div class="receipt">
           <div class="rc-head">
             <span><b>11 月 19 日</b>　周三　共 14 项</span>
-            <span>其中 3 项需要你确认</span>
+            <span>其中 2 项等你确认</span>
           </div>
 
-          <div class="rc-row"><div class="no">明天</div><div class="item">2 场面试已排好<i>9:30 一家 · 14:00 一家 · 中间留 1 小时</i></div><div class="amt q">已准备</div></div>
-          <div class="rc-row"><div class="no">06:12</div><div class="item">宽带套餐降一档，同速率<i>已提交 · 下月生效</i></div><div class="amt">−48 元/月</div></div>
-          <div class="rc-row"><div class="no">09:30</div><div class="item">投递 7 个匹配岗位<i>薪资 12–18k · 3 家已读</i></div><div class="amt q">7 份</div></div>
-          <div class="rc-row"><div class="no">11:05</div><div class="item">两个订阅到期，其中一个三个月没用<i>已暂停 · 等你决定退不退</i></div><div class="amt">−30 元/月</div></div>
-          <div class="rc-row"><div class="no">14:40</div><div class="item">三件闲置挂出，一件成交<i>旧显示器 · 买家已付款</i></div><div class="amt">+260 元</div></div>
-          <div class="rc-row"><div class="no">16:20</div><div class="item">发现一笔多扣的运费险<i>已申请退回 · 3–5 个工作日到账</i></div><div class="amt">+18 元</div></div>
+          <div class="rc-row"><div class="no">06:10</div><div class="item">话费套餐降一档，流量没变<i>已提交 · 下月生效</i></div><div class="amt">−18 元/月</div></div>
+          <div class="rc-row"><div class="no">08:40</div><div class="item">三门课的教材换成二手<i>同版本 · 品相八成新</i></div><div class="amt">−214 元</div></div>
+          <div class="rc-row"><div class="no">09:15</div><div class="item">投递 11 个实习岗<i>6 家已读 · 2 家约面</i></div><div class="amt q">11 份</div></div>
+          <div class="rc-row"><div class="no">11:30</div><div class="item">视频会员切到学生价<i>同一账号 · 权益不变</i></div><div class="amt">−12 元/月</div></div>
+          <div class="rc-row"><div class="no">14:05</div><div class="item">五件闲置挂出，两件成交<i>旧显示器、考研资料 · 买家已付款</i></div><div class="amt">+420 元</div></div>
+          <div class="rc-row"><div class="no">16:40</div><div class="item">助学金材料还差一份证明<i>已列出开具地点 · 等你半天</i></div><div class="amt q">待补</div></div>
+          <div class="rc-row"><div class="no">明天</div><div class="item">一家实习一面已排好<i>10:00 · 线上 · 路线和材料已备</i></div><div class="amt q">已准备</div></div>
 
           <div class="rc-foot">
-            <span>今日：省 <b>78</b> 元/月</span>
-            <span>进账 <b>278</b> 元</span>
-            <span>投递 <b>7</b> 份</span>
+            <span>今日：省 <b>30</b> 元/月 + <b>214</b> 元</span>
+            <span>进账 <b>420</b> 元</span>
+            <span>投递 <b>11</b> 份</span>
           </div>
         </div>
 
@@ -620,8 +718,8 @@
       <div>
         <div class="free-title"><small>关于收费</small>永久免费</div>
         <div class="free-cols">
-          <p><b>不卖数据。</b>你的简历、账单、聊天记录，不会出现在任何一份商业报告里。</p>
-          <p><b>不放广告。</b>这里不会出现贷款、理财、分期。你缺钱的时候，这些是最不该出现的东西。</p>
+          <p><b>不卖数据。</b>你的简历、成绩、账单，不会出现在任何一份商业报告里。</p>
+          <p><b>不放广告。</b>这里不会出现贷款、分期、校园贷。你缺钱的时候，这些是最不该出现的东西。</p>
           <p><b>不做付费解锁。</b>所有功能，所有人，从头到尾一样。</p>
           <p><b>撑不住会先说。</b>如果哪天真撑不下去，会提前一年公告，不会半夜改成收费。</p>
         </div>
@@ -630,26 +728,26 @@
     </div>
   </div>
 
-  <!-- 04 会与不会 -->
+  <!-- 06 边界 -->
   <section class="band">
     <div class="band-grid">
-      <div class="band-no"><i>04</i>边界</div>
+      <div class="band-no"><i>06</i>边界</div>
       <div class="band-main" style="max-width:none">
         <h2>能做什么，不能做什么，都写清楚。</h2>
         <div class="faith">
           <div>
             <h4>不承诺</h4>
             <ul>
-              <li>不承诺你一定找到工作。</li>
+              <li>不承诺你一定拿到那个名额。</li>
               <li>不承诺每个月多赚多少。</li>
               <li>不承诺你不用再做任何决定。</li>
-              <li>不承诺这段日子会很快过去。</li>
+              <li>不承诺申请就一定有结果。</li>
             </ul>
           </div>
           <div class="faith yes">
             <h4>承诺</h4>
             <ul>
-              <li>这些事不再由你一个人跑。</li>
+              <li>该看的地方，每轮都看一遍。</li>
               <li>每一笔省下的、进账的，都记在账上。</li>
               <li>要你出面的事，说清楚，不绕。</li>
               <li>你随时可以停，数据全部带走。</li>
@@ -666,12 +764,12 @@
   <!-- 落款 -->
   <div class="sign">
     <div>
-      <h2>这一段，<br>我陪你走。</h2>
-      <p>不用绑卡，不用付费，今天就一起过日子。</p>
-      <p class="sign-note">如果你现在还没准备好，也不用开始。<b>把这一页存下来，需要的时候再来。</b></p>
+      <h2>先扫一遍，<br>再说下一步。</h2>
+      <p>不用绑卡，不用付费，今天就能扫。</p>
+      <p class="sign-note">第一轮扫完，你会拿到一张清单。<b>办不办，什么时候办，你说了算。</b></p>
     </div>
     <div class="cta-col">
-      <a href="#" class="cta">开始用　→</a>
+      <a href="#" class="cta">开始扫描　→</a>
       <span class="cta-fine">约 3 分钟 · 永久免费</span>
     </div>
   </div>
@@ -690,38 +788,91 @@
 </div>
 
 <script>
-  // 百分比数字与血条同步
-  const pct = document.querySelector('.pct');
-  if (pct && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const steps = [[0,.10],[.22,.26],[.45,.44],[.68,.62],[.88,.78],[.97,.86]];
-    (function tick(){
-      const t = (performance.now() % 10000) / 10000;
-      let v = steps[0][1];
-      for (const [k, val] of steps) if (t >= k) v = val;
-      const label = Math.round(v * 100) + '%';
-      if (pct.textContent !== label) pct.textContent = label;
-      requestAnimationFrame(tick);
-    })();
+(function(){
+  var motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 扫描项：k=机会 s=省钱 m=要你出面
+  var items = [
+    {tag:'s', txt:'教育优惠 · 软件学生版', val:'省 ¥486'},
+    {tag:'m', txt:'助学金 · 未申报', val:'待补材料'},
+    {tag:'k', txt:'话费套餐 · 同速率高配', val:'−18/月'},
+    {tag:'s', txt:'视频会员 · 学生价未开', val:'−12/月'},
+    {tag:'k', txt:'实习岗 · 匹配命中', val:'11 个'},
+    {tag:'m', txt:'闲置 · 可出手', val:'估 ¥420'}
+  ];
+
+  var list    = document.getElementById('findings');
+  var found   = document.querySelector('.found');
+  var ring    = document.querySelector('.ring');
+  var liveBar = document.querySelector('.e-bar i[data-w="72"]');
+  var CIRC    = 540.4;
+  var CYCLE   = 13000;
+  var STEP    = 1500;
+  var TICK_AT = 4200;
+
+  function fillRow(w){ return 'position:absolute;top:0;bottom:0;left:0;width:' + w + '%'; }
+
+  function makeLi(it){
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="f-tag ' + it.tag + '">' + it.tag.toUpperCase() + '</span>'
+                 + '<span class="f-txt">' + it.txt + '</span>'
+                 + '<span class="f-val">' + it.val + '</span>';
+    return li;
   }
-</script>
-<script>
-  const fig = document.querySelector('.fig');
-  const pupils = document.querySelectorAll('.pupil');
-  if (fig && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let raf = null;
-    addEventListener('mousemove', ev => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        const r = fig.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > innerHeight) { raf = null; return; }
-        const cx = r.left + r.width * 0.5, cy = r.top + r.height * 0.72;
-        const dx = Math.max(-3.5, Math.min(3.5, (ev.clientX - cx) / 70));
-        const dy = Math.max(-2.6, Math.min(2.6, (ev.clientY - cy) / 80));
-        pupils.forEach(p => p.style.transform = `translate(${dx}px,${dy}px)`);
-        raf = null;
-      });
-    }, { passive: true });
+
+  // 执行队列的条形宽度（不依赖 JS 也成立，这里补一次动画）
+  var fills = document.querySelectorAll('.e-bar i.fill');
+  fills.forEach(function(el){
+    var w = el.getAttribute('data-w') || '0';
+    if (!motionOK) { el.style.width = w + '%'; return; }
+    el.style.width = '0%';
+    setTimeout(function(){ el.style.width = w + '%'; }, 260);
+  });
+
+  if (!list) return;
+
+  if (!motionOK) {
+    items.forEach(function(it){ list.appendChild(makeLi(it)); });
+    found.textContent = String(items.length);
+    ring.setAttribute('stroke-dashoffset', '90');
+    if (liveBar) liveBar.style.width = '72%';
+    return;
   }
+
+  list.innerHTML = '';
+  found.textContent = '0';
+  ring.setAttribute('stroke-dashoffset', CIRC);
+  if (liveBar) liveBar.style.width = '0%';
+
+  var shown = -1;
+
+  function render(t){
+    var cycleT = t % CYCLE;
+
+    // 扫到哪儿，指针与刻度在 CSS 里跑，这里只同步计数
+    var n = 0;
+    for (var i = 0; i < items.length; i++) {
+      if (cycleT >= 400 + i * STEP) n = i + 1;
+    }
+    if (n !== shown) {
+      shown = n;
+      list.innerHTML = '';
+      for (var j = (n > 3 ? n - 3 : 0); j < n; j++) list.appendChild(makeLi(items[j]));
+      found.textContent = String(n);
+    }
+
+    var prog = Math.min(1, cycleT / (400 + items.length * STEP + 1200));
+    ring.setAttribute('stroke-dashoffset', String(CIRC * (1 - prog)));
+
+    if (liveBar) {
+      var p = Math.min(0.72, (cycleT / CYCLE) * 0.82);
+      liveBar.style.width = (p * 100).toFixed(1) + '%';
+    }
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();
 </script>
 </body>
 </html>
