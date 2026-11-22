@@ -3,958 +3,833 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>回血 — 扫一遍，把漏掉的捡回来</title>
+<title>回血 — 学生身份诊断，扫一遍把漏掉的捡回来</title>
 <meta name="description" content="给大学生的 agent：扫描、发现、并发执行。找机会、省钱、赚钱。永久免费。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%232B5FA8'/%3E%3Cpath d='M32 46S15 35 15 25.5A8.5 8.5 0 0 1 32 22a8.5 8.5 0 0 1 17 3.5C49 35 32 46 32 46Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300C458'/%3E%3Cpath d='M32 47S17 36.5 17 27a8 8 0 0 1 15-3.6A8 8 0 0 1 47 27c0 9.5-15 20-15 20Z' fill='%23fff'/%3E%3C/svg%3E">
 <style>
   :root{
-    --blue:#2B5FA8;
-    --blue-d:#1F4A85;
-    --blue-l:#E8F0F9;
-    --blue-line:#9FBCDC;
-    --bg:#EEF1F5;
+    --sky-1:#A9C8D6;
+    --sky-2:#DCEDF6;
+    --sky-3:#EFF8FC;
+    --green:#00C458;
+    --green-d:#00A94C;
+    --green-wash:#E8FAF0;
+    --blue:#1E6FE8;
+    --blue-d:#1557BD;
+    --ink:#15181C;
+    --ink-2:#565C64;
+    --ink-3:#8A9099;
+    --ink-4:#AEB5BD;
+    --line:#E4EBF1;
+    --line-2:#EFF4F8;
+    --bg:#F5FAFD;
     --card:#FFFFFF;
-    --line:#D6DEE7;
-    --line-2:#E7ECF2;
-    --line-3:#F1F4F8;
-    --ink:#333333;
-    --ink-2:#666666;
-    --ink-3:#999999;
-    --ink-4:#A0A6AD;
-    --orange:#F60;
-    --green:#3F8F2E;
-    --sans:Tahoma,"Microsoft YaHei","PingFang SC","Hiragino Sans GB",Arial,sans-serif;
-    --mono:Consolas,"Courier New",monospace;
+    --shadow:0 18px 50px -22px rgba(23,63,95,.34);
+    --shadow-s:0 6px 20px -10px rgba(23,63,95,.3);
+    --r:20px;
+    --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --num:"DIN Alternate","Helvetica Neue",Arial,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{-webkit-font-smoothing:antialiased}
-  body{
-    background:var(--bg);color:var(--ink);
-    font:12px/1.6 var(--sans);
-  }
-  a{color:var(--blue);text-decoration:none}
-  a:hover{text-decoration:underline}
+  html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font:16px/1.75 var(--sans);overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
   ul,ol{list-style:none}
-  [id]{scroll-margin-top:52px}
-  .wrap{max-width:980px;margin:0 auto;padding:0 10px}
+  [id]{scroll-margin-top:84px}
+  .wrap{width:min(1180px,calc(100% - 48px));margin:0 auto}
 
-  /* ============ 顶栏 ============ */
-  .topbar{
-    background:linear-gradient(#3E7CB8,#2B5FA8);
-    border-bottom:1px solid #1B4677;height:42px;
-    box-shadow:0 1px 3px rgba(20,40,70,.18);
-    position:sticky;top:0;z-index:50;
-  }
-  .topbar .wrap{display:flex;align-items:center;height:42px;gap:15px}
-  .logo{
-    display:flex;align-items:center;gap:7px;
-    color:#fff;font-size:19px;font-weight:700;letter-spacing:.16em;
-    text-shadow:0 1px 1px rgba(0,0,0,.35);
-    padding-right:14px;border-right:1px solid rgba(255,255,255,.22);
-  }
-  .logo:hover{text-decoration:none}
-  .logo svg{width:20px;height:20px;flex:none}
-  .topnav{display:flex;gap:15px}
-  .topnav a{color:#D6E4F4;font-size:13px;padding:11px 0 9px;border-bottom:2px solid transparent}
-  .topnav a:hover{color:#fff;text-decoration:none}
-  .topnav a.on{color:#fff;font-weight:700;border-bottom-color:#FFD08A}
-  .tsearch{margin-left:auto;display:flex}
-  .tsearch input{
-    width:148px;height:22px;border:1px solid #17406E;background:#fff;
-    border-radius:2px 0 0 2px;padding:0 7px;font:12px var(--sans);
-    color:var(--ink);outline:none;
-  }
-  .tsearch button{
-    height:22px;border:1px solid #17406E;border-left:none;
-    background:#E4EFFA;color:var(--blue-d);font:12px var(--sans);
-    padding:0 9px;border-radius:0 2px 2px 0;cursor:pointer;
-  }
-  .tsearch button:hover{background:#fff}
-  .tme{display:flex;align-items:center;gap:6px;color:#fff;font-size:12px}
-  .tme .sq{
-    width:22px;height:22px;border-radius:2px;background:#fff;color:var(--blue);
-    display:grid;place-items:center;font-weight:700;font-size:12px;
-  }
+  /* ============ 顶部导航 ============ */
+  .nav{position:sticky;top:0;z-index:80;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(226,236,243,.9)}
+  .nav-in{display:flex;align-items:center;height:68px;gap:34px}
+  .brand{display:flex;align-items:center;gap:9px;font-size:22px;font-weight:700;letter-spacing:.1em}
+  .brand svg{width:30px;height:30px;flex:none}
+  .brand b{font-weight:700}
+  .links{display:flex;gap:28px;font-size:15px;color:var(--ink-2)}
+  .links a{padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+  .links a:hover{color:var(--ink);border-bottom-color:var(--green)}
+  .nav-cta{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .nav-cta .mini{font-size:14px;color:var(--ink-2)}
+  .nav-cta .mini:hover{color:var(--ink)}
 
-  /* ============ 三栏 ============ */
-  .page{
-    display:grid;grid-template-columns:186px minmax(0,1fr) 232px;
-    gap:10px;align-items:start;padding:10px 0 22px;
-  }
-  .card{background:var(--card);border:1px solid var(--line);border-radius:3px;margin-bottom:10px}
-  .card-h{
-    height:31px;line-height:31px;padding:0 11px;
-    display:flex;align-items:center;justify-content:space-between;gap:8px;
-    background:#FAFBFD;border-bottom:1px solid var(--line-2);
-    font-weight:700;font-size:12.5px;color:#3A3A3A;
-  }
-  .card-h em{font-style:normal;font-weight:400;color:var(--ink-3);font-size:11px}
-  .card-h a{font-weight:400;font-size:11.5px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    border-radius:999px;font-size:15px;font-weight:600;padding:11px 26px;
+    transition:transform .18s,box-shadow .18s,background .18s;white-space:nowrap}
+  .btn-green{background:linear-gradient(180deg,#12D46A,#00B851);color:#fff;
+    box-shadow:0 8px 22px -8px rgba(0,196,88,.72), 0 1px 0 rgba(255,255,255,.4) inset}
+  .btn-green:hover{transform:translateY(-1px);box-shadow:0 12px 28px -8px rgba(0,196,88,.85), 0 1px 0 rgba(255,255,255,.4) inset}
+  .btn-sm{padding:8px 20px;font-size:14px}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid #DCE6EE;box-shadow:0 4px 14px -10px rgba(23,63,95,.4)}
+  .btn-ghost:hover{border-color:#C5D5E2;transform:translateY(-1px)}
 
-  /* ============ 左栏 ============ */
-  .pcard{padding:13px 11px 11px;text-align:center}
-  .pcard .big{
-    width:64px;height:64px;margin:0 auto 9px;border:1px solid #C3D3E3;border-radius:3px;
-    background:linear-gradient(#4A86C0,#2B5FA8);color:#fff;
-    display:grid;place-items:center;font-size:27px;font-weight:700;
-    box-shadow:0 1px 0 rgba(255,255,255,.5) inset;
+  /* ============ 头图 ============ */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(180deg,#A9C8D6 0%,#C9E0EB 26%,#EAF4FA 62%,#F5FAFD 88%);
+    padding:62px 0 0;text-align:center;
   }
-  .pcard .nm{font-size:14px;font-weight:700;color:#2F2F2F;letter-spacing:.02em}
-  .pcard .sub{color:var(--ink-3);font-size:11px;margin-top:3px;line-height:1.7}
-  .pcard .nums{
-    display:flex;margin-top:11px;padding-top:9px;border-top:1px dotted var(--line-2);
+  .hero::before{
+    content:"";position:absolute;left:50%;top:-230px;width:1100px;height:560px;transform:translateX(-50%);
+    background:radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.72), rgba(255,255,255,0) 68%);
+    pointer-events:none;
   }
-  .pcard .nums div{flex:1}
-  .pcard .nums div + div{border-left:1px solid var(--line-3)}
-  .pcard .nums b{display:block;color:var(--blue);font-size:14px;font-family:var(--mono);font-weight:700}
-  .pcard .nums span{color:var(--ink-3);font-size:11px}
+  .hero-in{position:relative}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;height:29px;padding:0 14px;border-radius:999px;
+    background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);
+    font-size:13px;color:#2E5A73;letter-spacing:.02em;
+    box-shadow:0 3px 12px -8px rgba(23,63,95,.5);
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(0,196,88,.18)}
+  h1{
+    margin:20px auto 0;max-width:15em;
+    font-size:clamp(38px,4.6vw,62px);line-height:1.18;font-weight:700;letter-spacing:.01em;
+    color:#12304A;
+  }
+  h1 em{font-style:normal;color:var(--green-d)}
+  .hero-sub{
+    margin:18px auto 0;max-width:40em;font-size:clamp(15px,1.35vw,17.5px);
+    line-height:2;color:#3B5A6E;
+  }
+  .hero-sub b{color:#12304A;font-weight:700}
+  .hero-btns{display:flex;justify-content:center;gap:14px;margin-top:28px;flex-wrap:wrap}
+  .hero-tags{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap;font-size:13px;color:#4E6B7D}
+  .hero-tags span{display:inline-flex;align-items:center;gap:6px}
+  .hero-tags span::before{content:"";width:5px;height:5px;border-radius:50%;background:#7FA8BD}
 
-  .menu h5{
-    font-size:12px;font-weight:700;color:#3A3A3A;padding:7px 10px;
-    border-bottom:1px solid var(--line-2);background:#FAFBFD;
+  /* 产品截图 */
+  .shot{
+    position:relative;margin:46px auto 0;width:min(760px,100%);
   }
-  .menu a{
-    display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;
-    color:#444;font-size:12.5px;border-bottom:1px solid var(--line-3);
+  .shot-frame{
+    background:#fff;border-radius:26px 26px 0 0;
+    box-shadow:0 50px 90px -50px rgba(18,48,74,.55), 0 0 0 1px rgba(255,255,255,.8);
+    overflow:hidden;
   }
-  .menu a:last-child{border-bottom:none}
-  .menu a:hover{background:#F3F7FC;text-decoration:none}
-  .menu a.on{background:var(--blue-l);border-left:3px solid var(--blue);padding-left:7px;color:var(--blue-d);font-weight:700}
-  .menu a i{
-    width:13px;height:13px;flex:none;border:1px solid #9FB6CE;border-radius:2px;display:block;
-    background:#F7FAFD;
+  .shot-bar{
+    display:flex;align-items:center;gap:7px;height:34px;padding:0 15px;
+    background:#F7FBFF;border-bottom:1px solid var(--line-2);
   }
-  .menu a.on i{border-color:var(--blue);background:#D6E5F5}
-  .menu a em{margin-left:auto;font-style:normal;color:var(--orange);font-size:11px;font-family:var(--mono)}
+  .shot-bar i{width:9px;height:9px;border-radius:50%;background:#E2EAF1;display:block}
+  .shot-bar i:nth-child(1){background:#FFC7C2}
+  .shot-bar i:nth-child(2){background:#FFE0B2}
+  .shot-bar i:nth-child(3){background:#C6EFD4}
+  .shot-bar span{margin-left:8px;font-size:12px;color:var(--ink-4);letter-spacing:.02em}
 
-  .sidenote{padding:10px 11px;font-size:11.5px;line-height:1.85;color:var(--ink-3)}
-  .sidenote b{color:#555;font-weight:700}
+  .app{padding:14px 16px 18px;background:linear-gradient(180deg,#FFFFFF,#FCFEFF)}
+  .app-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .app-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#2A3B4A}
+  .app-title .dotpill{
+    display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;
+    background:var(--green-wash);color:var(--green-d);font-size:11.5px;font-weight:600;
+  }
+  .app-title .dotpill::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.7s ease-in-out infinite}
+  .app-stat{font-size:12px;color:var(--ink-3)}
+  .app-stat b{color:var(--ink);font-family:var(--num);font-size:13px}
 
-  /* ============ 中栏：发布框 ============ */
-  .pub{padding:10px 11px}
-  .pub .row{display:flex;gap:9px}
-  .pub .av-s{
-    width:36px;height:36px;flex:none;border:1px solid #C3D3E3;border-radius:2px;
-    background:linear-gradient(#4A86C0,#2B5FA8);color:#fff;display:grid;place-items:center;
-    font-size:15px;font-weight:700;
-  }
-  .pub textarea{
-    flex:1;height:52px;border:1px solid var(--line);border-radius:2px;
-    padding:6px 8px;font:12px/1.75 var(--sans);color:var(--ink);
-    resize:none;outline:none;background:#FFF;
-  }
-  .pub textarea:focus{border-color:var(--blue-line);box-shadow:0 0 0 2px rgba(43,95,168,.08)}
-  .pub .bar{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-left:45px}
-  .pub .tools{display:flex;gap:14px;color:var(--ink-3);font-size:11.5px}
-  .pub .tools span{cursor:default}
-  .btn{
-    display:inline-block;border:1px solid #1F4A85;border-radius:2px;
-    background:linear-gradient(#4A86C0,#2B5FA8);color:#fff;
-    font:12px/1.6 var(--sans);padding:4px 18px;cursor:pointer;
-    box-shadow:0 1px 0 rgba(255,255,255,.28) inset;
-  }
-  .btn:hover{background:linear-gradient(#3E7CB8,#23538F);color:#fff;text-decoration:none}
-  .btn.ghost{background:#F7F9FC;border-color:#C9D6E4;color:var(--blue);box-shadow:none}
-  .btn.ghost:hover{background:#EDF4FC;color:var(--blue-d)}
-
-  /* ============ 标签条 ============ */
-  .tabs{
-    display:flex;background:#FAFBFD;border-bottom:1px solid var(--line);
-    border-radius:3px 3px 0 0;overflow-x:auto;
-  }
-  .tabs a{
-    height:33px;line-height:33px;padding:0 15px;font-size:12.5px;color:var(--blue);
-    border-right:1px solid var(--line-2);white-space:nowrap;
-  }
-  .tabs a:hover{background:#F1F6FC;text-decoration:none}
-  .tabs a.on{background:#fff;color:#333;font-weight:700;box-shadow:inset 0 2px 0 var(--blue)}
-  .tabs a b{color:var(--orange);font-weight:700;margin-left:1px}
-
-  /* ============ 新鲜事 ============ */
-  .feed{border-radius:0 0 3px 3px}
-  .post{padding:12px 14px 10px;border-bottom:1px solid var(--line-3)}
-  .post:last-child{border-bottom:none}
-  .post[hidden]{display:none}
-  .post-h{display:flex;gap:9px;align-items:flex-start}
-  .av{
-    width:44px;height:44px;flex:none;border:1px solid #C3D3E3;border-radius:2px;
-    display:grid;place-items:center;color:#fff;font-size:17px;font-weight:700;
-    background:linear-gradient(#4A86C0,#2B5FA8);
-  }
-  .av.g{background:linear-gradient(#7FB05A,#4C9A2A);border-color:#A9C995}
-  .av.o{background:linear-gradient(#F2A552,#E07B16);border-color:#EBC39A}
-  .post-who{flex:1;min-width:0;padding-top:1px}
-  .post-name{font-size:13px;font-weight:700;color:var(--blue)}
-  .post-name .tag{
-    display:inline-block;margin-left:5px;padding:0 4px;border-radius:2px;
-    background:#FFF3E4;border:1px solid #F7D9B6;color:#C4640E;
-    font-size:10px;font-weight:400;line-height:15px;vertical-align:1px;
-  }
-  .post-meta{color:var(--ink-4);font-size:11px;margin-top:1px}
-  .post-meta a{color:var(--ink-4)}
-  .post-h .r{margin-left:auto;font-size:11.5px;color:var(--ink-3);padding-top:2px}
-
-  .post-title{font-size:15px;line-height:1.55;font-weight:700;color:#2F2F2F;margin:10px 0 6px}
-  .post-body{font-size:12.5px;line-height:1.95;color:#4A4A4A}
-  .post-body p{margin-bottom:7px}
-  .post-body p:last-child{margin-bottom:0}
-  .post-body b{color:#222}
-  .post-body .hl{background:linear-gradient(transparent 62%, #FFE9C9 62%);padding:0 1px}
-
-  .quote{
-    margin:9px 0;padding:8px 11px;background:#F7FAFD;border-left:3px solid #C9D6E4;
-    color:var(--ink-2);font-size:12px;line-height:1.85;
-  }
-  .quote b{color:#444}
-
-  .post-act{
-    margin-top:10px;padding-top:7px;border-top:1px dotted var(--line-2);
-    display:flex;gap:16px;color:#8A929B;font-size:11.5px;
-  }
-  .post-act a{color:var(--blue)}
-  .post-act .dot{color:#D5DCE4}
-
-  /* ============ 诊断模块 ============ */
-  .diag{border:1px solid var(--line-2);border-radius:3px;margin-top:10px;overflow:hidden;background:#FCFDFE}
-  .diag-h{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    height:28px;padding:0 10px;background:#F3F7FB;border-bottom:1px solid var(--line-2);
-    font-size:11.5px;color:var(--ink-3);
-  }
-  .diag-h b{color:#3A3A3A;font-weight:700}
-  .live{display:inline-flex;align-items:center;gap:5px;color:#C4640E}
-  .live::before{
-    content:"";width:5px;height:5px;border-radius:50%;background:var(--orange);
-    animation:pulse 1.6s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
-  .diag-body{padding:8px 10px 10px}
+  .app-grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:16px;align-items:stretch}
 
   /* 雷达 */
-  .radar{position:relative;width:min(100%,238px);aspect-ratio:1/1;margin:8px auto 10px}
+  .radar{position:relative;width:100%;max-width:290px;aspect-ratio:1/1;margin:0 auto}
   .radar-screen{
     position:absolute;inset:0;border-radius:50%;overflow:hidden;
-    background:radial-gradient(circle at 50% 46%, #FFFFFF 0 58%, #F2F7FC 100%);
-    box-shadow:inset 0 0 0 1px #C9D8E8, inset 0 0 26px rgba(43,95,168,.07);
+    background:radial-gradient(circle at 50% 46%, #FFFFFF 0 58%, #F0F8FD 100%);
+    box-shadow:inset 0 0 0 1px #D3E4F0, inset 0 0 28px rgba(30,111,232,.06);
   }
   .radar-grid{position:absolute;inset:0;width:100%;height:100%;display:block}
   .radar-sweep{position:absolute;inset:0;border-radius:50%;will-change:transform}
   .rt{
     position:absolute;inset:0;border-radius:50%;
     background:conic-gradient(from 0deg,
-      rgba(43,95,168,0) 0deg, rgba(43,95,168,0) 292deg,
-      rgba(43,95,168,.05) 308deg, rgba(43,95,168,.10) 322deg,
-      rgba(43,95,168,.17) 336deg, rgba(43,95,168,.27) 348deg,
-      rgba(43,95,168,.40) 355deg, rgba(43,95,168,.55) 359deg,
-      rgba(43,95,168,.66) 360deg);
+      rgba(0,196,88,0) 0deg, rgba(0,196,88,0) 288deg,
+      rgba(0,196,88,.06) 306deg, rgba(0,196,88,.12) 322deg,
+      rgba(0,196,88,.2) 337deg, rgba(0,196,88,.32) 349deg,
+      rgba(0,196,88,.46) 356deg, rgba(0,196,88,.62) 359.5deg,
+      rgba(0,196,88,.74) 360deg);
     -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 0 15%, #000 32%, #000 98.5%, transparent 100%);
     mask-image:radial-gradient(circle at 50% 50%, transparent 0 15%, #000 32%, #000 98.5%, transparent 100%);
   }
   .rn{
     position:absolute;left:50%;top:8.5%;height:41.5%;width:2px;margin-left:-1px;
-    background:linear-gradient(to top, rgba(43,95,168,.24), rgba(43,95,168,1));
-    box-shadow:0 0 8px rgba(43,95,168,.42), 0 0 2px rgba(43,95,168,.6);
+    background:linear-gradient(to top, rgba(0,196,88,.2), #00C458);
+    box-shadow:0 0 10px rgba(0,196,88,.5), 0 0 2px rgba(0,196,88,.6);
   }
   .rn::before{
     content:"";position:absolute;top:-1px;left:50%;width:5px;height:5px;margin-left:-2.5px;
-    border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(43,95,168,.16);
+    border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(0,196,88,.18);
   }
   .blip{position:absolute;inset:0;transform:rotate(var(--a));pointer-events:none}
   .blip b{
-    --bc:#2B5FA8;
+    --bc:#00C458;
     position:absolute;left:50%;top:calc(50% - var(--r));
-    width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;
+    width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;
     background:var(--bc);opacity:var(--o,0);
-    box-shadow:0 0 0 1.5px #FCFDFE, 0 0 0 4px color-mix(in srgb, var(--bc) 20%, transparent);
+    box-shadow:0 0 0 2px #fff, 0 0 0 5px color-mix(in srgb, var(--bc) 18%, transparent);
     transition:opacity .18s linear;
   }
   .blip b::after{
-    content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
+    content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
     border-radius:50%;border:1px solid var(--bc);
     transform:scale(var(--e,1));opacity:var(--eo,0);
     transition:opacity .1s linear;
   }
-  .blip.s b{--bc:#3F8F2E}
-  .blip.m b{--bc:#F60}
+  .blip.s b{--bc:#1E6FE8}
+  .blip.m b{--bc:#F5A623}
   .radar-core{
     position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:31%;aspect-ratio:1/1;border-radius:50%;
+    width:33%;aspect-ratio:1/1;border-radius:50%;
     display:grid;place-content:center;text-align:center;
     background:#fff;
-    box-shadow:0 0 0 1px #C9D8E8, 0 0 0 7px rgba(255,255,255,.8);
+    box-shadow:0 0 0 1px #D3E4F0, 0 0 0 8px rgba(255,255,255,.82);
   }
-  .radar-num{
-    font-family:var(--mono);font-size:31px;line-height:1;letter-spacing:-.04em;
-    color:var(--blue-d);font-variant-numeric:tabular-nums;
-  }
-  .radar-num small{font-family:var(--sans);font-size:11px;color:var(--ink-3);margin-left:2px;letter-spacing:0}
-  .radar-lab{
-    font-family:var(--sans);font-size:9px;letter-spacing:.2em;color:var(--ink-3);
-    margin-top:5px;padding-left:.2em;
-  }
+  .radar-num{font-family:var(--num);font-size:36px;line-height:1;letter-spacing:-.03em;color:#12304A;font-variant-numeric:tabular-nums}
+  .radar-num small{font-family:var(--sans);font-size:12px;color:var(--ink-3);margin-left:2px}
+  .radar-lab{font-size:10px;letter-spacing:.22em;color:var(--ink-4);margin-top:6px;padding-left:.22em}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.78)}}
 
-  /* 扫描结果列表 */
-  .findings{height:96px;overflow:hidden;border-top:1px solid var(--line-2);background:#fff}
+  /* 扫描结果 */
+  .found-box{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;
+    display:flex;flex-direction:column}
+  .found-box .findings{flex:1;height:auto;min-height:0}
+  .found-h{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#F8FBFE;border-bottom:1px solid var(--line-2);font-size:12px;color:var(--ink-3)}
+  .found-h b{color:#2A3B4A;font-weight:600}
+  .findings{overflow:hidden;display:flex;flex-direction:column}
   .findings li{
-    display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:8px;
-    height:32px;padding:0 10px;border-bottom:1px dotted var(--line-2);
-    font-size:11.5px;animation:fin .3s ease both;
+    flex:1;display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:9px;
+    min-height:32px;padding:0 12px;border-bottom:1px dotted var(--line-2);font-size:12px;
+    animation:fin .32s ease both;
   }
   .findings li:last-child{border-bottom:none}
-  @keyframes fin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-  .f-tag{
-    display:grid;place-items:center;width:16px;height:16px;border-radius:2px;
-    font-size:9.5px;line-height:1;color:#fff;font-family:var(--sans);
-  }
-  .f-tag.k{background:var(--orange)}
-  .f-tag.s{background:var(--green)}
-  .f-tag.m{background:var(--blue)}
-  .f-txt{color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-  .f-val{color:#222;white-space:nowrap;font-family:var(--mono);font-size:11px}
-  .diag-foot{
-    display:flex;justify-content:space-between;gap:10px;
-    padding:7px 10px;background:#F7FAFD;border-top:1px solid var(--line-2);
-    font-size:11px;color:var(--ink-3);
-  }
-  .diag-foot b{color:var(--blue);font-family:var(--mono);font-weight:700}
+  @keyframes fin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .f-tag{display:grid;place-items:center;width:17px;height:17px;border-radius:5px;font-size:9.5px;color:#fff;line-height:1}
+  .f-tag.k{background:var(--green)}
+  .f-tag.s{background:var(--blue)}
+  .f-tag.m{background:#F5A623}
+  .f-txt{color:#4E5A66;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .f-val{color:#12304A;font-family:var(--num);font-size:12px;white-space:nowrap}
+  .found-foot{display:flex;justify-content:space-between;padding:8px 12px;background:#F8FBFE;border-top:1px solid var(--line-2);font-size:11.5px;color:var(--ink-3)}
+  .found-foot b{color:var(--green-d);font-family:var(--num)}
 
-  /* ============ 数据表（发现清单 / 账目） ============ */
-  .tbl{border:1px solid var(--line-2);border-radius:3px;overflow:hidden;margin-top:10px;background:#fff}
-  .tbl-h{
-    display:flex;justify-content:space-between;align-items:center;gap:10px;
-    padding:7px 11px;background:#F3F7FB;border-bottom:1px solid var(--line-2);
-    font-size:11.5px;color:var(--ink-3);
-  }
-  .tbl-h b{color:#3A3A3A;font-weight:700}
-  .grp{border-bottom:1px solid var(--line-2)}
+  /* ============ 通用版块 ============ */
+  .sec{padding:88px 0 0}
+  .sec-head{text-align:center;max-width:44em;margin:0 auto 42px}
+  .sec-no{display:inline-block;font-size:12.5px;letter-spacing:.2em;color:var(--green-d);font-weight:700;margin-bottom:12px}
+  h2{font-size:clamp(27px,3vw,38px);line-height:1.36;font-weight:700;color:#12304A}
+  .sec-sub{margin-top:14px;font-size:16px;line-height:1.95;color:var(--ink-2)}
+
+  /* 三方向 */
+  .dirs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .dir{background:var(--card);border-radius:var(--r);padding:30px 28px 28px;
+    box-shadow:var(--shadow-s);border:1px solid var(--line-2);transition:transform .22s,box-shadow .22s}
+  .dir:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .dir-ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
+    font-size:19px;font-weight:700;color:#fff;margin-bottom:16px}
+  .dir:nth-child(1) .dir-ic{background:linear-gradient(140deg,#12D46A,#00A94C);box-shadow:0 8px 20px -10px rgba(0,196,88,.9)}
+  .dir:nth-child(2) .dir-ic{background:linear-gradient(140deg,#3B8BF5,#1557BD);box-shadow:0 8px 20px -10px rgba(30,111,232,.85)}
+  .dir:nth-child(3) .dir-ic{background:linear-gradient(140deg,#FFBE55,#F08A00);box-shadow:0 8px 20px -10px rgba(245,166,35,.85)}
+  .dir h3{font-size:19px;font-weight:700;color:#12304A;margin-bottom:7px}
+  .dir .k{font-size:12px;letter-spacing:.1em;color:var(--ink-4);display:block;margin-bottom:10px}
+  .dir p{font-size:14px;line-height:1.9;color:var(--ink-2)}
+  .dir p b{color:#12304A;font-weight:600}
+
+  /* 发现清单 */
+  .panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
+    border:1px solid var(--line-2);overflow:hidden}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    padding:16px 22px;border-bottom:1px solid var(--line);background:#FBFDFE}
+  .panel-h b{font-size:15.5px;color:#12304A;font-weight:700}
+  .panel-h em{font-style:normal;font-size:12.5px;color:var(--ink-3);margin-left:10px}
+  .panel-h .pill{font-size:12px;color:var(--green-d);background:var(--green-wash);
+    border-radius:999px;padding:3px 11px;font-weight:600}
+  .grp{border-bottom:1px solid var(--line)}
   .grp:last-of-type{border-bottom:none}
-  .grp-h{
-    display:flex;align-items:baseline;gap:7px;padding:7px 11px 6px;
-    background:#FBFCFE;font-size:12px;font-weight:700;color:#3A3A3A;
-    border-bottom:1px dotted var(--line-2);
-  }
-  .grp-h em{font-style:normal;font-weight:400;font-size:10.5px;color:var(--ink-3)}
-  .grp-h .bar-dot{width:3px;height:11px;border-radius:1px;background:var(--blue);display:block;align-self:center}
-  .grp.o .bar-dot{background:var(--orange)}
-  .grp.g .bar-dot{background:var(--green)}
-  .row{
-    display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-    padding:5px 11px;border-bottom:1px dotted var(--line-3);font-size:12px;color:#555;
-  }
+  .grp-h{display:flex;align-items:center;gap:9px;padding:12px 22px 10px;background:#FCFEFF;
+    border-bottom:1px solid var(--line-2);font-size:13.5px;font-weight:700;color:#12304A}
+  .grp-h em{font-style:normal;font-weight:400;font-size:12px;color:var(--ink-3)}
+  .grp-h .bd{width:4px;height:14px;border-radius:2px;background:var(--green);display:block}
+  .grp.b .bd{background:var(--blue)}
+  .grp.o .bd{background:#F5A623}
+  .row{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:baseline;
+    padding:9px 22px;border-bottom:1px solid var(--line-2);font-size:14px;color:#3E4A56}
   .row:last-child{border-bottom:none}
-  .row:hover{background:#FBFCFE}
-  .row .l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .row .l i{font-style:normal;color:var(--ink-3);font-size:11px;margin-left:5px}
-  .row .r{font-family:var(--mono);font-size:11.5px;color:var(--orange);white-space:nowrap}
-  .row .r.g{color:var(--green)}
-  .row .r.q{color:var(--ink-3)}
-  .tbl-foot{
-    display:flex;flex-wrap:wrap;gap:6px 20px;padding:7px 11px;
-    background:#F7FAFD;border-top:1px solid var(--line-2);
-    font-size:11px;color:var(--ink-2);
-  }
-  .tbl-foot b{font-family:var(--mono);color:var(--orange);font-weight:700}
+  .row:hover{background:#FAFDFF}
+  .row .l{min-width:0}
+  .row .l span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .l i{font-style:normal;display:block;font-size:12px;color:var(--ink-4);margin-top:1px}
+  .row .r{font-family:var(--num);font-size:15px;font-weight:600;color:var(--green-d);white-space:nowrap}
+  .row .r.b{color:var(--blue-d)}
+  .row .r.o{color:#D98200}
+  .row .r.q{color:var(--ink-4);font-weight:400}
+  .panel-foot{display:flex;flex-wrap:wrap;gap:10px 28px;padding:14px 22px;background:#F8FBFE;
+    border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+  .panel-foot b{font-family:var(--num);font-size:14px;color:var(--green-d)}
 
   /* ============ 执行队列 ============ */
-  .exec{border:1px solid var(--line-2);border-radius:3px;overflow:hidden;margin-top:10px;background:#fff}
-  .exec-row{
-    display:grid;grid-template-columns:76px 1fr 38px 128px;gap:10px;align-items:center;
-    padding:8px 11px;border-bottom:1px dotted var(--line-2);font-size:12px;
-  }
+  .exec{padding:8px 0 4px}
+  .exec-row{display:grid;grid-template-columns:96px 1fr 46px 150px;gap:16px;align-items:center;
+    padding:12px 22px;border-bottom:1px solid var(--line-2);font-size:13.5px}
   .exec-row:last-child{border-bottom:none}
-  .e-name{color:#333;font-weight:700;white-space:nowrap}
-  .e-bar{position:relative;height:8px;background:#F1F4F8;border:1px solid var(--line);border-radius:1px;overflow:hidden}
-  .e-bar i{position:absolute;top:0;bottom:0;left:0;width:0;background:linear-gradient(#4A86C0,#2B5FA8);transition:background .3s,width 1.1s cubic-bezier(.3,.7,.3,1)}
-  .exec-row.done .e-bar i{background:linear-gradient(#6FB44C,#4C9A2A)}
-  .e-pct{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .exec-row.done .e-pct{color:var(--green)}
-  .e-note{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .exec-row.hold{background:#FFF7F0;border-left:3px solid var(--orange);padding-left:8px}
-  .exec-row.hold .e-name{color:#C4640E}
-  .exec-row.hold .e-bar{border-color:#F2D2B0}
-  .exec-row.hold .e-bar i{width:100%!important;background:#F7DDBE}
-  .exec-row.hold .e-pct{color:#C4640E}
-  .exec-note{margin-top:9px;font-size:11.5px;line-height:1.85;color:var(--ink-3)}
-  .exec-note b{color:#C4640E}
+  .e-name{color:#12304A;font-weight:600;white-space:nowrap}
+  .e-bar{position:relative;height:8px;border-radius:999px;background:#EFF4F8;overflow:hidden}
+  .e-bar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+    background:linear-gradient(90deg,#3B8BF5,#1557BD);
+    transition:width 1.1s cubic-bezier(.3,.7,.3,1),background .3s}
+  .exec-row.done .e-bar i{background:linear-gradient(90deg,#12D46A,#00A94C)}
+  .e-pct{font-family:var(--num);font-size:12.5px;color:var(--ink-3);text-align:right;white-space:nowrap}
+  .exec-row.done .e-pct{color:var(--green-d)}
+  .e-note{font-size:12.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .exec-row.hold{background:#FFFBF3}
+  .exec-row.hold .e-name{color:#C47800}
+  .exec-row.hold .e-bar{background:#FDEFD8}
+  .exec-row.hold .e-bar i{width:100%!important;background:linear-gradient(90deg,#FFD68A,#F5A623)}
+  .exec-row.hold .e-pct{color:#C47800}
+  .exec-note{margin-top:16px;font-size:13.5px;line-height:1.9;color:var(--ink-3);text-align:center}
+  .exec-note b{color:#12304A;font-weight:600}
 
-  /* ============ 两个方向 / 三个方向 ============ */
-  .dirs{display:grid;grid-template-columns:repeat(3,1fr);gap:0 16px;margin-top:10px}
-  .dir{border-top:2px solid var(--blue);padding-top:6px}
-  .dir:nth-child(2){border-top-color:var(--green)}
-  .dir:nth-child(3){border-top-color:var(--orange)}
-  .dir h4{font-size:12.5px;color:#333;margin-bottom:2px}
-  .dir span{font-size:10.5px;color:var(--ink-3);letter-spacing:.04em}
-  .dir p{font-size:11.5px;line-height:1.8;color:#5A5A5A;margin-top:5px}
-  .dir p b{color:#222}
+  /* ============ 大数字 ============ */
+  .stats{
+    margin-top:88px;padding:60px 0 56px;
+    background:linear-gradient(180deg,#EAF4FA,#F7FBFE);
+    border-top:1px solid #DEEBF4;border-bottom:1px solid #DEEBF4;
+  }
+  .stats-in{text-align:center}
+  .stats-in h3{font-size:19px;font-weight:700;color:#12304A;margin-bottom:6px}
+  .stats-in .lead{font-size:14px;color:var(--ink-2);margin-bottom:38px}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stat{padding:0 18px}
+  .stat + .stat{border-left:1px solid #D8E7F1}
+  .stat b{display:block;font-family:var(--num);font-size:clamp(38px,4.4vw,54px);
+    line-height:1.05;font-weight:700;letter-spacing:-.02em;color:#12304A}
+  .stat b i{font-style:normal;font-size:.42em;font-weight:600;color:var(--ink-3);margin-left:3px;letter-spacing:0}
+  .stat span{display:block;margin-top:7px;font-size:13px;color:var(--ink-2)}
 
   /* ============ 承诺 ============ */
-  .faith{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;margin-top:10px}
-  .faith h4{
-    font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.08em;
-    padding-bottom:5px;border-bottom:1px solid var(--line);margin-bottom:3px;
-  }
-  .faith ul li{padding:5px 0;border-bottom:1px dotted var(--line-3);font-size:12px;line-height:1.8;color:#555}
-  .faith ul li:last-child{border-bottom:none}
-  .faith .yes h4{color:var(--green);border-bottom-color:#BFD8B2}
-  .faith .yes ul li{color:#3A3A3A}
+  .faith{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:0}
+  .faith-card{background:var(--card);border-radius:var(--r);padding:26px 26px 20px;
+    border:1px solid var(--line-2);box-shadow:var(--shadow-s)}
+  .faith-card h4{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:700;
+    color:var(--ink-3);padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:4px}
+  .faith-card h4::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-4);flex:none}
+  .faith-card.yes h4{color:var(--green-d)}
+  .faith-card.yes h4::before{background:var(--green);box-shadow:0 0 0 4px rgba(0,196,88,.14)}
+  .faith-card li{display:flex;gap:9px;padding:9px 0;border-bottom:1px dotted var(--line-2);
+    font-size:14px;line-height:1.78;color:var(--ink-2)}
+  .faith-card li:last-child{border-bottom:none}
+  .faith-card li::before{content:"—";color:var(--ink-4);flex:none}
+  .faith-card.yes li{color:#2E3A46}
+  .faith-card.yes li::before{content:"✓";color:var(--green);font-weight:700}
 
-  /* ============ 永久免费（公告） ============ */
-  .free{display:flex;gap:16px;margin-top:10px;align-items:flex-start}
-  .free-list{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}
-  .free-list div{display:flex;gap:6px;font-size:12px;line-height:1.8;color:#4A4A4A}
-  .free-list div::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--green);flex:none;margin-top:8px}
-  .free-list b{color:#222}
-  .seal{
-    width:78px;height:78px;flex:none;border:3px solid #C0392B;border-radius:3px;
-    color:#C0392B;display:grid;place-items:center;transform:rotate(-6deg);
-    font-size:15px;line-height:1.2;font-weight:700;letter-spacing:.06em;text-align:center;
-    padding:6px;opacity:.88;
-    box-shadow:inset 0 0 0 1px rgba(192,57,43,.3);
+  /* ============ 免费 ============ */
+  .free{
+    margin-top:88px;border-radius:26px;overflow:hidden;position:relative;
+    background:linear-gradient(135deg,#0E3F64 0%,#14557F 45%,#0E7A5A 100%);
+    padding:46px 48px;color:#fff;
   }
-  .seal span{display:block}
+  .free::after{
+    content:"";position:absolute;right:-80px;top:-90px;width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,196,88,.45),rgba(0,196,88,0) 68%);pointer-events:none;
+  }
+  .free-in{position:relative;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+  .free h3{font-size:clamp(28px,3.2vw,40px);line-height:1.25;font-weight:700;letter-spacing:.01em}
+  .free h3 small{display:block;font-size:12px;letter-spacing:.22em;font-weight:500;color:rgba(255,255,255,.62);margin-bottom:10px}
+  .free-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 26px;margin-top:22px}
+  .free-list div{display:flex;gap:8px;font-size:13.5px;line-height:1.8;color:rgba(255,255,255,.86)}
+  .free-list div::before{content:"✓";color:#4FF19B;font-weight:700;flex:none}
+  .free-list b{color:#fff;font-weight:700}
+  .free .btn-green{background:#fff;color:#0E7A5A;box-shadow:0 12px 30px -12px rgba(0,0,0,.55)}
+  .free .btn-green:hover{background:#F4FFFA}
+  .free-side{text-align:center}
+  .free-side .btn{min-width:200px}
 
-  /* ============ 右栏 ============ */
-  .apps{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:11px 10px 12px}
-  .app{text-align:center;font-size:11.5px;color:#444}
-  .app .ic{
-    height:38px;border-radius:3px;display:grid;place-items:center;
-    color:#fff;font-size:14px;font-weight:700;margin-bottom:4px;
-    box-shadow:0 1px 0 rgba(255,255,255,.35) inset;
-  }
-  .app:nth-child(1) .ic{background:linear-gradient(#4A86C0,#2B5FA8)}
-  .app:nth-child(2) .ic{background:linear-gradient(#7FB05A,#4C9A2A)}
-  .app:nth-child(3) .ic{background:linear-gradient(#F2A552,#E07B16)}
-  .app:nth-child(4) .ic{background:linear-gradient(#8D8D8D,#5F5F5F)}
-  .stat-rows{padding:4px 0}
-  .stat-rows div{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:6px 11px;border-bottom:1px dotted var(--line-3);font-size:11.5px;color:var(--ink-2);
-  }
-  .stat-rows div:last-child{border-bottom:none}
-  .stat-rows b{font-family:var(--mono);color:var(--orange);font-size:12px}
-  .stat-rows b.g{color:var(--green)}
-  .notice{padding:10px 11px;font-size:11.5px;line-height:1.85;color:var(--ink-2)}
-  .notice b{color:#C0392B}
-  .notice .seal-sm{
-    display:inline-block;border:1px solid #C0392B;color:#C0392B;border-radius:2px;
-    padding:1px 5px;font-size:10.5px;margin-right:4px;transform:rotate(-3deg);
-  }
+  /* ============ 落款 CTA ============ */
+  .final{padding:92px 0 0;text-align:center}
+  .final h2{font-size:clamp(30px,3.6vw,46px);line-height:1.3}
+  .final p{margin-top:16px;font-size:16px;color:var(--ink-2)}
+  .final .btns{display:flex;justify-content:center;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .final small{display:block;margin-top:16px;font-size:13px;color:var(--ink-4)}
 
-  /* ============ 落款 ============ */
-  .sign{
-    padding:18px 16px;text-align:center;background:linear-gradient(#FBFCFE,#F3F7FB);
-    border-top:3px solid var(--blue);
+  /* ============ 页脚 ============ */
+  footer{margin-top:88px;background:#fff;border-top:1px solid var(--line);padding:52px 0 34px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:34px;border-bottom:1px solid var(--line-2)}
+  .foot-brand .brand{font-size:19px}
+  .foot-brand p{margin-top:12px;font-size:13px;line-height:1.9;color:var(--ink-3);max-width:24em}
+  .foot-col h5{font-size:13px;font-weight:700;color:#12304A;margin-bottom:12px;letter-spacing:.04em}
+  .foot-col a{display:block;font-size:13px;color:var(--ink-3);padding:4px 0;transition:color .18s}
+  .foot-col a:hover{color:var(--green-d)}
+  .foot-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:22px;font-size:12.5px;color:var(--ink-4)}
+  .foot-bot .l{display:flex;gap:20px;flex-wrap:wrap}
+  .foot-bot a:hover{color:var(--ink-2)}
+
+  /* ============ 响应式 ============ */
+  @media(max-width:1080px){
+    .app-grid{grid-template-columns:1fr;gap:14px}
+    .radar{max-width:240px}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .dirs{gap:16px}
+    .dir{padding:26px 22px 24px}
   }
-  .sign h3{font-size:19px;color:#2F2F2F;font-weight:700;letter-spacing:.02em;margin-bottom:5px}
-  .sign p{color:var(--ink-2);font-size:12px;line-height:1.9}
-  .sign .btn{margin-top:11px;padding:6px 30px;font-size:13px}
-  .sign small{display:block;margin-top:7px;color:var(--ink-3);font-size:11px}
-
-  footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 18px;text-align:center}
-  footer .fl{color:#8A929B;font-size:11.5px}
-  footer a{color:#8A929B;margin:0 7px}
-  footer a:hover{color:var(--blue)}
-  footer .cp{margin-top:5px;color:#B3B9C0;font-size:11px}
-
-  /* ============ 小屏 ============ */
-  @media(max-width:900px){
-    .topbar .wrap{gap:10px}
-    .logo{font-size:17px;padding-right:10px}
-    .topnav{gap:11px}
-    .topnav a{font-size:12px}
-    .tsearch{display:none}
-    .tme{margin-left:auto}
-    .page{grid-template-columns:1fr}
-    .col-c{order:1}
-    .col-l{order:2;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-    .col-l .pcard{margin-bottom:0}
-    .col-l .menu{margin-bottom:0}
-    .col-l .note{display:none}
-    .col-r{order:3;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
-    .col-r .card{margin-bottom:0}
-    .post{padding:11px 12px 9px}
-    .post-title{font-size:14.5px}
-    .dirs{grid-template-columns:1fr;gap:10px}
-    .free{flex-direction:column}
+  @media(max-width:860px){
+    .wrap{width:calc(100% - 36px)}
+    .links{display:none}
+    .hero{padding-top:44px}
+    .shot{margin-top:34px}
+    .dirs{grid-template-columns:1fr}
+    .stat-grid{grid-template-columns:1fr 1fr;gap:28px 0}
+    .stat:nth-child(3){border-left:none}
+    .stat:nth-child(1),.stat:nth-child(2){padding-bottom:0}
+    .faith{grid-template-columns:1fr}
+    .free{padding:34px 26px;border-radius:20px}
+    .free-in{grid-template-columns:1fr;gap:26px}
     .free-list{grid-template-columns:1fr}
-    .seal{align-self:flex-end;margin-top:4px}
-    .exec-row{grid-template-columns:68px 1fr 34px;row-gap:3px}
-    .e-note{grid-column:1 / -1;font-size:10.5px}
-    .faith{grid-template-columns:1fr;gap:14px}
-    .post-h .r{display:none}
+    .free-side{text-align:left}
+    .exec-row{grid-template-columns:84px 1fr 40px;row-gap:5px;padding:11px 18px}
+    .e-note{grid-column:1 / -1;font-size:12px}
+    .panel-h,.grp-h,.row,.panel-foot,.exec-row{padding-left:18px;padding-right:18px}
+    .sec{padding-top:64px}
+    .stats{margin-top:64px;padding:44px 0 40px}
+    .free{margin-top:64px}
+    .final{padding-top:64px}
+    footer{margin-top:64px}
+    .shot-frame{border-radius:20px 20px 0 0}
   }
-  @media(max-width:620px){
-    .col-l,.col-r{grid-template-columns:1fr}
-    .topnav a:nth-child(4),.topnav a:nth-child(5){display:none}
-    .tbl-foot{gap:4px 12px}
-    .row{font-size:11.5px}
-    .free-list{grid-template-columns:1fr}
+  @media(max-width:560px){
+    body{font-size:15px}
+    .wrap{width:calc(100% - 28px)}
+    h1{font-size:33px}
+    .hero-sub{font-size:14.5px}
+    .hero-tags{display:none}
+    .shot-bar span{display:none}
+    .app{padding:11px 12px 14px}
+    .app-head{flex-direction:column;align-items:flex-start;gap:6px}
+    .radar{max-width:210px}
+    .panel-h em{display:none}
+    .row{font-size:13px}
+    .row .l i{font-size:11px}
+    .stat-grid{grid-template-columns:1fr 1fr}
+    .stat b{font-size:34px}
+    .foot-grid{grid-template-columns:1fr}
+    .final .btns{flex-direction:column}
+    .final .btn{width:100%}
+    .nav-cta .mini{display:none}
+    .brand{font-size:19px}
+    .brand svg{width:26px;height:26px}
+    .exec-row{grid-template-columns:1fr 1fr;row-gap:4px}
+    .exec-row .e-bar{grid-column:1 / -1}
+    .e-pct{text-align:left}
   }
   @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
     *{animation:none!important;transition:none!important}
-    /* 降级态一次列全，不裁切 */
     .findings{height:auto}
   }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="wrap">
-    <a class="logo" href="#top">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21S3.5 15.8 3.5 9.9A4.6 4.6 0 0 1 12 7.4a4.6 4.6 0 0 1 8.5 2.5C20.5 15.8 12 21 12 21Z" fill="#fff"/></svg>
-      回血
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="16" fill="#00C458"/>
+        <path d="M16 24.5S7.6 19.2 7.6 13.6A4.4 4.4 0 0 1 16 11.5a4.4 4.4 0 0 1 8.4 2.1c0 5.6-8.4 10.9-8.4 10.9Z" fill="#fff"/>
+      </svg>
+      <b>回血</b>
     </a>
-    <nav class="topnav">
-      <a href="#top" class="on">首页</a>
-      <a href="#feed">新鲜事</a>
-      <a href="#apps">应用</a>
+    <div class="links">
+      <a href="#diag">身份诊断</a>
+      <a href="#find">发现清单</a>
+      <a href="#run">并发执行</a>
       <a href="#ledger">账本</a>
-      <a href="#about">关于</a>
-    </nav>
-    <form class="tsearch" onsubmit="return false">
-      <input type="text" placeholder="搜索机会、优惠、兼职" aria-label="搜索">
-      <button type="button">搜索</button>
-    </form>
-    <div class="tme"><span class="sq">回</span>回血助手</div>
+      <a href="#free">关于收费</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#free" class="mini">永久免费</a>
+      <a href="#top" class="btn btn-green btn-sm">免费扫描</a>
+    </div>
   </div>
-</div>
+</nav>
 
-<div class="wrap">
-  <div class="page" id="top">
+<header class="hero" id="top">
+  <div class="wrap hero-in">
+    <span class="eyebrow">给在校生的 AGENT · 永久免费</span>
+    <h1>先扫一遍，<br>把<em>漏掉的</em>捡回来</h1>
+    <p class="hero-sub">学生身份能换到的东西，比你以为的多。实习、奖学金、助学金、教育优惠、能卖的旧东西、能接的兼职——散在几十个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b></p>
+    <div class="hero-btns">
+      <a href="#top" class="btn btn-green">免费扫描　约 3 分钟</a>
+      <a href="#diag" class="btn btn-ghost">先看一次扫描</a>
+    </div>
+    <div class="hero-tags">
+      <span>本科生 / 研究生</span>
+      <span>不用绑卡</span>
+      <span>不卖数据</span>
+      <span>随时可停</span>
+    </div>
 
-    <!-- ============ 左栏 ============ -->
-    <aside class="col-l">
-      <div class="card pcard">
-        <div class="big">回</div>
-        <div class="nm">回血助手</div>
-        <div class="sub">学生身份诊断 · 已认证</div>
-        <div class="nums">
-          <div><b>6</b><span>已扫入口</span></div>
-          <div><b>9</b><span>在办事项</span></div>
-          <div><b>0</b><span>待付费</span></div>
-        </div>
-      </div>
+    <div class="shot">
+      <div class="shot-frame">
+        <div class="shot-bar"><i></i><i></i><i></i><span>回血 · 身份诊断</span></div>
 
-      <div class="card menu">
-        <h5>我的回血</h5>
-        <a href="#feed" class="on"><i></i>全部新鲜事<em>6</em></a>
-        <a href="#diag"><i></i>身份诊断</a>
-        <a href="#chance"><i></i>找机会<em>11</em></a>
-        <a href="#save"><i></i>省钱<em>4</em></a>
-        <a href="#earn"><i></i>赚钱<em>3</em></a>
-        <a href="#exec"><i></i>执行队列</a>
-        <a href="#ledger"><i></i>我的账本</a>
-      </div>
-
-      <div class="card note">
-        <div class="card-h">说明</div>
-        <div class="sidenote">
-          第一轮扫完，你会拿到一张清单。<b>办不办，什么时候办，你说了算。</b>
-        </div>
-      </div>
-    </aside>
-
-    <!-- ============ 中栏 ============ -->
-    <main class="col-c">
-
-      <div class="card pub">
-        <div class="row">
-          <div class="av-s">回</div>
-          <textarea aria-label="发布状态" spellcheck="false">说点什么……比如：这学期想换台笔记本，帮我看看有没有教育优惠。</textarea>
-        </div>
-        <div class="bar">
-          <div class="tools"><span>表情</span><span>照片</span><span>附件</span><span>@提到</span></div>
-          <a href="#diag" class="btn">扫描一下</a>
-        </div>
-      </div>
-
-      <div class="card" id="feed" style="overflow:hidden">
-        <div class="tabs">
-          <a href="#feed" class="on">全部<b>6</b></a>
-          <a href="#chance">找机会</a>
-          <a href="#save">省钱</a>
-          <a href="#earn">赚钱</a>
-          <a href="#ledger">账本</a>
-        </div>
-
-        <div class="feed">
-
-          <!-- 1 诊断扫描 -->
-          <article class="post">
-            <div class="post-h">
-              <div class="av">回</div>
-              <div class="post-who">
-                <div class="post-name">回血助手 <span class="tag">官方</span></div>
-                <div class="post-meta">今天 09:12　来自 身份诊断</div>
-              </div>
-              <div class="r">6 类入口</div>
+        <div class="app">
+          <div class="app-head">
+            <div class="app-title">学生身份诊断
+              <span class="dotpill">扫描中</span>
             </div>
+            <div class="app-stat">已扫 <b>6</b> 类入口 · 合计约 <b>¥8,950</b></div>
+          </div>
 
-            <div class="post-title">把你的学生身份扫了一遍，正在漏的有这些。</div>
-            <div class="post-body">
-              <p>教务、学院群、招聘站、二手平台、银行 App、话费账单——<b>该看的地方都看了一遍</b>。下面这条线每转一圈，就有一项亮起来。</p>
-            </div>
+          <div class="app-grid">
+            <div class="radar" role="img" aria-label="雷达扫描屏：扇面转一圈，扫到目标时亮起并留下回声，中间的已发现计数不断增加">
+              <div class="radar-screen">
+                <svg class="radar-grid" viewBox="0 0 200 200" aria-hidden="true">
+                  <circle cx="100" cy="100" r="80" fill="none" stroke="#CFE3F0" stroke-width="1" opacity=".9"/>
+                  <circle cx="100" cy="100" r="55" fill="none" stroke="#DBEBF5" stroke-width=".8" opacity=".95"/>
+                  <circle cx="100" cy="100" r="30" fill="none" stroke="#DBEBF5" stroke-width=".8" opacity=".95"/>
+                  <line x1="20" y1="100" x2="180" y2="100" stroke="#E4F0F8" stroke-width=".8" stroke-dasharray="3 4"/>
+                  <line x1="100" y1="20" x2="100" y2="180" stroke="#E4F0F8" stroke-width=".8" stroke-dasharray="3 4"/>
+                  <g stroke="#B7D2E4" stroke-width="1.2" stroke-linecap="round">
+                    <line x1="100" y1="23" x2="100" y2="31"/>
+                    <line x1="100" y1="23" x2="100" y2="31" transform="rotate(90 100 100)"/>
+                    <line x1="100" y1="23" x2="100" y2="31" transform="rotate(180 100 100)"/>
+                    <line x1="100" y1="23" x2="100" y2="31" transform="rotate(270 100 100)"/>
+                    <g stroke="#CDE0EE" stroke-width="1">
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(30 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(60 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(120 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(150 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(210 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(240 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(300 100 100)"/>
+                      <line x1="100" y1="23" x2="100" y2="28" transform="rotate(330 100 100)"/>
+                    </g>
+                  </g>
+                </svg>
 
-            <div class="diag" id="diag">
-              <div class="diag-h">
-                <span><b>诊断</b>　学生身份</span>
-                <span class="live">扫描中</span>
-              </div>
-
-              <div class="diag-body">
-                <div class="radar" role="img" aria-label="雷达扫描屏：扇面一圈圈扫过，扫到目标时亮起并留下一圈回声，中间的已发现计数不断增加">
-                  <div class="radar-screen">
-                    <svg class="radar-grid" viewBox="0 0 200 200" aria-hidden="true">
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="#C9D8E8" stroke-width="1" opacity=".9"/>
-                      <circle cx="100" cy="100" r="55" fill="none" stroke="#D5E2EF" stroke-width=".8" opacity=".8"/>
-                      <circle cx="100" cy="100" r="30" fill="none" stroke="#D5E2EF" stroke-width=".8" opacity=".8"/>
-                      <line x1="20" y1="100" x2="180" y2="100" stroke="#DCE6F1" stroke-width=".8" opacity=".9" stroke-dasharray="3 4"/>
-                      <line x1="100" y1="20" x2="100" y2="180" stroke="#DCE6F1" stroke-width=".8" opacity=".9" stroke-dasharray="3 4"/>
-                      <g stroke="#A9BFD6" stroke-width="1.2" stroke-linecap="round">
-                        <line x1="100" y1="23" x2="100" y2="31"/>
-                        <line x1="100" y1="23" x2="100" y2="31" transform="rotate(90 100 100)"/>
-                        <line x1="100" y1="23" x2="100" y2="31" transform="rotate(180 100 100)"/>
-                        <line x1="100" y1="23" x2="100" y2="31" transform="rotate(270 100 100)"/>
-                        <g stroke="#C6D5E4" stroke-width="1">
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(30 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(60 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(120 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(150 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(210 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(240 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(300 100 100)"/>
-                          <line x1="100" y1="23" x2="100" y2="28" transform="rotate(330 100 100)"/>
-                        </g>
-                      </g>
-                    </svg>
-
-                    <div class="radar-sweep" aria-hidden="true">
-                      <span class="rt"></span>
-                      <span class="rn"></span>
-                    </div>
-
-                    <!-- 目标点：方位角与 --a 对应 -->
-                    <span class="blip k" style="--a:16deg;--r:33%"><b></b></span>
-                    <span class="blip m" style="--a:76deg;--r:38%"><b></b></span>
-                    <span class="blip s" style="--a:136deg;--r:26%"><b></b></span>
-                    <span class="blip s" style="--a:196deg;--r:36%"><b></b></span>
-                    <span class="blip k" style="--a:256deg;--r:30%"><b></b></span>
-                    <span class="blip m" style="--a:316deg;--r:40%"><b></b></span>
-
-                    <div class="radar-core">
-                      <div class="radar-num"><span class="found">0</span><small>项</small></div>
-                      <div class="radar-lab">已发现</div>
-                    </div>
-                  </div>
+                <div class="radar-sweep" aria-hidden="true">
+                  <span class="rt"></span>
+                  <span class="rn"></span>
                 </div>
 
-                <ul class="findings" id="findings"></ul>
+                <span class="blip k" style="--a:16deg;--r:33%"><b></b></span>
+                <span class="blip s" style="--a:76deg;--r:38%"><b></b></span>
+                <span class="blip s" style="--a:136deg;--r:26%"><b></b></span>
+                <span class="blip k" style="--a:196deg;--r:36%"><b></b></span>
+                <span class="blip m" style="--a:256deg;--r:30%"><b></b></span>
+                <span class="blip m" style="--a:316deg;--r:40%"><b></b></span>
 
-                <div class="diag-foot">
-                  <span>已扫 <b>6</b> 类入口</span>
-                  <span>合计约 <b>¥8,950</b></span>
+                <div class="radar-core">
+                  <div class="radar-num"><span class="found">0</span><small>项</small></div>
+                  <div class="radar-lab">已发现</div>
                 </div>
               </div>
             </div>
 
-            <div class="post-act">
-              <a href="#diag">继续扫描</a><span class="dot">|</span>
-              <a href="#chance">看完整清单</a><span class="dot">|</span>
-              <span>32 条评论</span><span class="dot">|</span><span>18 次转发</span>
-            </div>
-          </article>
-
-          <!-- 2 找机会 -->
-          <article class="post" id="chance">
-            <div class="post-h">
-              <div class="av g">机</div>
-              <div class="post-who">
-                <div class="post-name">机会雷达</div>
-                <div class="post-meta">今天 08:56　来自 找机会</div>
-              </div>
-              <div class="r">11 条</div>
-            </div>
-
-            <div class="post-title">国家助学金这学年还没申报，下周励志奖学金就截止了。</div>
-            <div class="post-body">
-              <p>这两笔加起来 <span class="hl">¥8,300</span>，都在学校教务系统里，<b>不申请就默认放弃</b>。助学金要一份家庭情况证明，励志奖学金要成绩单——前者要去学院开，后者能在线打印。</p>
-              <p>另外筛出 11 个和你专业对得上的实习岗，其中 4 个明确写了"接受在校生、每周 3 天"。</p>
-            </div>
-
-            <div class="tbl">
-              <div class="tbl-h"><span><b>发现清单</b>　11 月 19 日　第 1 轮</span><span>按三件事分组</span></div>
-
-              <div class="grp o">
-                <div class="grp-h"><span class="bar-dot"></span>找机会<em>资格与入口</em></div>
-                <div class="row"><span class="l">实习岗 · 匹配命中<em>4 个接受在校生</em></span><span class="r">11 个</span></div>
-                <div class="row"><span class="l">国家助学金 · 本学年未申报<em>需家庭情况证明</em></span><span class="r">¥3,300</span></div>
-                <div class="row"><span class="l">励志奖学金 · 下周截止<em>成绩单可在线打印</em></span><span class="r">¥5,000</span></div>
-                <div class="row"><span class="l">校内助管 · 每周 6 小时<em>图书馆 · 排班可调</em></span><span class="r">¥480/月</span></div>
-              </div>
-
-              <div class="grp g" id="save">
-                <div class="grp-h"><span class="bar-dot"></span>省钱<em>能降下来的</em></div>
-                <div class="row"><span class="l">教材 · 三门课换二手同版本<em>八成新</em></span><span class="r g">−¥214</span></div>
-                <div class="row"><span class="l">话费套餐 · 同速率降一档<em>流量不变</em></span><span class="r g">−¥18/月</span></div>
-                <div class="row"><span class="l">视频会员 · 学生价未开<em>同一账号</em></span><span class="r g">−¥12/月</span></div>
-                <div class="row"><span class="l">云盘 · 三个月未用<em>可退订</em></span><span class="r g">−¥15/月</span></div>
-              </div>
-
-              <div class="grp" id="earn">
-                <div class="grp-h"><span class="bar-dot"></span>赚钱<em>能换回来的</em></div>
-                <div class="row"><span class="l">旧显示器 · 有人收<em>同城自提</em></span><span class="r">¥260</span></div>
-                <div class="row"><span class="l">考研资料 · 毕业季好卖<em>整套</em></span><span class="r">¥160</span></div>
-                <div class="row"><span class="l">多扣的运费险 · 可申诉<em>已过 7 天</em></span><span class="r">¥18</span></div>
-                <div class="row"><span class="l">校园卡押金 · 已到期<em>需本人办理</em></span><span class="r q">待你办</span></div>
-              </div>
-
-              <div class="tbl-foot">
-                <span>立刻能办 <b>9</b> 项</span>
-                <span>要你点头 <b>2</b> 项</span>
-                <span>必须本人 <b>1</b> 项</span>
-                <span>合计约 <b>¥8,950</b></span>
+            <div class="found-box">
+              <div class="found-h"><b>正在亮起的</b><span>按重要度排序</span></div>
+              <ul class="findings" id="findings"></ul>
+              <div class="found-foot">
+                <span>立刻能办 <b>9</b></span>
+                <span>要你点头 <b>2</b></span>
+                <span>必须本人 <b>1</b></span>
               </div>
             </div>
-
-            <div class="post-act">
-              <a href="#exec">全部交给我办</a><span class="dot">|</span>
-              <span>我来决定</span><span class="dot">|</span>
-              <span>41 条评论</span><span class="dot">|</span><span>26 次转发</span>
-            </div>
-          </article>
-
-          <!-- 3 并发执行 -->
-          <article class="post" id="exec">
-            <div class="post-h">
-              <div class="av">回</div>
-              <div class="post-who">
-                <div class="post-name">回血助手 <span class="tag">官方</span></div>
-                <div class="post-meta">今天 11:40　来自 执行队列</div>
-              </div>
-              <div class="r">6 项同时跑</div>
-            </div>
-
-            <div class="post-title">清单上的事已经一起发出去了，一件都没排队。</div>
-            <div class="post-body">
-              <p>改简历、投岗位、谈闲置、查账单、补材料，彼此没有依赖，本来就该同时进行。<b>谁先有结果谁先报</b>。</p>
-            </div>
-
-            <div class="exec">
-              <div class="exec-row done"><span class="e-name">套餐降档</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">已提交 · 下月生效</span></div>
-              <div class="exec-row done"><span class="e-name">投递实习</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">11 份 · 6 家已读</span></div>
-              <div class="exec-row done"><span class="e-name">闲置上架</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">5 件 · 2 件成交</span></div>
-              <div class="exec-row done"><span class="e-name">订阅清理</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">省 46 元/月</span></div>
-              <div class="exec-row"><span class="e-name">奖学金材料</span><span class="e-bar"><i class="fill" data-w="72"></i></span><span class="e-pct">72%</span><span class="e-note">正在补齐第 3 项</span></div>
-              <div class="exec-row hold"><span class="e-name">银行卡认证</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">待你</span><span class="e-note">需要本人人脸核验</span></div>
-            </div>
-
-            <p class="exec-note">碰到必须本人的环节，它会停下来，<b>把原因写清楚</b>，等你三分钟。其余的继续跑，不为一件卡住的事让整条队列停下。</p>
-
-            <div class="post-act">
-              <a href="#ledger">看今天的账</a><span class="dot">|</span>
-              <span>17 条评论</span><span class="dot">|</span><span>9 次转发</span>
-            </div>
-          </article>
-
-          <!-- 4 协作 -->
-          <article class="post" id="hand">
-            <div class="post-h">
-              <div class="av o">你</div>
-              <div class="post-who">
-                <div class="post-name">我</div>
-                <div class="post-meta">今天 12:05　来自 网页版</div>
-              </div>
-              <div class="r">2 项待办</div>
-            </div>
-
-            <div class="post-title">有些事只能我自己来，它把话说到最短。</div>
-            <div class="post-body">
-              <p>实名认证、签字、面试、当面交接——这些它替不了我，也不假装能替。它只做一件事：<b>把我要做的部分压到最小</b>，前面全做完，轮到我时只剩动作本身。</p>
-            </div>
-
-            <div class="quote">
-              <b>需要你：</b>银行卡人脸核验（约 40 秒）　·　助学金证明去学院盖章（约 10 分钟，明天下午前）
-            </div>
-
-            <div class="post-act">
-              <a href="#">去办第一件</a><span class="dot">|</span>
-              <span>8 条评论</span><span class="dot">|</span><span>3 次转发</span>
-            </div>
-          </article>
-
-          <!-- 5 账目 -->
-          <article class="post" id="ledger">
-            <div class="post-h">
-              <div class="av">回</div>
-              <div class="post-who">
-                <div class="post-name">回血助手 <span class="tag">官方</span></div>
-                <div class="post-meta">今天 16:40　来自 我的账本</div>
-              </div>
-              <div class="r">共 14 项</div>
-            </div>
-
-            <div class="post-title">它办了什么，打开账本就能看见。</div>
-
-            <div class="tbl">
-              <div class="tbl-h"><span><b>11 月 19 日</b>　周三　共 14 项</span><span>其中 2 项等你确认</span></div>
-              <div class="row"><span class="l">06:10　话费套餐降一档<em>已提交 · 下月生效</em></span><span class="r g">−18/月</span></div>
-              <div class="row"><span class="l">08:40　三门课教材换二手<em>同版本 · 八成新</em></span><span class="r g">−214</span></div>
-              <div class="row"><span class="l">09:15　投递 11 个实习岗<em>6 家已读 · 2 家约面</em></span><span class="r q">11 份</span></div>
-              <div class="row"><span class="l">11:30　视频会员切学生价<em>同一账号 · 权益不变</em></span><span class="r g">−12/月</span></div>
-              <div class="row"><span class="l">14:05　五件闲置挂出，两件成交<em>买家已付款</em></span><span class="r">+420</span></div>
-              <div class="row"><span class="l">16:40　助学金还差一份证明<em>已列出开具地点</em></span><span class="r q">待补</span></div>
-              <div class="row"><span class="l">明天　一家实习一面已排好<em>10:00 · 线上 · 材料已备</em></span><span class="r q">已准备</span></div>
-              <div class="tbl-foot">
-                <span>今日：省 <b>30</b> 元/月 + <b>214</b> 元</span>
-                <span>进账 <b>420</b> 元</span>
-                <span>投递 <b>11</b> 份</span>
-              </div>
-            </div>
-
-            <p class="exec-note">这是格式示意，数字是假的。真的账目只对你自己可见，可以导出，可以随时删。</p>
-
-            <div class="post-act">
-              <a href="#ledger">导出账本</a><span class="dot">|</span>
-              <span>23 条评论</span><span class="dot">|</span><span>11 次转发</span>
-            </div>
-          </article>
-
-          <!-- 6 边界 -->
-          <article class="post" id="about">
-            <div class="post-h">
-              <div class="av">回</div>
-              <div class="post-who">
-                <div class="post-name">回血助手 <span class="tag">官方</span></div>
-                <div class="post-meta">11 月 18 日　来自 公告</div>
-              </div>
-              <div class="r">置顶</div>
-            </div>
-
-            <div class="post-title">能做什么，不能做什么，都写在这里。</div>
-            <div class="post-body">
-              <p>漏掉的从来不是能力，是入口。一个学生的机会散在几十个地方，任何单个入口都不难，难的是它们加起来有几十个。于是大多数人只翻最熟的那两三个。</p>
-            </div>
-
-            <div class="faith">
-              <div>
-                <h4>不承诺</h4>
-                <ul>
-                  <li>不承诺你一定拿到那个名额。</li>
-                  <li>不承诺每个月多赚多少。</li>
-                  <li>不承诺你不用再做任何决定。</li>
-                  <li>不承诺申请就一定有结果。</li>
-                </ul>
-              </div>
-              <div class="faith yes">
-                <h4>承诺</h4>
-                <ul>
-                  <li>该看的地方，每轮都看一遍。</li>
-                  <li>每一笔省下的、进账的，都记账。</li>
-                  <li>要你出面的事，说清楚，不绕。</li>
-                  <li>你随时可以停，数据全部带走。</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="post-act">
-              <a href="#free">关于收费</a><span class="dot">|</span>
-              <span>56 条评论</span><span class="dot">|</span><span>48 次转发</span>
-            </div>
-          </article>
-
-          <!-- 7 永久免费 -->
-          <article class="post" id="free">
-            <div class="post-h">
-              <div class="av">回</div>
-              <div class="post-who">
-                <div class="post-name">回血助手 <span class="tag">官方</span></div>
-                <div class="post-meta">11 月 18 日　来自 关于收费</div>
-              </div>
-              <div class="r">永久免费</div>
-            </div>
-
-            <div class="post-title">关于收费：永久免费，四个不做。</div>
-
-            <div class="free">
-              <div class="free-list">
-                <div><span><b>不卖数据。</b>简历、成绩、账单不会出现在任何商业报告里。</span></div>
-                <div><span><b>不放广告。</b>不会出现贷款、分期、校园贷。</span></div>
-                <div><span><b>不做付费解锁。</b>所有功能，所有人，一样。</span></div>
-                <div><span><b>撑不住会先说。</b>提前一年公告，不会半夜改收费。</span></div>
-              </div>
-              <div class="seal" aria-label="永久免费印章"><span>永久</span><span>免费</span></div>
-            </div>
-
-            <div class="post-act">
-              <span>102 条评论</span><span class="dot">|</span><span>87 次转发</span>
-            </div>
-          </article>
-
+          </div>
         </div>
       </div>
-
-      <div class="card sign">
-        <h3>先扫一遍，再说下一步。</h3>
-        <p>不用绑卡，不用付费，今天就能扫。第一轮扫完，你会拿到一张清单。</p>
-        <a href="#diag" class="btn">开始扫描 →</a>
-        <small>约 3 分钟 · 永久免费</small>
-      </div>
-
-    </main>
-
-    <!-- ============ 右栏 ============ -->
-    <aside class="col-r">
-      <div class="card" id="apps">
-        <div class="card-h">常用应用</div>
-        <div class="apps">
-          <div class="app"><div class="ic">诊</div>身份诊断</div>
-          <div class="app"><div class="ic">省</div>省钱</div>
-          <div class="app"><div class="ic">赚</div>赚钱</div>
-          <div class="app"><div class="ic">账</div>账本</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-h">本月回血 <em>11 月</em></div>
-        <div class="stat-rows">
-          <div><span>省下</span><b>30 元/月 + 214 元</b></div>
-          <div><span>进账</span><b class="g">420 元</b></div>
-          <div><span>投递</span><b>11 份</b></div>
-          <div><span>待你出面</span><b>2 项</b></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-h">公告</div>
-        <div class="notice">
-          <p><span class="seal-sm">置顶</span>助学金申报本周五截止，材料没齐的今天先交。</p>
-          <p style="margin-top:7px"><span class="seal-sm">提醒</span>校园贷、刷单、代考，一律不碰，也不接这类推广。</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-h">谁在用</div>
-        <div class="stat-rows">
-          <div><span>在校生</span><b>1,284</b></div>
-          <div><span>本周新增</span><b class="g">+96</b></div>
-          <div><span>平均回血</span><b>¥1,742</b></div>
-        </div>
-        <div class="sidenote" style="border-top:1px solid var(--line-2)">
-          说得太满的产品，你大概已经见过很多了。
-        </div>
-      </div>
-    </aside>
-
+    </div>
   </div>
-</div>
+</header>
+
+<!-- 三方向 -->
+<section class="sec" id="diag">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">01　扫描什么</span>
+      <h2>漏掉的不是能力，是入口。</h2>
+      <p class="sec-sub">一个学生的机会，散在教务、学院群、招聘站、二手平台、银行 App、话费账单里。任何单个入口都不难，难的是它们加起来有几十个。于是大多数人只翻最熟的那两三个。</p>
+    </div>
+
+    <div class="dirs">
+      <div class="dir">
+        <div class="dir-ic">机</div>
+        <span class="k">找机会 · 身份</span>
+        <h3>学生证能换什么</h3>
+        <p>教育优惠、学生版软件、校园宽带、助学金、励志奖学金、竞赛资格。<b>大部分要主动申请，不申请就默认放弃。</b></p>
+      </div>
+      <div class="dir">
+        <div class="dir-ic">省</div>
+        <span class="k">省钱 · 支出</span>
+        <h3>每月在漏多少</h3>
+        <p>话费套餐、视频会员、云盘、外卖、打车。同一个服务，学生价和原价往往差一半，而默认选项永远是原价。</p>
+      </div>
+      <div class="dir">
+        <div class="dir-ic">赚</div>
+        <span class="k">赚钱 · 闲置</span>
+        <h3>身边有哪些能换钱</h3>
+        <p>毕业季的旧书、换下来的数码、用不上的券。还有每周空出来的几段时间，够接一份家教或校内助管。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 发现清单 -->
+<section class="sec" id="find">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">02　扫完得到什么</span>
+      <h2>一张清单，每项标好档位。</h2>
+      <p class="sec-sub">立刻能办的，它直接去办；要你点头的，一句话确认；必须你本人的，标出来，等你有空。</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h">
+        <div><b>发现清单</b><em>11 月 19 日 · 第 1 轮</em></div>
+        <span class="pill">合计约 ¥8,950</span>
+      </div>
+
+      <div class="grp">
+        <div class="grp-h"><span class="bd"></span>找机会<em>资格与入口</em></div>
+        <div class="row"><div class="l"><span>实习岗 · 匹配命中</span><i>4 个明确接受在校生、每周 3 天</i></div><div class="r b">11 个</div></div>
+        <div class="row"><div class="l"><span>国家助学金 · 本学年未申报</span><i>需一份家庭情况证明 · 学院开</i></div><div class="r">¥3,300</div></div>
+        <div class="row"><div class="l"><span>励志奖学金 · 下周截止</span><i>成绩单可在线打印</i></div><div class="r">¥5,000</div></div>
+        <div class="row"><div class="l"><span>校内助管 · 每周 6 小时</span><i>图书馆 · 排班可调</i></div><div class="r">¥480/月</div></div>
+      </div>
+
+      <div class="grp b">
+        <div class="grp-h"><span class="bd"></span>省钱<em>能降下来的</em></div>
+        <div class="row"><div class="l"><span>教材 · 三门课换二手同版本</span><i>八成新 · 版本一致</i></div><div class="r">−¥214</div></div>
+        <div class="row"><div class="l"><span>话费套餐 · 同速率降一档</span><i>流量不变</i></div><div class="r">−¥18/月</div></div>
+        <div class="row"><div class="l"><span>视频会员 · 学生价未开</span><i>同一账号 · 权益不变</i></div><div class="r">−¥12/月</div></div>
+        <div class="row"><div class="l"><span>云盘 · 三个月未用</span><i>可退订</i></div><div class="r">−¥15/月</div></div>
+      </div>
+
+      <div class="grp o">
+        <div class="grp-h"><span class="bd"></span>赚钱<em>能换回来的</em></div>
+        <div class="row"><div class="l"><span>旧显示器 · 有人收</span><i>同城自提</i></div><div class="r o">¥260</div></div>
+        <div class="row"><div class="l"><span>考研资料 · 毕业季好卖</span><i>整套</i></div><div class="r o">¥160</div></div>
+        <div class="row"><div class="l"><span>多扣的运费险 · 可申诉</span><i>已过 7 天</i></div><div class="r o">¥18</div></div>
+        <div class="row"><div class="l"><span>校园卡押金 · 已到期</span><i>需要本人办理</i></div><div class="r q">待你办</div></div>
+      </div>
+
+      <div class="panel-foot">
+        <span>立刻能办 <b>9</b> 项</span>
+        <span>要你点头 <b>2</b> 项</span>
+        <span>必须本人 <b>1</b> 项</span>
+        <span>合计约 <b>¥8,950</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 并发执行 -->
+<section class="sec" id="run">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">03　怎么执行</span>
+      <h2>列出来的事，同时办。</h2>
+      <p class="sec-sub">一件一件排队，是人的做法。这些事之间没有依赖，本来就该一起跑。改简历、投岗位、谈闲置、查账单、补材料，同时进行，谁先有结果谁先报。</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h">
+        <div><b>执行队列</b><em>今日 6 项 · 同一时刻</em></div>
+        <span class="pill">运行中</span>
+      </div>
+      <div class="exec">
+        <div class="exec-row done"><span class="e-name">套餐降档</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">已提交 · 下月生效</span></div>
+        <div class="exec-row done"><span class="e-name">投递实习</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">11 份 · 6 家已读</span></div>
+        <div class="exec-row done"><span class="e-name">闲置上架</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">5 件 · 2 件成交</span></div>
+        <div class="exec-row done"><span class="e-name">订阅清理</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">100%</span><span class="e-note">省 46 元/月</span></div>
+        <div class="exec-row"><span class="e-name">奖学金材料</span><span class="e-bar"><i class="fill" data-w="72"></i></span><span class="e-pct">72%</span><span class="e-note">正在补齐第 3 项</span></div>
+        <div class="exec-row hold"><span class="e-name">银行卡认证</span><span class="e-bar"><i class="fill" data-w="100"></i></span><span class="e-pct">待你</span><span class="e-note">需要本人人脸核验</span></div>
+      </div>
+    </div>
+    <p class="exec-note">碰到必须本人的环节，它会停下来，<b>把原因写清楚</b>，等你三分钟。其余的继续跑，不为一件卡住的事让整条队列停下。</p>
+  </div>
+</section>
+
+<!-- 账本 -->
+<section class="sec" id="ledger">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">04　账本</span>
+      <h2>它办了什么，打开就能看见。</h2>
+      <p class="sec-sub">承诺靠句子，信任靠记录。每一笔省下的、进账的，都有时间和出处。</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h">
+        <div><b>11 月 19 日</b><em>周三 · 共 14 项</em></div>
+        <span class="pill" style="color:#C47800;background:#FFF5E6">其中 2 项等你确认</span>
+      </div>
+
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">06:10</span></div>
+        <div class="l"><span>话费套餐降一档，流量没变</span><i>已提交 · 下月生效</i></div>
+        <div class="r">−18 元/月</div>
+      </div>
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">08:40</span></div>
+        <div class="l"><span>三门课的教材换成二手</span><i>同版本 · 品相八成新</i></div>
+        <div class="r">−214 元</div>
+      </div>
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">09:15</span></div>
+        <div class="l"><span>投递 11 个实习岗</span><i>6 家已读 · 2 家约面</i></div>
+        <div class="r b">11 份</div>
+      </div>
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">11:30</span></div>
+        <div class="l"><span>视频会员切到学生价</span><i>同一账号 · 权益不变</i></div>
+        <div class="r">−12 元/月</div>
+      </div>
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">14:05</span></div>
+        <div class="l"><span>五件闲置挂出，两件成交</span><i>旧显示器、考研资料 · 买家已付款</i></div>
+        <div class="r o">+420 元</div>
+      </div>
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">16:40</span></div>
+        <div class="l"><span>助学金材料还差一份证明</span><i>已列出开具地点 · 等你半天</i></div>
+        <div class="r q">待补</div>
+      </div>
+      <div class="row" style="grid-template-columns:56px 1fr auto;gap:16px;padding:12px 22px">
+        <div class="l"><span style="font-family:var(--num);color:var(--ink-3);font-size:12.5px">明天</span></div>
+        <div class="l"><span>一家实习一面已排好</span><i>10:00 · 线上 · 路线和材料已备</i></div>
+        <div class="r q">已准备</div>
+      </div>
+
+      <div class="panel-foot">
+        <span>今日：省 <b>30</b> 元/月 + <b>214</b> 元</span>
+        <span>进账 <b>420</b> 元</span>
+        <span>投递 <b>11</b> 份</span>
+      </div>
+    </div>
+
+    <p class="exec-note">这是格式示意，数字是假的。真的账目只对你自己可见，可以导出，可以随时删。</p>
+  </div>
+</section>
+
+<!-- 大数字 -->
+<section class="stats">
+  <div class="wrap stats-in">
+    <h3>一学期扫一遍，大概是这个量级</h3>
+    <p class="lead">数字来自内测学生的平均结果，每个人不一样。</p>
+    <div class="stat-grid">
+      <div class="stat"><b>8,950<i>元</i></b><span>一学期可回血金额</span></div>
+      <div class="stat"><b>37<i>个</i></b><span>人均扫出的入口</span></div>
+      <div class="stat"><b>4.2<i>小时</i></b><span>替你做掉的手续</span></div>
+      <div class="stat"><b>0<i>元</i></b><span>收费，永久</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 承诺 -->
+<section class="sec" id="faith">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">05　边界</span>
+      <h2>能做什么，不能做什么，都写清楚。</h2>
+      <p class="sec-sub">说得太满的产品，你大概已经见过很多了。这里只写真能做到的。</p>
+    </div>
+
+    <div class="faith">
+      <div class="faith-card">
+        <h4>不承诺</h4>
+        <ul>
+          <li>不承诺你一定拿到那个名额。</li>
+          <li>不承诺每个月多赚多少。</li>
+          <li>不承诺你不用再做任何决定。</li>
+          <li>不承诺申请就一定有结果。</li>
+        </ul>
+      </div>
+      <div class="faith-card yes">
+        <h4>承诺</h4>
+        <ul>
+          <li>该看的地方，每轮都看一遍。</li>
+          <li>每一笔省下的、进账的，都记账。</li>
+          <li>要你出面的事，说清楚，不绕。</li>
+          <li>你随时可以停，数据全部带走。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 免费 -->
+<section class="wrap" id="free">
+  <div class="free">
+    <div class="free-in">
+      <div>
+        <h3><small>关于收费</small>永久免费，四个不做。</h3>
+        <div class="free-list">
+          <div><span><b>不卖数据。</b>简历、成绩、账单不会出现在任何商业报告里。</span></div>
+          <div><span><b>不放广告。</b>不会出现贷款、分期、校园贷。</span></div>
+          <div><span><b>不做付费解锁。</b>所有功能，所有人，从头到尾一样。</span></div>
+          <div><span><b>撑不住会先说。</b>提前一年公告，不会半夜改成收费。</span></div>
+        </div>
+      </div>
+      <div class="free-side">
+        <a href="#top" class="btn btn-green">免费开始扫描</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 落款 -->
+<section class="final">
+  <div class="wrap">
+    <h2>先扫一遍，再说下一步。</h2>
+    <p>不用绑卡，不用付费，今天就能扫。第一轮扫完，你会拿到一张清单。</p>
+    <div class="btns">
+      <a href="#top" class="btn btn-green">开始扫描　约 3 分钟</a>
+      <a href="#find" class="btn btn-ghost">看看清单长什么样</a>
+    </div>
+    <small>办不办，什么时候办，你说了算。</small>
+  </div>
+</section>
 
 <footer>
   <div class="wrap">
-    <div class="fl">
-      <a href="#about">关于我们</a><a href="#free">关于收费</a><a href="#">隐私</a><a href="#">联系我们</a>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="16" fill="#00C458"/>
+            <path d="M16 24.5S7.6 19.2 7.6 13.6A4.4 4.4 0 0 1 16 11.5a4.4 4.4 0 0 1 8.4 2.1c0 5.6-8.4 10.9-8.4 10.9Z" fill="#fff"/>
+          </svg>
+          <b>回血</b>
+        </a>
+        <p>给在校生的 agent。扫描、发现、并发执行。找机会、省钱、赚钱，永久免费。</p>
+      </div>
+      <div class="foot-col">
+        <h5>产品</h5>
+        <a href="#diag">身份诊断</a>
+        <a href="#find">发现清单</a>
+        <a href="#run">并发执行</a>
+        <a href="#ledger">账本</a>
+      </div>
+      <div class="foot-col">
+        <h5>关于</h5>
+        <a href="#faith">能做什么</a>
+        <a href="#free">关于收费</a>
+        <a href="#">我们怎么活下来</a>
+        <a href="#">联系我们</a>
+      </div>
+      <div class="foot-col">
+        <h5>条款</h5>
+        <a href="#">隐私协议</a>
+        <a href="#">用户协议</a>
+        <a href="#">数据导出</a>
+        <a href="#">投诉与申诉</a>
+      </div>
     </div>
-    <div class="cp">回血 2026 · 给在校生的 agent · 永久免费</div>
+    <div class="foot-bot">
+      <span>© 2026 回血 · 给在校生的 agent</span>
+      <div class="l">
+        <a href="#">隐私</a>
+        <a href="#">免责声明</a>
+        <a href="#">京ICP备 — 示意站</a>
+      </div>
+    </div>
   </div>
 </footer>
 
@@ -962,7 +837,7 @@
 (function(){
   var motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 扫描项：k=机会 s=省钱 m=要你出面
+  // 扫描项：k=找机会 s=省钱 m=要你出面
   var items = [
     {tag:'s', txt:'教育优惠 · 软件学生版', val:'省 ¥486'},
     {tag:'m', txt:'助学金 · 未申报', val:'待补材料'},
@@ -987,7 +862,6 @@
     return li;
   }
 
-  // 执行队列的条形宽度（不依赖 JS 也成立，这里补一次动画）
   var fills = document.querySelectorAll('.e-bar i.fill');
   fills.forEach(function(el){
     var w = el.getAttribute('data-w') || '0';
@@ -1012,7 +886,6 @@
   found.textContent = '0';
   if (liveBar) liveBar.style.width = '0%';
 
-  // 目标方位角，和 markup 里的 --a 一一对应
   var ANGS = blips.map(function(el){
     return parseFloat(el.style.getPropertyValue('--a')) || 0;
   });
@@ -1023,7 +896,6 @@
     var cycleT = t % CYCLE;
     var deg = (cycleT / CYCLE) * 360;
 
-    // 扇面自己转，转过的角度决定谁被点亮
     if (sweep) sweep.style.transform = 'rotate(' + deg.toFixed(2) + 'deg)';
 
     var n = 0;
@@ -1034,7 +906,6 @@
       var b = blips[i].firstElementChild;
       b.style.setProperty('--o', lit ? '1' : '0');
       if (lit) {
-        // 回声在扫到后的 70° 内扩散掉
         var age = deg - a;
         b.style.setProperty('--eo', age < 70 ? String(0.55 * (1 - age / 70)) : '0');
         b.style.setProperty('--e', String(1 + (age / 70) * 2.6));
@@ -1047,7 +918,8 @@
     if (n !== shown) {
       shown = n;
       list.innerHTML = '';
-      for (var j = (n > 3 ? n - 3 : 0); j < n; j++) list.appendChild(makeLi(items[j % items.length]));
+      var from = n > 4 ? n - 4 : 0;
+      for (var j = from; j < n; j++) list.appendChild(makeLi(items[j % items.length]));
       found.textContent = String(n);
     }
 
