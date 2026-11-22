@@ -101,29 +101,71 @@
     font-family:var(--sans);font-size:10.5px;letter-spacing:.12em;color:var(--ink-3);
   }
   .scan-head b{color:var(--ink);font-weight:600;letter-spacing:.1em}
-  .dial-wrap{position:relative;width:min(100%,268px);margin:20px auto 14px}
-  .dial{width:100%;height:auto;display:block}
-  .dial-sweep{transform-box:view-box;transform-origin:100px 100px;animation:spin 9s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .tick{stroke:#C9C0AE;stroke-width:2;animation:tickLight 9s linear infinite}
-  @keyframes tickLight{
-    0%{stroke:var(--red);stroke-width:2.8}
-    5%{stroke:var(--red);stroke-width:2.8}
-    14%{stroke:#C9C0AE;stroke-width:2}
-    100%{stroke:#C9C0AE;stroke-width:2}
+  .radar{position:relative;width:min(100%,272px);aspect-ratio:1/1;margin:20px auto 12px}
+  .radar-screen{
+    position:absolute;inset:0;border-radius:50%;overflow:hidden;
+    background:radial-gradient(circle at 50% 46%, #FFFDF7 0 58%, #F4EEE2 100%);
+    box-shadow:inset 0 0 0 1px var(--line-2), inset 0 0 30px rgba(28,26,23,.08);
   }
-  .dial-center{
-    position:absolute;inset:0;display:grid;place-content:center;text-align:center;
-    pointer-events:none;padding-top:2px;
+  .radar-grid{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .radar-sweep{position:absolute;inset:0;border-radius:50%;will-change:transform}
+  .rt{
+    position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from 0deg,
+      rgba(176,58,40,0) 0deg, rgba(176,58,40,0) 292deg,
+      rgba(176,58,40,.04) 308deg, rgba(176,58,40,.09) 322deg,
+      rgba(176,58,40,.16) 336deg, rgba(176,58,40,.26) 348deg,
+      rgba(176,58,40,.38) 355deg, rgba(176,58,40,.52) 359deg,
+      rgba(176,58,40,.62) 360deg);
+    -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 0 15%, #000 32%, #000 98.5%, transparent 100%);
+    mask-image:radial-gradient(circle at 50% 50%, transparent 0 15%, #000 32%, #000 98.5%, transparent 100%);
   }
-  .dial-num{
-    font-family:var(--mono);font-size:40px;line-height:1;letter-spacing:-.03em;
+  .rn{
+    position:absolute;left:50%;top:8.5%;height:41.5%;width:2px;margin-left:-1px;
+    background:linear-gradient(to top, rgba(176,58,40,.25), rgba(176,58,40,1));
+    box-shadow:0 0 8px rgba(176,58,40,.45), 0 0 2px rgba(176,58,40,.6);
+  }
+  .rn::before{
+    content:"";position:absolute;top:-1px;left:50%;width:5px;height:5px;margin-left:-2.5px;
+    border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(176,58,40,.16);
+  }
+  .blip{position:absolute;inset:0;transform:rotate(var(--a));pointer-events:none}
+  .blip b{
+    --bc:#B03A28;
+    position:absolute;left:50%;top:calc(50% - var(--r));
+    width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;
+    background:var(--bc);opacity:var(--o,0);
+    box-shadow:0 0 0 1.5px var(--panel), 0 0 0 4px color-mix(in srgb, var(--bc) 22%, transparent);
+    transition:opacity .18s linear;
+  }
+  .blip b::after{
+    content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
+    border-radius:50%;border:1px solid var(--bc);
+    transform:scale(var(--e,1));opacity:var(--eo,0);
+    transition:opacity .1s linear;
+  }
+  .blip.s b{--bc:#5F6F54}
+  .blip.m b{--bc:#57514A}
+  .radar-core{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:31%;aspect-ratio:1/1;border-radius:50%;
+    display:grid;place-content:center;text-align:center;
+    background:var(--panel);
+    box-shadow:0 0 0 1px var(--line-2), 0 0 0 7px rgba(255,253,247,.72);
+  }
+  .radar-num{
+    font-family:var(--mono);font-size:34px;line-height:1;letter-spacing:-.04em;
     color:var(--ink);font-variant-numeric:tabular-nums;
   }
-  .dial-num span{font-size:15px;color:var(--ink-3);margin-left:2px;letter-spacing:0}
-  .dial-label{
-    font-family:var(--sans);font-size:10px;letter-spacing:.2em;color:var(--ink-3);
-    margin-top:9px;
+  .radar-num small{font-size:12px;color:var(--ink-3);margin-left:2px;letter-spacing:0}
+  .radar-lab{
+    font-family:var(--sans);font-size:9px;letter-spacing:.22em;color:var(--ink-3);
+    margin-top:6px;padding-left:.22em;
+  }
+  .scan-head .live{display:inline-flex;align-items:center;gap:6px}
+  .scan-head .live::before{
+    content:"";width:5px;height:5px;border-radius:50%;background:var(--red);
+    animation:pulse 1.6s ease-in-out infinite;
   }
   .findings{
     list-style:none;height:108px;overflow:hidden;
@@ -479,39 +521,52 @@
       <div class="scan">
         <div class="scan-head">
           <span><b>诊断</b>　学生身份</span>
-          <span>扫描中</span>
+          <span class="live">扫描中</span>
         </div>
 
-        <div class="dial-wrap">
-          <svg class="dial" viewBox="0 0 200 200" role="img" aria-label="扫描表盘，指针一圈圈扫过，已发现的项数不断增加">
-            <circle cx="100" cy="100" r="86" fill="none" stroke="#E4DCCB" stroke-width="7"/>
-            <circle class="ring" cx="100" cy="100" r="86" fill="none" stroke="#B03A28"
-                    stroke-width="7" stroke-linecap="round"
-                    transform="rotate(-90 100 100)"
-                    stroke-dasharray="540.4" stroke-dashoffset="540.4"/>
-            <g>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(0 100 100)"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(30 100 100)" style="animation-delay:.75s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(60 100 100)" style="animation-delay:1.5s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(90 100 100)" style="animation-delay:2.25s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(120 100 100)" style="animation-delay:3s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(150 100 100)" style="animation-delay:3.75s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(180 100 100)" style="animation-delay:4.5s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(210 100 100)" style="animation-delay:5.25s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(240 100 100)" style="animation-delay:6s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(270 100 100)" style="animation-delay:6.75s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(300 100 100)" style="animation-delay:7.5s"/>
-              <line class="tick" x1="100" y1="72" x2="100" y2="80" transform="rotate(330 100 100)" style="animation-delay:8.25s"/>
-            </g>
-            <g class="dial-sweep">
-              <path d="M100 100 L100 28" stroke="#B03A28" stroke-width="1.3" opacity=".5"/>
-              <circle cx="100" cy="28" r="2.4" fill="#B03A28"/>
-            </g>
-            <circle cx="100" cy="100" r="3" fill="#1C1A17"/>
-          </svg>
-          <div class="dial-center">
-            <div class="dial-num"><span class="found">0</span><span>项</span></div>
-            <div class="dial-label">已发现</div>
+        <div class="radar" role="img" aria-label="雷达扫描屏：扇面一圈圈扫过，扫到目标时亮起并留下一圈回声，中间的已发现计数不断增加">
+          <div class="radar-screen">
+            <svg class="radar-grid" viewBox="0 0 200 200" aria-hidden="true">
+              <circle cx="100" cy="100" r="80" fill="none" stroke="#C9C0AE" stroke-width="1" opacity=".8"/>
+              <circle cx="100" cy="100" r="55" fill="none" stroke="#C9C0AE" stroke-width=".8" opacity=".55"/>
+              <circle cx="100" cy="100" r="30" fill="none" stroke="#C9C0AE" stroke-width=".8" opacity=".55"/>
+              <line x1="20" y1="100" x2="180" y2="100" stroke="#C9C0AE" stroke-width=".8" opacity=".45" stroke-dasharray="3 4"/>
+              <line x1="100" y1="20" x2="100" y2="180" stroke="#C9C0AE" stroke-width=".8" opacity=".45" stroke-dasharray="3 4"/>
+              <g stroke="#B9AF9B" stroke-width="1.2" stroke-linecap="round">
+                <line x1="100" y1="23" x2="100" y2="31"/>
+                <line x1="100" y1="23" x2="100" y2="31" transform="rotate(90 100 100)"/>
+                <line x1="100" y1="23" x2="100" y2="31" transform="rotate(180 100 100)"/>
+                <line x1="100" y1="23" x2="100" y2="31" transform="rotate(270 100 100)"/>
+                <g stroke="#CFC6B4" stroke-width="1">
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(30 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(60 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(120 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(150 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(210 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(240 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(300 100 100)"/>
+                  <line x1="100" y1="23" x2="100" y2="28" transform="rotate(330 100 100)"/>
+                </g>
+              </g>
+            </svg>
+
+            <div class="radar-sweep" aria-hidden="true">
+              <span class="rt"></span>
+              <span class="rn"></span>
+            </div>
+
+            <!-- 目标点：方位角与 --a 对应，delay 让扇面扫到那一刻才亮 -->
+            <span class="blip k" style="--a:16deg;--r:33%"><b ></b></span>
+            <span class="blip m" style="--a:76deg;--r:38%"><b ></b></span>
+            <span class="blip s" style="--a:136deg;--r:26%"><b ></b></span>
+            <span class="blip s" style="--a:196deg;--r:36%"><b ></b></span>
+            <span class="blip k" style="--a:256deg;--r:30%"><b ></b></span>
+            <span class="blip m" style="--a:316deg;--r:40%"><b ></b></span>
+
+            <div class="radar-core">
+              <div class="radar-num"><span class="found">0</span><small>项</small></div>
+              <div class="radar-lab">已发现</div>
+            </div>
           </div>
         </div>
 
@@ -522,7 +577,7 @@
           <span>合计约 <b>¥8,950</b></span>
         </div>
       </div>
-      <p class="figcap"><b>图 1</b>　一轮扫描，把散在各处的机会摆到一张纸上。</p>
+      <p class="figcap"><b>图 1</b>　扇面转一圈，散在各处的机会一个个亮起来。</p>
     </div>
 
     <div class="deck">
@@ -803,11 +858,10 @@
 
   var list    = document.getElementById('findings');
   var found   = document.querySelector('.found');
-  var ring    = document.querySelector('.ring');
+  var sweep   = document.querySelector('.radar-sweep');
+  var blips   = [].slice.call(document.querySelectorAll('.blip'));
   var liveBar = document.querySelector('.e-bar i[data-w="72"]');
-  var CIRC    = 540.4;
-  var CYCLE   = 13000;
-  var STEP    = 1500;
+  var CYCLE   = 9000;   // one revolution == one scan pass
   var TICK_AT = 4200;
 
   function fillRow(w){ return 'position:absolute;top:0;bottom:0;left:0;width:' + w + '%'; }
@@ -834,35 +888,55 @@
   if (!motionOK) {
     items.forEach(function(it){ list.appendChild(makeLi(it)); });
     found.textContent = String(items.length);
-    ring.setAttribute('stroke-dashoffset', '90');
+    blips.forEach(function(el){
+      el.firstElementChild.style.setProperty('--o', '1');
+    });
     if (liveBar) liveBar.style.width = '72%';
     return;
   }
 
   list.innerHTML = '';
   found.textContent = '0';
-  ring.setAttribute('stroke-dashoffset', CIRC);
   if (liveBar) liveBar.style.width = '0%';
+
+  // 目标方位角，和 markup 里的 --a 一一对应
+  var ANGS = blips.map(function(el){
+    return parseFloat(el.style.getPropertyValue('--a')) || 0;
+  });
 
   var shown = -1;
 
   function render(t){
     var cycleT = t % CYCLE;
+    var deg = (cycleT / CYCLE) * 360;
 
-    // 扫到哪儿，指针与刻度在 CSS 里跑，这里只同步计数
+    // 扇面自己转，转过的角度决定谁被点亮
+    if (sweep) sweep.style.transform = 'rotate(' + deg.toFixed(2) + 'deg)';
+
     var n = 0;
-    for (var i = 0; i < items.length; i++) {
-      if (cycleT >= 400 + i * STEP) n = i + 1;
+    for (var i = 0; i < blips.length; i++) {
+      var a = ANGS[i];
+      var lit = deg >= a;
+      if (lit) n++;
+      var b = blips[i].firstElementChild;
+      b.style.setProperty('--o', lit ? '1' : '0');
+      if (lit) {
+        // 回声在扫到后的 70° 内扩散掉
+        var age = deg - a;
+        b.style.setProperty('--eo', age < 70 ? String(0.55 * (1 - age / 70)) : '0');
+        b.style.setProperty('--e', String(1 + (age / 70) * 2.6));
+      } else {
+        b.style.setProperty('--eo', '0');
+        b.style.setProperty('--e', '1');
+      }
     }
+
     if (n !== shown) {
       shown = n;
       list.innerHTML = '';
-      for (var j = (n > 3 ? n - 3 : 0); j < n; j++) list.appendChild(makeLi(items[j]));
+      for (var j = (n > 3 ? n - 3 : 0); j < n; j++) list.appendChild(makeLi(items[j % items.length]));
       found.textContent = String(n);
     }
-
-    var prog = Math.min(1, cycleT / (400 + items.length * STEP + 1200));
-    ring.setAttribute('stroke-dashoffset', String(CIRC * (1 - prog)));
 
     if (liveBar) {
       var p = Math.min(0.72, (cycleT / CYCLE) * 0.82);
