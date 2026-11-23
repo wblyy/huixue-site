@@ -204,6 +204,7 @@
   .f-tag.k{background:var(--green)}
   .f-tag.s{background:var(--blue)}
   .f-tag.m{background:#F5A623}
+  .f-tag.t{background:#E5615B}
   .f-txt{color:#4E5A66;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .f-val{color:#12304A;font-family:var(--num);font-size:12px;white-space:nowrap}
   .found-foot{display:flex;justify-content:space-between;padding:8px 12px;background:#F8FBFE;border-top:1px solid var(--line-2);font-size:11.5px;color:var(--ink-3)}
@@ -289,6 +290,22 @@
     white-space:nowrap;flex:none;text-align:right;line-height:1.5}
   .gcard li b.q{font-family:var(--sans);font-weight:400;color:var(--ink-3)}
   .gcard p{margin-top:auto;padding-top:12px;font-size:11.5px;line-height:1.8;color:var(--ink-3)}
+  .cs-fix{margin-top:26px;background:#fff;border-radius:var(--r);border:1px solid var(--line-2);
+    box-shadow:var(--shadow-s);overflow:hidden}
+  .cs-fix-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:16px 22px 14px;
+    background:linear-gradient(180deg,#FFF7F6,#FFFFFF);border-bottom:1px solid #F6E7E6}
+  .cs-fix-h b{font-size:15px;color:#12304A;font-weight:700}
+  .cs-fix-h span{font-size:12px;color:#B4645F}
+  .cs-fix ul{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;padding:6px 22px 14px}
+  .cs-fix li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:9px;align-items:start;
+    padding:11px 0;border-bottom:1px dotted var(--line-2)}
+  .cs-fix li::before{content:"";width:16px;height:16px;border-radius:4px;background:#E5615B;
+    margin-top:2px;background-image:linear-gradient(45deg,transparent 46%,#fff 46%,#fff 54%,transparent 54%),
+    linear-gradient(-45deg,transparent 46%,#fff 46%,#fff 54%,transparent 54%);background-size:8px 8px;
+    background-position:center;background-repeat:no-repeat}
+  .cs-fix li b{display:block;font-size:13.5px;font-weight:600;color:#2B3A47;line-height:1.5}
+  .cs-fix li b s{color:#4E5A66;font-weight:600;text-decoration-thickness:1px;text-decoration-color:#D5736D}
+  .cs-fix li em{display:block;margin-top:2px;font-style:normal;font-size:12px;line-height:1.7;color:var(--ink-3)}
   .mats-note{margin-top:18px;font-size:12.5px;line-height:1.9;color:var(--ink-4);text-align:center}
   .mats-note b{color:var(--ink-2);font-weight:600}
 
@@ -478,6 +495,13 @@
   .sh-foot{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
   .sh-foot .btn{flex:1;min-width:150px}
   .sh-note{margin-top:12px;font-size:11.5px;line-height:1.8;color:var(--ink-4);text-align:center}
+  .city-lock{display:flex;align-items:center;gap:10px;min-height:46px;padding:0 14px;border-radius:12px;
+    border:1px solid #D9E6F0;background:#FBFDFF}
+  .city-lock b{font-size:15px;font-weight:700;color:#12304A}
+  .city-lock span{margin-left:auto;font-size:11.5px;color:var(--ink-4)}
+  .chips span.off{color:#C6CDD4;background:#F7FAFC;border-color:#EDF2F6;cursor:not-allowed}
+  .sh-res li.t{opacity:.72}
+  .sh-res li.t .t{text-decoration:line-through;text-decoration-color:#DDA6A6;text-decoration-thickness:1px}
 
   /* ============ 响应式 ============ */
   @media(max-width:1080px){
@@ -569,6 +593,7 @@
       <a href="#diag">身份诊断</a>
       <a href="#verify">怎么核验</a>
       <a href="#mats">年级清单</a>
+      <a href="#traps">别白跑</a>
       <a href="#run">并发执行</a>
       <a href="#ledger">账本</a>
       <a href="#free">关于收费</a>
@@ -582,9 +607,9 @@
 
 <header class="hero" id="top">
   <div class="wrap hero-in">
-    <span class="eyebrow">给在校生的 AGENT · 永久免费</span>
+    <span class="eyebrow">长沙 · 给在校生的 AGENT · 永久免费</span>
     <h1>先扫一遍，<br>把<em>漏掉的</em>捡回来</h1>
-    <p class="hero-sub">学生身份能换到的东西，比你以为的多。实习、奖学金、助学金、教育优惠、能卖的旧东西、能接的兼职——散在几十个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b>核验只用两句话：哪个学校，大几。</p>
+    <p class="hero-sub">长沙有 84.79 万在校大学生，能换到的东西比你以为的多。实习补贴、求职补贴、创业工位、免费场馆、能接的兼职——散在十几个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b>核验只用两句话：哪个学校，大几。</p>
     <div class="hero-btns">
       <a href="#diag" class="btn btn-green" data-scan>免费扫描　约 3 分钟</a>
       <a href="#diag" class="btn btn-ghost">先看一次扫描</a>
@@ -605,7 +630,7 @@
             <div class="app-title">学生身份诊断
               <span class="dotpill">扫描中</span>
             </div>
-            <div class="app-stat">已扫 <b>6</b> 类入口 · 合计约 <b>¥10,350</b></div>
+            <div class="app-stat">已扫 <b>6</b> 类入口 · 合计约 <b>¥6,894</b></div>
           </div>
 
           <div class="app-grid">
@@ -719,8 +744,8 @@
         <div class="fld">
           <label for="school">你在哪所学校</label>
           <div class="fld-box">
-            <input id="school" type="text" inputmode="text" autocomplete="off" placeholder="输入全称或简称，如 华南理工" style="flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15px;font-weight:600;color:#12304A;outline:none">
-            <span class="fld-hit">覆盖全国普通高校</span>
+            <input id="school" type="text" inputmode="text" autocomplete="off" placeholder="如 中南大学、长沙民政" style="flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15px;font-weight:600;color:#12304A;outline:none">
+            <span class="fld-hit">目前只覆盖长沙</span>
           </div>
         </div>
 
@@ -768,7 +793,7 @@
     <div class="sec-head">
       <span class="sec-no">03　按学校、按年级</span>
       <h2>大一能办的，和大四能办的，不是同一张单子。</h2>
-      <p class="sec-sub">同样的身份，进了不同的学校、走到不同的年级，能碰到的入口就换了一批。下面按学校类型分开，一年一格。</p>
+      <p class="sec-sub">同样的身份，进了不同的学校、走到不同的年级，能碰到的入口就换了一批。下面按学校类型分开，一年一格，只列长沙能落地的。</p>
     </div>
 
     <div class="mats-tabs" role="tablist" aria-label="学校类型">
@@ -804,21 +829,21 @@
           <header><span class="g-no">大三</span><em>名额真正开始动</em></header>
           <ul>
             <li><span>夏令营 / 预推免</span><b>5–9 月</b></li>
-            <li><span>本校保研率 · 985 区间</span><b>30–65%</b></li>
-            <li><span>交换与联合培养</span><b>一学期</b></li>
-            <li><span>暑期实习 · 转正名额</span><b>提前批</b></li>
+            <li><span>湘江新区实习补贴 · 满 30 天</span><b>1,000/月×3</b></li>
+            <li><span>芒果TV 日常实习 · 九个组</span><b>常年招</b></li>
+            <li><span>中联重科 · 技术类实习生</span><b>岳麓区</b></li>
           </ul>
-          <p>2025 年多校取消夏令营，预推免成了主战场，别按老时间线准备。</p>
+          <p>2025 年多校取消夏令营，预推免成了主战场。实习补贴要求企业在新区的夏令营名单里，先查名单再投简历。</p>
         </div>
         <div class="gcard">
           <header><span class="g-no">大四</span><em>只此一次的钱</em></header>
           <ul>
-            <li><span>推免系统填报</span><b>9 月底</b></li>
-            <li><span>一次性求职补贴 · 困难生</span><b>1,000–3,000</b></li>
-            <li><span>同项 · 有助学贷款</span><b>600</b></li>
-            <li><span>基层就业学费补偿</span><b>≤20,000/年</b></li>
+            <li><span>一次性求职补贴 · 六类困难生</span><b>1,500 元</b></li>
+            <li><span>租房和生活补贴 · 本科口径</span><b>12,000</b></li>
+            <li><span>就业见习补贴 · 未就业可申</span><b>约 1,760/月</b></li>
+            <li><span>落户 · 全程网办</span><b>几分钟</b></li>
           </ul>
-          <p>求职补贴各地 600–3,000 不等（广州 3,000、江苏 1,500），错过申报期不补发。</p>
+          <p>求职补贴 8 月中旬开窗，约一个月。租房补贴要落户且在长缴养老保险，按月发满两年，毕业 2 年内有效。</p>
         </div>
       </div>
     </div>
@@ -848,22 +873,22 @@
         <div class="gcard">
           <header><span class="g-no">大三</span><em>考研要现在定</em></header>
           <ul>
+            <li><span>湘江新区实习补贴 · 满 30 天</span><b>1,000/月×3</b></li>
+            <li><span>马栏山 · 秋季招聘会</span><b>近 500 岗</b></li>
             <li><span>考研择校 · 考数学的科目</span><b>提前 12 个月</b></li>
-            <li><span>专业实习</span><b>3–6 个月</b></li>
-            <li><span>省考 / 选调 · 部分省收本科</span><b>看省份</b></li>
             <li><span>学科竞赛 · 省级</span><b>加分项</b></li>
           </ul>
-          <p>数学和专业课要重来的科目，大三上就该动手了。</p>
+          <p>数学和专业课要重来的科目，大三上就该动手了。马栏山秋季招聘会 40 余家企业、近 500 个岗位，10 月开。</p>
         </div>
         <div class="gcard">
           <header><span class="g-no">大四</span><em>三条路同时开</em></header>
           <ul>
-            <li><span>秋招主战场</span><b>9–11 月</b></li>
-            <li><span>一次性求职补贴 · 困难生</span><b>600–3,000</b></li>
-            <li><span>三支一扶 / 西部计划</span><b>服务 2 年</b></li>
-            <li><span>基层就业学费补偿</span><b>≤20,000/年</b></li>
+            <li><span>一次性求职补贴 · 六类困难生</span><b>1,500 元</b></li>
+            <li><span>租房和生活补贴 · 本科口径</span><b>12,000</b></li>
+            <li><span>灵活就业社保补贴 · 先缴后补</span><b>约 40%</b></li>
+            <li><span>一次性创业补贴 · 5 年内注册</span><b>按年公告</b></li>
           </ul>
-          <p>秋招和考研可以同时报，别在 9 月就替自己做完选择。</p>
+          <p>秋招和考研可以同时报。落户在"我的长沙"里几分钟办完，租房补贴要先把养老保险缴上。</p>
         </div>
       </div>
     </div>
@@ -893,12 +918,12 @@
         <div class="gcard">
           <header><span class="g-no">大三</span><em>毕业年，一次算清</em></header>
           <ul>
-            <li><span>专升本 · 各省统考</span><b>3–4 月</b></li>
-            <li><span>顶岗实习</span><b>半年</b></li>
-            <li><span>一次性求职补贴 · 困难生</span><b>600–3,000</b></li>
-            <li><span>雨露短期技能培训</span><b>1,500–2,000</b></li>
+            <li><span>专升本 · 湖南统考</span><b>3–4 月</b></li>
+            <li><span>一次性求职补贴 · 六类困难生</span><b>1,500 元</b></li>
+            <li><span>天心数谷 · 零租金工位</span><b>36 个月</b></li>
+            <li><span>创业担保贷款 · 免反担保</span><b>30 万</b></li>
           </ul>
-          <p>三年制的高职，毕业年就是大三，所有申报都压在这一年。</p>
+          <p>三年制的高职，毕业年就是大三，所有申报都压在这一年。天心数谷 2,500㎡、100 余工位，长沙理工与天心经开区牵头。</p>
         </div>
         <div class="gcard">
           <header><span class="g-no">大四</span><em>三年制没有这一格</em></header>
@@ -958,7 +983,29 @@
       </div>
     </div>
 
-    <p class="mats-note">金额依据教育部、财政部与各省 2025 年公开文件整理，<b>档位和申报时间以本校学生资助中心通知为准</b>。同类项目通常不可重复领取。</p>
+    <p class="mats-note">金额依据教育部、财政部与长沙市 2025 年公开文件整理，<b>目前只覆盖长沙；档位和申报时间以本校学生资助中心与当年通知为准</b>。同类项目通常不可重复领取。</p>
+  </div>
+</section>
+
+<!-- 长沙纠偏 -->
+<section class="sec" id="traps">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">04　以为有，其实没有</span>
+      <h2>先别跑。这五项长沙给不了你。</h2>
+      <p class="sec-sub">传言比政策跑得快。下面每条都有人认真推过，也确实办不成。省下这一趟，比多领一笔更值。</p>
+    </div>
+
+    <div class="cs-fix">
+      <div class="cs-fix-h"><b>五条常见误解</b><span>按 2025—2026 年公开口径核对</span></div>
+      <ul>
+        <li><div><b><s>地铁学生卡 5 折</s></b><em>轨道集团写的是"14 周岁以上学生 5 折"，但卡只发给中小学生、高中、职高、中专。大学生多数办不出来。地铁刷普通储值卡是 9 折。</em></div></li>
+        <li><div><b><s>青年人才驿站免费住</s></b><em>在长高校学生要毕业后才能申请，在校期间不行。外地来长求职的可以先住 7 天 6 晚。</em></div></li>
+        <li><div><b><s>人才保障房本科生能申</s></b><em>面向毕业 1 年内、30 岁以下的全日制硕士，以及 35 岁以下博士。本科生不在范围内。</em></div></li>
+        <li><div><b><s>实习补贴随便什么实习都算</s></b><em>必须是在新区夏令营名单里的企业，且满 30 天并通过考核。投简历之前先查名单。</em></div></li>
+        <li><div><b><s>医保两地都能交</s></b><em>学校统一参保后，户籍地那份要退掉。两边同时交，报销时只认一边，钱白花。</em></div></li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -966,23 +1013,23 @@
 <section class="sec" id="find">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">04　扫完得到什么</span>
+      <span class="sec-no">05　扫完得到什么</span>
       <h2>一张清单，每项标好档位。</h2>
       <p class="sec-sub">立刻能办的，它直接去办；要你点头的，一句话确认；必须你本人的，标出来，等你有空。清单跟着学校类型和年级生成，换一格，结果就换一批。</p>
     </div>
 
     <div class="panel">
       <div class="panel-h">
-        <div><b>发现清单</b><em>华南理工 · 双一流 · 大三 · 11 月 19 日</em></div>
-        <span class="pill">合计约 ¥10,350</span>
+        <div><b>发现清单</b><em>中南大学 · 双一流 · 大三 · 11 月 19 日</em></div>
+        <span class="pill">合计约 ¥6,894</span>
       </div>
 
       <div class="grp">
         <div class="grp-h"><span class="bd"></span>找机会<em>资格与入口</em></div>
-        <div class="row"><div class="l"><span>实习岗 · 匹配命中</span><i>4 个明确接受在校生、每周 3 天</i></div><div class="r b">11 个</div></div>
+        <div class="row"><div class="l"><span>湘江新区实习岗 · 匹配命中</span><i>11 个在名单企业里、每周 3 天</i></div><div class="r b">11 个</div></div>
         <div class="row"><div class="l"><span>国家助学金 · 本学年未申报</span><i>需一份家庭情况证明 · 学院开</i></div><div class="r">¥3,700</div></div>
-        <div class="row"><div class="l"><span>励志奖学金 · 下周截止</span><i>成绩单可在线打印</i></div><div class="r">¥6,000</div></div>
-        <div class="row"><div class="l"><span>校内助管 · 每周 6 小时</span><i>图书馆 · 排班可调</i></div><div class="r">¥480/月</div></div>
+        <div class="row"><div class="l"><span>湘江新区实习补贴 · 满 30 天</span><i>企业须在夏令营名单 · 已核过</i></div><div class="r">¥3,000</div></div>
+        <div class="row"><div class="l"><span>芒果TV 实习 · 编剧 / 后期组</span><i>常年招 · 长沙 · 九个组</i></div><div class="r q">按月</div></div>
       </div>
 
       <div class="grp b">
@@ -990,7 +1037,7 @@
         <div class="row"><div class="l"><span>教材 · 三门课换二手同版本</span><i>八成新 · 版本一致</i></div><div class="r">−¥214</div></div>
         <div class="row"><div class="l"><span>话费套餐 · 同速率降一档</span><i>流量不变</i></div><div class="r">−¥18/月</div></div>
         <div class="row"><div class="l"><span>视频会员 · 学生价未开</span><i>同一账号 · 权益不变</i></div><div class="r">−¥12/月</div></div>
-        <div class="row"><div class="l"><span>云盘 · 三个月未用</span><i>可退订</i></div><div class="r">−¥15/月</div></div>
+        <div class="row"><div class="l"><span>湖南博物院 · 提前 5 天约</span><i>基本陈列全免</i></div><div class="r">全免</div></div>
       </div>
 
       <div class="grp o">
@@ -1002,10 +1049,10 @@
       </div>
 
       <div class="panel-foot">
-        <span>立刻能办 <b>9</b> 项</span>
-        <span>要你点头 <b>2</b> 项</span>
+        <span>立刻能办 <b>10</b> 项</span>
+        <span>要你点头 <b>1</b> 项</span>
         <span>必须本人 <b>1</b> 项</span>
-        <span>合计约 <b>¥10,350</b></span>
+        <span>合计约 <b>¥6,894</b></span>
       </div>
     </div>
   </div>
@@ -1015,7 +1062,7 @@
 <section class="sec" id="run">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">05　怎么执行</span>
+      <span class="sec-no">06　怎么执行</span>
       <h2>列出来的事，同时办。</h2>
       <p class="sec-sub">一件一件排队，是人的做法。这些事之间没有依赖，本来就该一起跑。改简历、投岗位、谈闲置、查账单、补材料，同时进行，谁先有结果谁先报。</p>
     </div>
@@ -1042,7 +1089,7 @@
 <section class="sec" id="ledger">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">06　账本</span>
+      <span class="sec-no">07　账本</span>
       <h2>它办了什么，打开就能看见。</h2>
       <p class="sec-sub">承诺靠句子，信任靠记录。每一笔省下的、进账的，都有时间和出处。</p>
     </div>
@@ -1103,12 +1150,12 @@
 <!-- 大数字 -->
 <section class="stats">
   <div class="wrap stats-in">
-    <h3>一学期扫一遍，大概是这个量级</h3>
-    <p class="lead">数字来自内测学生的平均结果，每个人不一样。</p>
+    <h3>一个长沙学生一学期能碰到的量级</h3>
+    <p class="lead">按 2025 年省市公开标准估算，不含按月发放的项。实际数额看你的学校、年级和困难认定。</p>
     <div class="stat-grid">
-      <div class="stat"><b>10,350<i>元</i></b><span>一学期可回血金额</span></div>
-      <div class="stat"><b>37<i>个</i></b><span>人均扫出的入口</span></div>
-      <div class="stat"><b>4.2<i>小时</i></b><span>替你做掉的手续</span></div>
+      <div class="stat"><b>6,894<i>元</i></b><span>一学期能算清的</span></div>
+      <div class="stat"><b>22<i>元</i></b><span>市区兼职最低时薪</span></div>
+      <div class="stat"><b>5<i>项</i></b><span>标出来其实办不到</span></div>
       <div class="stat"><b>0<i>元</i></b><span>收费，永久</span></div>
     </div>
   </div>
@@ -1118,7 +1165,7 @@
 <section class="sec" id="faith">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-no">07　边界</span>
+      <span class="sec-no">08　边界</span>
       <h2>能做什么，不能做什么，都写清楚。</h2>
       <p class="sec-sub">说得太满的产品，你大概已经见过很多了。这里只写真能做到的。</p>
     </div>
@@ -1233,7 +1280,7 @@
   <div class="sheet-card">
     <div class="sh-head">
       <div>
-        <h3 id="sh-title">扫描你的入口</h3>
+        <h3 id="sh-title">扫一遍长沙的入口</h3>
         <p>两句话，不传证件。清单只保存在这台设备上。</p>
       </div>
       <button class="sh-x" type="button" data-close aria-label="关闭">×</button>
@@ -1242,9 +1289,13 @@
     <div class="sh-step on" id="st-form">
       <div class="sh-form">
         <div class="fld">
+          <label>城市</label>
+          <div class="city-lock"><b>长沙</b><span>目前只覆盖长沙</span></div>
+        </div>
+        <div class="fld">
           <label for="sh-school">你在哪所学校</label>
           <div class="fld-box">
-            <input id="sh-school" type="text" autocomplete="organization" placeholder="全称或简称，如 华南理工"
+            <input id="sh-school" type="text" autocomplete="organization" placeholder="如 中南大学、长沙民政"
               style="flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15px;font-weight:600;color:#12304A;outline:none">
           </div>
         </div>
@@ -1284,65 +1335,109 @@
 
 <script>
 (function(){
-  // 本地演示清单：按学校类型 × 年级生成，金额取自公开政策文件
+  // 长沙本地清单：按学校类型 × 年级生成，金额取自省市公开政策文件
+  // k=钱（可直接到账） s=省（省钱） m=你（要本人跑） t=坑（以为有其实没有）
   var KIND = { '双一流':'a', '普通本科':'b', '高职高专':'c' };
   var DATA = {
     a: [
-      [ ['k','机','国家助学金 · 本学年可申报','3,700/年'],
-        ['k','机','滋蕙计划 · 新生入学资助','500–1,000'],
-        ['s','省','勤工助学 · 每小时不低于 12 元','480/月'],
-        ['s','省','学生票 · 硬座 5 折','每年 4 次'] ],
-      [ ['k','机','国家奖学金 · 全国 12 万名','10,000/年'],
-        ['k','机','国家励志奖学金 · 前 3%','6,000/年'],
-        ['k','机','大学生创新创业训练','1–2 万'],
-        ['s','省','视频会员 · 学生价未开','−12/月'] ],
-      [ ['m','你','夏令营 / 预推免 · 5–9 月','要报名'],
-        ['m','你','本校保研率','30–65%'],
-        ['k','机','交换与联合培养','一学期'],
-        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'] ],
-      [ ['m','你','推免系统填报 · 9 月底','要本人'],
-        ['k','机','一次性求职补贴 · 困难生','1,000–3,000'],
-        ['k','机','基层就业学费补偿','≤2 万/年'],
-        ['s','省','教材 · 同版本换二手','−214'] ]
+      [ ['k','钱','国家助学金 · 本学年可申报','3,700/年'],
+        ['k','钱','国家助学贷款 · 毕业前免息','≤2 万/年'],
+        ['k','钱','滋蕙计划 · 新生入学资助','500–1,000'],
+        ['s','省','湖南博物院 · 提前 5 天约','全免'],
+        ['s','省','岳麓山、橘子洲、花明楼','全免'],
+        ['s','省','大学城合租 · 后湖一带','500/月'],
+        ['m','你','学校统一参保 · 户籍地要退掉','一次'],
+        ['t','坑','地铁学生卡 · 大学生不给办','别跑一趟'] ],
+      [ ['k','钱','国家奖学金 · 全国 12 万名','10,000/年'],
+        ['k','钱','国家励志奖学金 · 前 3%','6,000/年'],
+        ['k','钱','大创项目 · 国家级','1–2 万'],
+        ['m','你','公积金 · 在校就能开户','可缴'],
+        ['s','省','芒果TV 日常实习 · 9 个组','常年招'],
+        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'],
+        ['s','省','长沙图书馆 · 自助机办证','全免'],
+        ['t','坑','新区实习补贴 · 大二不算','要最后两学年'] ],
+      [ ['k','钱','湘江新区实习补贴 · 满 30 天','1,000/月×3'],
+        ['k','钱','大创项目 · 国家级','1–2 万'],
+        ['m','你','夏令营 / 预推免 · 5–9 月','要报名'],
+        ['m','你','公积金 · 在校就能开户','可缴'],
+        ['s','省','芒果TV 实习 · 编剧/后期/服化','九个组'],
+        ['s','省','中联重科 · 技术类实习生','岳麓区'],
+        ['t','坑','实习补贴 · 企业要在名单里','先查再投'] ],
+      [ ['k','钱','一次性求职补贴 · 六类困难生','1,500 元'],
+        ['k','钱','租房和生活补贴 · 本科口径','12,000'],
+        ['k','钱','就业见习补贴 · 未就业可申','约 1,760/月'],
+        ['m','你','秋招 / 推免 · 9–11 月','要本人'],
+        ['m','你','落户 · 全程网办','几分钟'],
+        ['s','省','岳麓山、橘子洲','全免'],
+        ['t','坑','青年人才驿站 · 在校不能用','毕业当年起'],
+        ['t','坑','人才保障房 · 本科不在范围','硕士起'] ]
     ],
     b: [
-      [ ['k','机','国家助学金 · 本学年可申报','3,700/年'],
-        ['s','省','勤工助学 · 每小时不低于 12 元','480/月'],
+      [ ['k','钱','国家助学金 · 本学年可申报','3,700/年'],
+        ['k','钱','国家助学贷款 · 毕业前免息','≤2 万/年'],
+        ['s','省','长沙图书馆 · 自助机办证','全免'],
+        ['s','省','学校体育场馆 · 暑假开放','全免'],
+        ['s','省','大学城合租 · 后湖一带','500/月'],
         ['m','你','转专业 · 大多在大一末','一次'],
-        ['k','机','国家助学贷款','≤2 万/年'] ],
-      [ ['k','机','国家励志奖学金 · 困难生','6,000/年'],
+        ['m','你','学校统一参保 · 户籍地要退掉','一次'],
+        ['t','坑','地铁学生卡 · 大学生不给办','别跑一趟'] ],
+      [ ['k','钱','国家励志奖学金 · 困难生','6,000/年'],
         ['m','你','四六级 / 教资笔试','两证'],
-        ['k','机','大创项目 · 省级以上','1 项'],
-        ['s','省','视频会员 · 学生价未开','−12/月'] ],
-      [ ['m','你','考研择校 · 考数学的科目','提前 12 个月'],
-        ['m','你','专业实习','3–6 个月'],
-        ['k','机','学科竞赛 · 省级','加分项'],
-        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'] ],
-      [ ['m','你','秋招主战场','9–11 月'],
-        ['k','机','一次性求职补贴 · 困难生','600–3,000'],
-        ['k','机','三支一扶 / 西部计划','服务 2 年'],
-        ['s','省','教材 · 同版本换二手','−214'] ]
+        ['m','你','公积金 · 在校就能开户','可缴'],
+        ['s','省','长沙图书馆 + 体育场馆','全免'],
+        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'],
+        ['s','省','芒果TV 日常实习 · 9 个组','常年招'],
+        ['t','坑','新区实习补贴 · 大二不算','要最后两学年'],
+        ['t','坑','地铁学生卡 · 大学生不给办','别跑一趟'] ],
+      [ ['k','钱','湘江新区实习补贴 · 满 30 天','1,000/月×3'],
+        ['k','钱','学科竞赛 · 省级','加分项'],
+        ['m','你','考研择校 / 专业实习','提前 12 个月'],
+        ['m','你','公积金 · 在校就能开户','可缴'],
+        ['s','省','马栏山 · 秋季招聘会','近 500 岗'],
+        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'],
+        ['t','坑','实习补贴 · 企业要在名单里','先查再投'] ],
+      [ ['k','钱','一次性求职补贴 · 六类困难生','1,500 元'],
+        ['k','钱','租房和生活补贴 · 本科口径','12,000'],
+        ['k','钱','灵活就业社保补贴 · 先缴后补','约 40%'],
+        ['m','你','秋招 · 9–11 月','要本人'],
+        ['m','你','落户 · 全程网办','几分钟'],
+        ['k','钱','一次性创业补贴 · 5 年内注册','按年公告'],
+        ['t','坑','求职补贴 · 窗口只开一个月','8 月中旬'],
+        ['t','坑','人才保障房 · 本科不在范围','硕士起'] ]
     ],
     c: [
-      [ ['k','机','国家助学金 · 高职约 22%','3,700/年'],
-        ['k','机','雨露计划 · 脱贫家庭','3,000/年'],
-        ['s','省','勤工助学 · 每小时不低于 12 元','480/月'],
-        ['s','省','学生票 · 硬座 5 折','每年 4 次'] ],
-      [ ['k','机','国家励志奖学金 · 前 3.3%','6,000/年'],
-        ['k','机','技能等级证书 · 一次性','1,500–2,000'],
+      [ ['k','钱','国家助学金 · 高职约 22%','3,700/年'],
+        ['k','钱','雨露计划 · 脱贫家庭','3,000/年'],
+        ['k','钱','国家助学贷款 · 毕业前免息','≤2 万/年'],
+        ['s','省','勤工助学 · 时薪不低于 12 元','480/月'],
+        ['s','省','长沙图书馆 · 自助机办证','全免'],
+        ['m','你','学校统一参保 · 户籍地要退掉','一次'],
+        ['t','坑','地铁学生卡 · 大学生不给办','别跑一趟'] ],
+      [ ['k','钱','国家励志奖学金 · 前 3.3%','6,000/年'],
+        ['k','钱','技能等级证书 · 培训后补','按品类'],
         ['m','你','1+X 证书 · 按工种','要考试'],
-        ['m','你','现代学徒制 · 企业补贴','按月'] ],
-      [ ['m','你','专升本 · 各省统考 3–4 月','要报名'],
+        ['m','你','现代学徒制 · 企业补贴','按月'],
+        ['s','省','勤工助学 · 时薪不低于 12 元','480/月'],
+        ['s','省','长沙图书馆 + 体育场馆','全免'],
+        ['t','坑','地铁学生卡 · 大学生不给办','别跑一趟'] ],
+      [ ['m','你','专升本 · 湖南统考 3–4 月','要报名'],
         ['m','你','顶岗实习','半年'],
-        ['k','机','一次性求职补贴 · 困难生','600–3,000'],
-        ['s','省','雨露短期技能培训','1,500–2,000'] ],
-      [ ['m','你','三年制 · 毕业年就是大三','没有大四'],
-        ['k','机','职业本科 · 按本科口径','重算'],
-        ['k','机','应征入伍学费补偿','≤2 万/年'],
-        ['s','省','教材 · 同版本换二手','−214'] ]
+        ['k','钱','职业技能培训补贴 · 考证后报','按品类'],
+        ['k','钱','创业担保贷款 · 孵化基地免反担保','30 万'],
+        ['s','省','马栏山 · 秋季招聘会','近 500 岗'],
+        ['s','省','天心数谷 · 零租金工位','36 个月'],
+        ['t','坑','新区实习补贴 · 只给本科后两年','专科没有'] ],
+      [ ['k','钱','一次性求职补贴 · 六类困难生','1,500 元'],
+        ['k','钱','就业见习补贴 · 未就业可申','约 1,760/月'],
+        ['k','钱','应征入伍学费补偿','≤2 万/年'],
+        ['m','你','专升本后本科两年 · 口径才够本科','重算'],
+        ['m','你','秋招 / 顶岗 · 提前半年','要本人'],
+        ['s','省','马栏山 · 秋季招聘会','近 500 岗'],
+        ['t','坑','租房和生活补贴 · 全日制本科起','专科没有'],
+        ['t','坑','人才保障房 · 本科不在范围','硕士起'] ]
     ]
   };
-  var LOGS = ['正在核对学校类型…','对照年级时间线…','查奖助学金申报窗口…','比对本地学生价…','整理清单…'];
+  var LOGS = ['定位到长沙…','对照学校和年级…','查省市政策申报窗口…','比对本地学生价…','标出办不到的项…'];
 
   var sheet = document.getElementById('sheet');
   if (!sheet) return;
@@ -1408,18 +1503,21 @@
     var rows = DATA[KIND[type]][gi < 0 ? 0 : gi];
     var school = (input.value || '').trim();
     res.innerHTML = '';
-    var own = 0;
+    var own = 0, trap = 0;
     rows.forEach(function(r){
       if (r[0] === 'm') own++;
+      if (r[0] === 't') trap++;
       var li = document.createElement('li');
+      if (r[0] === 't') li.className = 't';
       li.innerHTML = '<span class="f-tag ' + r[0] + '">' + r[1] + '</span>'
                    + '<span class="t">' + r[2] + '</span>'
-                   + '<span class="v' + (r[0] === 'm' ? ' q' : '') + '">' + r[3] + '</span>';
+                   + '<span class="v' + (r[0] === 'm' || r[0] === 't' ? ' q' : '') + '">' + r[3] + '</span>';
       res.appendChild(li);
     });
     count.textContent = String(rows.length);
-    sumEl.textContent = own ? '其中 ' + own + ' 项要你本人' : '都能代办';
-    who.textContent = (school ? school + ' · ' : '') + type + ' · ' + grade;
+    sumEl.textContent = (own ? own + ' 项要你本人 · ' : '') + (trap ? trap + ' 项办不到' : '都能代办');
+    who.textContent = (school ? school + ' · ' : '') + type + ' · ' + grade
+                    + (KIND[type] === 'c' && gi >= 3 ? '（三年制，毕业年就是大三）' : '');
   }
 
   function scan(){
