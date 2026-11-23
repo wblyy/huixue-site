@@ -420,6 +420,65 @@
   .foot-bot .l{display:flex;gap:20px;flex-wrap:wrap}
   .foot-bot a:hover{color:var(--ink-2)}
 
+  /* ============ 扫描面板 ============ */
+  body.locked{overflow:hidden}
+  .sheet{position:fixed;inset:0;z-index:200;display:none}
+  .sheet.on{display:block}
+  .sheet-bg{position:absolute;inset:0;background:rgba(11,30,46,.44);
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .sheet-card{position:absolute;left:50%;bottom:0;width:min(600px,100%);
+    max-height:calc(100% - 30px);overflow-y:auto;overscroll-behavior:contain;
+    background:#fff;border-radius:22px 22px 0 0;
+    padding:18px 22px calc(20px + env(safe-area-inset-bottom));
+    transform:translateX(-50%);
+    box-shadow:0 -18px 60px -18px rgba(11,30,46,.55);
+    animation:shUp .3s cubic-bezier(.2,.85,.3,1) both}
+  @keyframes shUp{from{transform:translate(-50%,30px)}to{transform:translate(-50%,0)}}
+  @media(min-width:641px){
+    .sheet-card{bottom:auto;top:50%;border-radius:22px;padding:24px 26px 26px;
+      max-height:min(760px,calc(100% - 64px));
+      animation:shPop .24s cubic-bezier(.2,.85,.3,1) both}
+  }
+  @keyframes shPop{from{transform:translate(-50%,-47%) scale(.97);opacity:.5}
+                   to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+  .sh-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .sh-head h3{font-size:19px;font-weight:700;color:#12304A;line-height:1.4}
+  .sh-head p{margin-top:4px;font-size:12.5px;color:var(--ink-3)}
+  .sh-x{flex:none;width:34px;height:34px;border:0;border-radius:50%;background:#F1F6FA;
+    color:var(--ink-2);font-size:19px;line-height:1;cursor:pointer;transition:background .18s}
+  .sh-x:hover{background:#E7EFF6;color:var(--ink)}
+
+  .sh-step{display:none}
+  .sh-step.on{display:block}
+  .sh-form .fld:first-child{margin-top:18px}
+
+  .sh-go{margin-top:20px;width:100%;height:48px;font-size:15.5px}
+  .sh-hint{margin-top:10px;font-size:12px;color:var(--ink-4);text-align:center;min-height:18px}
+  .sh-hint.bad{color:#D9534F}
+
+  .sh-run{padding:26px 0 8px;text-align:center}
+  .sh-run h4{font-size:15.5px;font-weight:700;color:#12304A}
+  .sh-run .who{margin-top:6px;font-size:12.5px;color:var(--ink-3)}
+  .sh-bar{position:relative;height:6px;border-radius:999px;background:#EFF4F8;overflow:hidden;margin:20px 0 12px}
+  .sh-bar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+    background:linear-gradient(90deg,#12D46A,#00A94C);transition:width .5s ease}
+  .sh-log{font-size:12.5px;color:var(--ink-3);min-height:20px}
+
+  .sh-done-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-top:16px;padding-bottom:12px;border-bottom:1px solid var(--line-2)}
+  .sh-done-head b{font-size:14px;color:#12304A;font-weight:700}
+  .sh-done-head span{font-size:11.5px;color:var(--ink-4)}
+  .sh-res{max-height:44vh;overflow-y:auto;overscroll-behavior:contain}
+  .sh-res li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;
+    padding:9px 0;border-bottom:1px dotted var(--line-2);font-size:13.5px;color:#2B3A47}
+  .sh-res li:last-child{border-bottom:none}
+  .sh-res .t{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sh-res .v{font-family:var(--num);font-size:13px;font-weight:700;color:var(--green-d);white-space:nowrap}
+  .sh-res .v.q{font-family:var(--sans);font-weight:400;color:var(--ink-3)}
+  .sh-foot{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .sh-foot .btn{flex:1;min-width:150px}
+  .sh-note{margin-top:12px;font-size:11.5px;line-height:1.8;color:var(--ink-4);text-align:center}
+
   /* ============ 响应式 ============ */
   @media(max-width:1080px){
     .vfy{grid-template-columns:minmax(0,1fr)}
@@ -516,7 +575,7 @@
     </div>
     <div class="nav-cta">
       <a href="#free" class="mini">永久免费</a>
-      <a href="#top" class="btn btn-green btn-sm">免费扫描</a>
+      <a href="#top" class="btn btn-green btn-sm" data-scan>免费扫描</a>
     </div>
   </div>
 </nav>
@@ -527,7 +586,7 @@
     <h1>先扫一遍，<br>把<em>漏掉的</em>捡回来</h1>
     <p class="hero-sub">学生身份能换到的东西，比你以为的多。实习、奖学金、助学金、教育优惠、能卖的旧东西、能接的兼职——散在几十个入口里，没人替你数过。<b>不是你不努力，是你没时间一个个翻。</b>核验只用两句话：哪个学校，大几。</p>
     <div class="hero-btns">
-      <a href="#top" class="btn btn-green">免费扫描　约 3 分钟</a>
+      <a href="#top" class="btn btn-green" data-scan>免费扫描　约 3 分钟</a>
       <a href="#diag" class="btn btn-ghost">先看一次扫描</a>
     </div>
     <div class="hero-tags">
@@ -1101,7 +1160,7 @@
         </div>
       </div>
       <div class="free-side">
-        <a href="#top" class="btn btn-green">免费开始扫描</a>
+        <a href="#top" class="btn btn-green" data-scan>免费开始扫描</a>
       </div>
     </div>
   </div>
@@ -1113,7 +1172,7 @@
     <h2>先扫一遍，再说下一步。</h2>
     <p>不用绑卡，不用付费，今天就能扫。第一轮扫完，你会拿到一张清单。</p>
     <div class="btns">
-      <a href="#top" class="btn btn-green">开始扫描　约 3 分钟</a>
+      <a href="#top" class="btn btn-green" data-scan>开始扫描　约 3 分钟</a>
       <a href="#find" class="btn btn-ghost">看看清单长什么样</a>
     </div>
     <small>办不办，什么时候办，你说了算。</small>
@@ -1168,7 +1227,245 @@
   </div>
 </footer>
 
+<!-- 扫描面板 -->
+<div class="sheet" id="sheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="sh-title">
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-card">
+    <div class="sh-head">
+      <div>
+        <h3 id="sh-title">扫描你的入口</h3>
+        <p>两句话，不传证件。清单只保存在这台设备上。</p>
+      </div>
+      <button class="sh-x" type="button" data-close aria-label="关闭">×</button>
+    </div>
+
+    <div class="sh-step on" id="st-form">
+      <div class="sh-form">
+        <div class="fld">
+          <label for="sh-school">你在哪所学校</label>
+          <div class="fld-box">
+            <input id="sh-school" type="text" autocomplete="organization" placeholder="全称或简称，如 华南理工"
+              style="flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15px;font-weight:600;color:#12304A;outline:none">
+          </div>
+        </div>
+        <div class="fld">
+          <label>学校类型</label>
+          <div class="chips" id="sh-type"><span class="on">双一流</span><span>普通本科</span><span>高职高专</span></div>
+        </div>
+        <div class="fld">
+          <label>现在大几</label>
+          <div class="chips" id="sh-grade"><span>大一</span><span>大二</span><span class="on">大三</span><span>大四</span></div>
+        </div>
+      </div>
+      <button class="btn btn-green sh-go" type="button" id="sh-go">开始扫描　约 3 分钟</button>
+      <div class="sh-hint" id="sh-hint">不用填学号，不用学校邮箱。名字写错也不影响，随时能改。</div>
+    </div>
+
+    <div class="sh-step" id="st-run">
+      <div class="sh-run">
+        <h4>正在扫入口</h4>
+        <div class="who" id="sh-who"></div>
+        <div class="sh-bar"><i id="sh-fill"></i></div>
+        <div class="sh-log" id="sh-log">正在核对学校类型…</div>
+      </div>
+    </div>
+
+    <div class="sh-step" id="st-done">
+      <div class="sh-done-head"><b>扫出 <span id="sh-count">0</span> 项</b><span id="sh-sum"></span></div>
+      <ul class="sh-res" id="sh-res"></ul>
+      <div class="sh-foot">
+        <button class="btn btn-green" type="button" id="sh-again">换个学校再扫</button>
+        <button class="btn btn-ghost" type="button" data-close>先看着，关掉</button>
+      </div>
+      <p class="sh-note">这是本地演示：清单按学校类型和年级生成，金额来自公开政策文件。<br>真实版本会接你的教务与资助系统，跳转去办仍然需要你本人。</p>
+    </div>
+  </div>
+</div>
+
 <script>
+(function(){
+  // 本地演示清单：按学校类型 × 年级生成，金额取自公开政策文件
+  var KIND = { '双一流':'a', '普通本科':'b', '高职高专':'c' };
+  var DATA = {
+    a: [
+      [ ['k','机','国家助学金 · 本学年可申报','3,700/年'],
+        ['k','机','滋蕙计划 · 新生入学资助','500–1,000'],
+        ['s','省','勤工助学 · 每小时不低于 12 元','480/月'],
+        ['s','省','学生票 · 硬座 5 折','每年 4 次'] ],
+      [ ['k','机','国家奖学金 · 全国 12 万名','10,000/年'],
+        ['k','机','国家励志奖学金 · 前 3%','6,000/年'],
+        ['k','机','大学生创新创业训练','1–2 万'],
+        ['s','省','视频会员 · 学生价未开','−12/月'] ],
+      [ ['m','你','夏令营 / 预推免 · 5–9 月','要报名'],
+        ['m','你','本校保研率','30–65%'],
+        ['k','机','交换与联合培养','一学期'],
+        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'] ],
+      [ ['m','你','推免系统填报 · 9 月底','要本人'],
+        ['k','机','一次性求职补贴 · 困难生','1,000–3,000'],
+        ['k','机','基层就业学费补偿','≤2 万/年'],
+        ['s','省','教材 · 同版本换二手','−214'] ]
+    ],
+    b: [
+      [ ['k','机','国家助学金 · 本学年可申报','3,700/年'],
+        ['s','省','勤工助学 · 每小时不低于 12 元','480/月'],
+        ['m','你','转专业 · 大多在大一末','一次'],
+        ['k','机','国家助学贷款','≤2 万/年'] ],
+      [ ['k','机','国家励志奖学金 · 困难生','6,000/年'],
+        ['m','你','四六级 / 教资笔试','两证'],
+        ['k','机','大创项目 · 省级以上','1 项'],
+        ['s','省','视频会员 · 学生价未开','−12/月'] ],
+      [ ['m','你','考研择校 · 考数学的科目','提前 12 个月'],
+        ['m','你','专业实习','3–6 个月'],
+        ['k','机','学科竞赛 · 省级','加分项'],
+        ['s','省','学生票 · 动车二等座 75 折','每年 4 次'] ],
+      [ ['m','你','秋招主战场','9–11 月'],
+        ['k','机','一次性求职补贴 · 困难生','600–3,000'],
+        ['k','机','三支一扶 / 西部计划','服务 2 年'],
+        ['s','省','教材 · 同版本换二手','−214'] ]
+    ],
+    c: [
+      [ ['k','机','国家助学金 · 高职约 22%','3,700/年'],
+        ['k','机','雨露计划 · 脱贫家庭','3,000/年'],
+        ['s','省','勤工助学 · 每小时不低于 12 元','480/月'],
+        ['s','省','学生票 · 硬座 5 折','每年 4 次'] ],
+      [ ['k','机','国家励志奖学金 · 前 3.3%','6,000/年'],
+        ['k','机','技能等级证书 · 一次性','1,500–2,000'],
+        ['m','你','1+X 证书 · 按工种','要考试'],
+        ['m','你','现代学徒制 · 企业补贴','按月'] ],
+      [ ['m','你','专升本 · 各省统考 3–4 月','要报名'],
+        ['m','你','顶岗实习','半年'],
+        ['k','机','一次性求职补贴 · 困难生','600–3,000'],
+        ['s','省','雨露短期技能培训','1,500–2,000'] ],
+      [ ['m','你','三年制 · 毕业年就是大三','没有大四'],
+        ['k','机','职业本科 · 按本科口径','重算'],
+        ['k','机','应征入伍学费补偿','≤2 万/年'],
+        ['s','省','教材 · 同版本换二手','−214'] ]
+    ]
+  };
+  var LOGS = ['正在核对学校类型…','对照年级时间线…','查奖助学金申报窗口…','比对本地学生价…','整理清单…'];
+
+  var sheet = document.getElementById('sheet');
+  if (!sheet) return;
+  var steps = { form: document.getElementById('st-form'), run: document.getElementById('st-run'), done: document.getElementById('st-done') };
+  var input = document.getElementById('sh-school');
+  var hint  = document.getElementById('sh-hint');
+  var goBtn = document.getElementById('sh-go');
+  var fill  = document.getElementById('sh-fill');
+  var log   = document.getElementById('sh-log');
+  var who   = document.getElementById('sh-who');
+  var res   = document.getElementById('sh-res');
+  var count = document.getElementById('sh-count');
+  var sumEl = document.getElementById('sh-sum');
+  var again = document.getElementById('sh-again');
+  var timer = null, lastFocus = null;
+
+  var motionOK = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function pickOf(box){
+    var on = box.querySelector('.on');
+    return on ? on.textContent : box.children[0].textContent;
+  }
+  function step(name){
+    Object.keys(steps).forEach(function(k){ steps[k].classList.toggle('on', k === name); });
+  }
+  function open(){
+    lastFocus = document.activeElement;
+    // 从核验版块带过来已选的内容
+    var vType = document.querySelector('#chips-type .on');
+    var vGrade = document.querySelector('#chips-grade .on');
+    if (vType) setChip('sh-type', vType.textContent);
+    if (vGrade) setChip('sh-grade', vGrade.textContent);
+    if (!input.value) {
+      var src = document.getElementById('school');
+      if (src && src.value) input.value = src.value;
+    }
+    step('form');
+    hint.className = 'sh-hint';
+    hint.textContent = '不用填学号，不用学校邮箱。名字写错也不影响，随时能改。';
+    sheet.classList.add('on');
+    sheet.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('locked');
+    if (window.innerWidth > 640) input.focus();
+    else sheet.querySelector('.sh-x').focus();
+  }
+  function close(){
+    sheet.classList.remove('on');
+    sheet.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('locked');
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function setChip(boxId, label){
+    var box = document.getElementById(boxId);
+    if (!box) return;
+    [].slice.call(box.children).forEach(function(c){ c.classList.toggle('on', c.textContent === label); });
+  }
+
+  function render(){
+    var type = pickOf(document.getElementById('sh-type'));
+    var grade = pickOf(document.getElementById('sh-grade'));
+    var gi = ['大一','大二','大三','大四'].indexOf(grade);
+    var rows = DATA[KIND[type]][gi < 0 ? 0 : gi];
+    var school = (input.value || '').trim();
+    res.innerHTML = '';
+    var own = 0;
+    rows.forEach(function(r){
+      if (r[0] === 'm') own++;
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="f-tag ' + r[0] + '">' + r[1] + '</span>'
+                   + '<span class="t">' + r[2] + '</span>'
+                   + '<span class="v' + (r[0] === 'm' ? ' q' : '') + '">' + r[3] + '</span>';
+      res.appendChild(li);
+    });
+    count.textContent = String(rows.length);
+    sumEl.textContent = own ? '其中 ' + own + ' 项要你本人' : '都能代办';
+    who.textContent = (school ? school + ' · ' : '') + type + ' · ' + grade;
+  }
+
+  function scan(){
+    var school = (input.value || '').trim();
+    if (!school) {
+      hint.className = 'sh-hint bad';
+      hint.textContent = '写个学校名就行，简称也可以。';
+      input.focus();
+      return;
+    }
+    document.getElementById('school') && (document.getElementById('school').value = school);
+    render();
+    var type = pickOf(document.getElementById('sh-type'));
+    var grade = pickOf(document.getElementById('sh-grade'));
+    who.textContent = school + ' · ' + type + ' · ' + grade;
+
+    if (!motionOK) { step('done'); return; }
+
+    step('run');
+    fill.style.width = '0%';
+    log.textContent = LOGS[0];
+    var p = 0, i = 0;
+    (function tick(){
+      p = Math.min(100, p + 7 + Math.random() * 6);
+      fill.style.width = p.toFixed(0) + '%';
+      var li2 = Math.min(LOGS.length - 1, Math.floor(p / 22));
+      if (li2 !== i) { i = li2; log.textContent = LOGS[i]; }
+      if (p < 100) timer = setTimeout(tick, 150 + Math.random() * 120);
+      else timer = setTimeout(function(){ log.textContent = '清单已生成'; step('done'); }, 260);
+    })();
+  }
+
+  [].slice.call(document.querySelectorAll('[data-scan]')).forEach(function(el){
+    el.addEventListener('click', function(e){ e.preventDefault(); open(); });
+  });
+  [].slice.call(sheet.querySelectorAll('[data-close]')).forEach(function(el){
+    el.addEventListener('click', close);
+  });
+  goBtn.addEventListener('click', scan);
+  again.addEventListener('click', function(){ step('form'); if (window.innerWidth > 640) input.focus(); });
+  input.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); scan(); } });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && sheet.classList.contains('on')) close();
+  });
+})();
+
 (function(){
   // 学校类型 / 年级：只给建议，不作为进入门槛
   var tabs = [].slice.call(document.querySelectorAll('.mats-tabs button'));
